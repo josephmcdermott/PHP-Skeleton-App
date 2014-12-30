@@ -21,8 +21,6 @@
 
 $default_module_includes = array(
 	"js" => array()
-	,"css" => array(
-		"webapp_installer_module_css" => "/webapp_installer/library/css/styles.css"
-	)
+	,"css" => array()
 );
 ?>
