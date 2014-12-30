@@ -84,7 +84,7 @@ function form(){
       $app->redirect($final_global_template_vars["path_to_this_module"]);
     }
     // Next, check to see if the database exists by making $posted_data['database_name'] the current db
-    $db_selected = mysqli_select_db($posted_data['database_name'], $link);
+    $db_selected = mysqli_select_db($link, $posted_data['database_name']);
     if(!$db_selected) {
       // die('Cannot use the "'.$posted_data['database_name'].'" database. Does it exist?');
       $app->flash('message', 'Cannot use the "'.$posted_data['database_name'].'" database. Does it exist?');
