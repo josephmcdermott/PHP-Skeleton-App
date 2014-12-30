@@ -6,6 +6,8 @@ The PHP Skeleton App creates an object-oriented PHP MVC environment, tailored fo
 
 Out of the box, it provides the ability to set up and run a public-facing website, authenticate to the administrative side, and create users and groups. All of the baseline database tables are created on first run, along with the first "Universal Administrator".
 
+* * *
+
 ## Features
 
 * **Quick 5-minute installation**
@@ -42,6 +44,8 @@ Out of the box, it provides the ability to set up and run a public-facing websit
 
 * **More coming soon...**
 
+* * *
+
 ## Requirements (LAMP)
 
 *These requirements are what I have found to be true. It's likely that I may have missed something along the way. If so, please let me know.*
@@ -71,19 +75,21 @@ http://YOUR_DOMAIN/webapp_installer/library/env.php
 
 * * *
 
-## Get Started
+## Getting Started
 
-### Install the PHP Skeleton
+### STEP 1
 
 #### Clone the Repository Into the Web Root
 
 For example: */var/www/*
 
-The web root directory **must be completely empty.**
+**Note: The web root directory must be completely empty.**
 
 ```bash
 git clone https://github.com/ghalusa/PHP-Skeleton-App.git /PATH/TO/YOUR_EMPTY_WEB_ROOT_DIRECTORY/
 ```
+
+### STEP 2
 
 #### Run Composer (non global installation)
 
@@ -97,14 +103,18 @@ php composer.phar install
 composer install
 ```
 
-#### Make Sure Apache Has Permissions to Do Stuff
+### STEP 3
+
+#### First, Make Sure Apache Has Permissions to Do Stuff
 *(This can be changed back after the installation is finished.)*
 
 ```bash
-sudo chown -R www-data:www-data /var/www
+sudo chown -R www-data:www-data /PATH/TO/YOUR_EMPTY_WEB_ROOT_DIRECTORY/
 ```
 
-## Run the Web App Installer
+### STEP 4
+
+#### Run the Web App Installer...
 
 ##### Point your browser to the root of your web environment...
 
@@ -112,12 +122,16 @@ sudo chown -R www-data:www-data /var/www
 http://YOUR_DOMAIN/
 ```
 
-##### Fill Out the Form
+##### ... And Fill Out the Form
 
 You will need:
 
 * A valid email address for the creation of the administrative account.
 * The location, username, and password of a MySQL database.
+
+#### That's It!
+
+At this point, you should have successfully spawned a complete "PHP Skeleton App". Dig in, and start adding your own "Modules"!
 
 * * *
 
@@ -132,6 +146,10 @@ The PHP Skeleton App is created and maintained by [Goran Halusa](http://halusana
 ### Twitter
 
 Follow [@goranhalusa](http://www.twitter.com/goranhalusa) on Twitter to receive the very latest news and updates about The PHP Skeleton App.
+
+### Acknowledgements
+
+* [PHP Weekly](http://phpweekly.com/): Thanks for including The PHP Skeleton App in your weekly email!
 
 ### Disclaimer
 
