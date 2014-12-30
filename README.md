@@ -77,6 +77,8 @@ http://YOUR_DOMAIN/webapp_installer/library/env.php
 
 For example: */var/www/*
 
+The web root directory **must be completely empty.**
+
 ```bash
 git clone https://github.com/ghalusa/PHP-Skeleton-App.git /PATH/TO/YOUR_EMPTY_WEB_ROOT_DIRECTORY/
 ```
