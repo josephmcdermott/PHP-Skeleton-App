@@ -78,7 +78,7 @@ http://YOUR_DOMAIN/webapp_installer/library/env.php
 For example: */var/www/*
 
 ```bash
-git clone git@github.com:ghalusa/PHP-Skeleton-App.git /PATH/TO/YOUR_EMPTY_WEB_ROOT_DIRECTORY/
+git clone https://github.com/ghalusa/PHP-Skeleton-App.git /PATH/TO/YOUR_EMPTY_WEB_ROOT_DIRECTORY/
 ```
 
 #### Run Composer (non global installation)
