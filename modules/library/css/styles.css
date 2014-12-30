@@ -1,0 +1,44 @@
+#modules-module-menu .single_module
+{
+	padding: 12px 12px 12px 12px;
+	margin: 0 5px 5px 0;
+	min-height: 120px;
+
+}
+
+#modules-module-menu .single_module a
+{
+	font-weight: bold;
+	text-decoration: none;
+	color: #666666;
+}
+
+#modules-module-menu .single_module a:hover
+{
+	color: #999999;
+	text-decoration: none;	
+}
+
+#modules-module-menu .single_module:hover
+{
+	background-color: #f3f9fd
+
+;
+}
+
+
+#modules-module-menu .single_module p
+{
+	margin: 0 0 0 57px;
+}
+
+#modules-module-menu img
+{
+	margin: 0 10px 0 0;
+	padding: 0;
+}
+
+#modules-module-menu img:hover
+{
+	cursor: pointer;
+}

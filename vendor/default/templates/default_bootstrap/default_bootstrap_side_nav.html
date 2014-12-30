@@ -1,0 +1,65 @@
+{% block styles_head %}
+	<style type="text/css">
+		#main_side_nav {
+			clear: both;
+			margin-top: 50px;
+		}
+		#main_side_nav li.nav-header {
+			cursor: pointer;
+			margin-top: 16px;
+		}
+	</style>
+{% endblock %}
+{% block side_nav %}
+	{% if visible_module_count > 0 %}
+		<div class="{% if hide_side_nav is not empty %}{% else %}col-sm-3 col-md-2{% endif %} sidebar sidebar-nav" style="{% if hide_side_nav == true %}display:none;{% endif %}">
+		  	<a id="hide_side_nav" href="javascript:void(0);" class="btn btn-default btn-xs" style="position: fixed; top: 52px; left: 2px;"><i class="glyphicon glyphicon-arrow-left"></i> Hide Navigation</a>
+		    <ul class="nav nav-list" id="main_side_nav">
+				{% for module in default_module_list if module.menu_hidden != true %}
+			      	{% if module.pages %}
+			      		{% set icon_image = 'glyphicon glyphicon-chevron-right' %}
+			      		{% set is_module_active = false %}
+			    		{% if module.handle == active_module %}
+			    			{% set is_module_active = true %}
+			    			{% set icon_image = 'glyphicon glyphicon-chevron-down' %}
+			    		{% endif %}
+			    		<li class="nav-header {{ display_active }}"><i class="{{ icon_image }}"></i> {{ module.module_name }}</li>
+			      		{% for page in module.pages if page.display == true %}
+			      			<li style="{% if is_module_active == false %}display:none;{% endif %}"><a href="{{ module.path_to_this_module }}{{ page.path }}">{{ page.label }}</a></li>
+			      		{% endfor %}
+			      	{% endif %}
+		      	{% endfor %}
+		    </ul>
+		 </div><!--/.sidebar-nav -->
+	{% endif %}
+{% endblock %}
+{% block show_side_nav %}
+	<a id="show_side_nav" href="javascript:void(0);" class="btn btn-default btn-xs" style="margin: 2px 0px 2px 2px; {% if hide_side_nav is not empty %}{% else %}display:none;{% endif %}"><i class="glyphicon glyphicon-arrow-right"></i> Show Navigation</a>
+{% endblock %}
+{% block written_js_bottom %}
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$("#main_side_nav li.nav-header").on("click",function(){
+				$(this).nextUntil("li.nav-header").slideToggle('fast');
+				$(this).find("i").toggleClass("glyphicon glyphicon-chevron-down");
+				$(this).find("i").toggleClass("glyphicon glyphicon-chevron-right");
+			});
+			$("#hide_side_nav").on('click',function(){
+				var nav_bar = $(this).closest(".sidebar-nav");
+				nav_bar.removeClass("col-sm-3, col-md-2").hide();
+				var content_bar = nav_bar.next("div");
+				content_bar.removeClass("col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2");
+				content_bar.addClass("col-sm-12 col-md-12");
+				$("#show_side_nav").show();
+			});
+			$("#show_side_nav").on('click',function(){
+				var nav_bar = $("#hide_side_nav").closest(".sidebar-nav");
+				nav_bar.addClass("col-sm-3, col-md-2").show();
+				var content_bar = nav_bar.next("div");
+				content_bar.removeClass("col-sm-12 col-md-12");
+				content_bar.addClass("col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2");
+				$("#show_side_nav").hide();
+			});
+		});
+	</script>
+{% endblock %}

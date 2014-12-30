@@ -1,0 +1,43 @@
+/* form */
+.field-group{
+	clear:both;
+}
+
+/* general */
+footer .row-fluid [class*="span"] {
+	color: #777;
+}
+#footer-links{
+	height:45px;
+	clear:both;
+	margin-bottom:0px;
+}
+#footer-links li{
+	float:right;
+	margin:0 10px 0 10px;
+}
+#footer-links a{
+	color:white;
+}
+#footer-images{
+	clear:both;
+	height:50px;
+}
+#footer-images li{
+	float:right;
+	margin:0 50px 0 10px;
+}
+#contentHeader h1 {
+	width:500px;
+}
+.header_buttons{
+	float:right;
+	margin:-15px 10px 0 0;
+	width:200px;
+}
+#advanced_search_link_wrapper{
+	width:120px;
+}
+ul li{
+	list-style-type:none;
+}
