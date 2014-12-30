@@ -35,7 +35,7 @@
   require_once $_SERVER["PATH_TO_FRAMEWORKS"] . 'default/functions/functions.php';
   require_once $_SERVER["PATH_TO_FRAMEWORKS"] . 'default/models/utility.php';
 
-  // Added due to PHP errors - by Gor, ghalusa@gmail.com, 2013-07-16
+  // Added due to PHP errors - by Gor, gor@webcraftr.com, 2013-07-16
   // "PHP Strict Standards:  Non-static method slimlocal\models\utility::subvalue_sort()
   // should not be called statically in /Users/gorgor/Dropbox/Sites/frameworks/default/autoload.php on line 169"
   $utility = new \slimlocal\models\utility();
@@ -204,7 +204,7 @@
     }
   }
 
-  // Changed from static call to instanciated due to PHP errors - by Gor, ghalusa@gmail.com, 2013-07-16
+  // Changed from static call to instanciated due to PHP errors - by Gor, gor@webcraftr.com, 2013-07-16
   // "PHP Strict Standards:  Non-static method slimlocal\models\utility::subvalue_sort()
   // should not be called statically in /Users/gorgor/Dropbox/Sites/frameworks/default/autoload.php on line 169"
   $modules_list_array = $utility->subvalue_sort($modules_list_array, 'sort_order');
