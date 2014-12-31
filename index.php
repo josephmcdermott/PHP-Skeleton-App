@@ -1,24 +1,29 @@
 <?php
 /**
- * This file is part of PHP Skeleton App.
+ * The PHP Skeleton App
  *
- * (c) 2014 Goran Halusa
+ * @author      Goran Halusa
+ * @copyright   2015 Goran Halusa
+ * @link        https://github.com/ghalusa/PHP-Skeleton-App
+ * @license     https://github.com/ghalusa/PHP-Skeleton-App/wiki/License
+ * @version     1.0.0
+ * @package     PHP Skeleton App
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
 /**
- * Top-level index.
+ * Top-level Index
  *
- * @copyright   2014 Goran Halusa
- * @link        https://github.com/ghalusa/PHP-Skeleton-App
- * @license     https://github.com/ghalusa/PHP-Skeleton-App/wiki/License
- * @version     1.0.0
+ * Checks to see if the .htaccess needs the PATH_TO_FRAMEWORKS environment variable set.
+ * Includes the autoload.php script at the top-level.
+ *
  * @package     PHP Skeleton App
+ * @author      Goran Halusa
+ * @since       1.0.0
  */
 
-// Check to see if the .htaccess needs the PATH_TO_FRAMEWORKS environment variable set.
 $file_name = ".htaccess";
 $original_file = file_get_contents($_SERVER['DOCUMENT_ROOT'].'/'.$file_name);
 
