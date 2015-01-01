@@ -19,43 +19,26 @@
  * @author Goran Halusa <gor@webcraftr.com>
  */
 
-$needed_ext = array("soap"
+$needed_ext = array(
+  "curl"
+  ,"fileinfo"
+  ,"json"
+  ,"mcrypt"
+  ,"mysql"
   ,"PDO"
   ,"pdo_mysql"
-  ,"mysql"
-  ,"curl"
-  ,"gd"
-  ,"mcrypt"
-  ,"ldap"
-  ,"imagick"
-  ,"json"
-  ,"fileinfo"
 );
 
 $needed_apached_modules = array(
   "mod_alias"
-  ,"mod_auth_basic"
-  ,"mod_authn_file"
-  ,"mod_authz_default"
-  ,"mod_authz_groupfile"
-  ,"mod_authz_host"
-  ,"mod_authz_user"
-  ,"mod_autoindex"
-  ,"mod_cgi"
   ,"mod_deflate"
   ,"mod_dir"
   ,"mod_env"
   ,"mod_headers"
-  ,"util_ldap"
   ,"mod_mime"
-  ,"mod_mime_magic"
-  ,"mod_negotiation"
   ,"mod_php5"
-  ,"mod_reqtimeout"
   ,"mod_rewrite"
   ,"mod_setenvif"
-  ,"mod_ssl"
-  ,"mod_status"
 );
 ?>
 
@@ -65,8 +48,8 @@ $needed_apached_modules = array(
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Environment check for the Scientific Web Programming Group's web server setup.">
-    <meta name="author" content="ABCC's Scientific Web Programming Group (SWPG)">
+    <meta name="description" content="Environment check for The PHP Skeleton App.">
+    <meta name="author" content="Goran Halusa">
 
     <title>Web Server Environment Check: <?php echo $_SERVER["SERVER_NAME"].'  ('.$_SERVER["SERVER_ADDR"].')'; ?></title>
 

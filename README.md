@@ -54,12 +54,12 @@ Out of the box, it provides the ability to set up and run a public-facing websit
 * So far, only tested on Linux Ubuntu 14.04 (trusty)
 
 ##### Apache
-* Modules: alias, autoindex, deflate, dir, env, headers, mime, mime_magic, negotiation, php5, reqtimeout, rewrite, setenvif, status
+* Modules: alias, deflate, dir, env, headers, mime, php5, rewrite, setenvif
 
 ##### MySQL
 
 ##### PHP >= 5.3
-* Extensions: PDO, pdo_mysql, mysql, php5-curl, php5-mcrypt, php5-json
+* Extensions: FileInfo, mysql, PDO, pdo_mysql, php5-curl, php5-json, php5-mcrypt
 
 ##### Git
 
