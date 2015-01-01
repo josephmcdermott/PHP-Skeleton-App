@@ -233,7 +233,7 @@
                   <li class="dropdown">
                     <a class="dropdown-toggle" id="default_logged_in" role="button" href="#" data-toggle="dropdown">Logged in as {{ session[session_key].first_name }} {{ session[session_key].last_name }} <b class="caret"></b></a>
                     <ul class="dropdown-menu" role="menu" aria-labelledby="default_logged_in">
-                      <li><a href="/modules/">Dashboard</a></li>
+                      <li><a href="/dashboard/">Dashboard</a></li>
                       {% if preferences_url is not empty %}
                         <li><a href="{{ preferences_url }}">Preferences</a></li>
                       {% endif %}

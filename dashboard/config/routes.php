@@ -14,19 +14,13 @@
  */
 
 /**
- * Show Dashboard
+ * Routes
  *
- * Controller for the Modules module.
+ * Routes for the Dashboard module.
  *
  * @author      Goran Halusa <gor@webcraftr.com>
  * @since       1.0.0
  */
 
-function show_dashboard(){
-	$app = \Slim\Slim::getInstance();
-	global $final_global_template_vars;
-	$app->render('modules_dashboard.php',array(
-		"page_title" => "Dashboard"
-	));
-}
+$app->get('/', "check_authenticated", "show_dashboard");
 ?>

@@ -201,7 +201,7 @@
               <li id="fat-menu" class="dropdown">
               	<a class="dropdown-toggle" id="default_logged_in" href="#" data-toggle="dropdown" aria-haspopup="true" role="button" aria-expanded="false">Logged in as {{ session[session_key].first_name }} {{ session[session_key].last_name }} <span class="caret"></span></a>
               	<ul class="dropdown-menu" role="menu" aria-labelledby="default_logged_in">
-                  <li><a href="/modules/">Dashboard</a></li>
+                  <li><a href="/dashboard/">Dashboard</a></li>
               		{% if preferences_url is not empty %}
               			<li><a href="{{ preferences_url }}">Preferences</a></li>
               		{% endif %}

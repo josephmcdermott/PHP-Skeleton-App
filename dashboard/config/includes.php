@@ -14,13 +14,18 @@
  */
 
 /**
- * Modules Index
+ * Includes
  *
- * Includes the autoload.php script for the Modules module.
+ * Includes for the Dashboard module.
  *
  * @author      Goran Halusa <gor@webcraftr.com>
  * @since       1.0.0
  */
 
-include_once($_SERVER["PATH_TO_FRAMEWORKS"] . "default/autoload.php");
+$default_module_includes = array(
+	"js" => array()
+	,"css" => array(
+		"module_css" => "/dashboard/library/css/styles.css"
+	)
+);
 ?>

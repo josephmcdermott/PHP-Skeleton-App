@@ -14,18 +14,19 @@
  */
 
 /**
- * Includes
+ * Show Dashboard
  *
- * Includes for the Modules module.
+ * Controller for the Dashboard module.
  *
  * @author      Goran Halusa <gor@webcraftr.com>
  * @since       1.0.0
  */
 
-$default_module_includes = array(
-	"js" => array()
-	,"css" => array(
-		"module_css" => "/modules/library/css/styles.css"
-	)
-);
+function show_dashboard(){
+	$app = \Slim\Slim::getInstance();
+	global $final_global_template_vars;
+	$app->render('modules_dashboard.php',array(
+		"page_title" => "Dashboard"
+	));
+}
 ?>

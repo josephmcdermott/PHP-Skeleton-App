@@ -32,11 +32,11 @@ $default_global_settings = array(
   ,"login_url" => "/authenticate"
   ,"access_denied_url" => "/authenticate/access_denied"
   ,"log_page_load" => false
-  ,"landing_page" => "/modules"
+  ,"landing_page" => "/dashboard"
   ,"redirect_cookie_key" => "default_redirect"
   ,"hide_public_site" => true
   ,"google_analytics_key" => ""
-  ,"module_icon_path" => "/modules/library/images/module_default_icon.png"
+  ,"module_icon_path" => "/dashboard/library/images/module_default_icon.png"
   // Are we on an AWS EC2 instance? MediaTemple? DigitalOcean? e.g. "aws_ec2" (anything goes)
   ,"hosting_vendor" => false
   // Path to PHPMailer - e.g. /mnt/lib/phpmailer/class.phpmailer.php

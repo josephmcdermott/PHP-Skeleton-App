@@ -14,13 +14,13 @@
  */
 
 /**
- * Routes
+ * Dashboard Index
  *
- * Routes for the Modules module.
+ * Includes the autoload.php script for the Dashboard module.
  *
  * @author      Goran Halusa <gor@webcraftr.com>
  * @since       1.0.0
  */
 
-$app->get('/', "check_authenticated", "show_dashboard");
+include_once($_SERVER["PATH_TO_FRAMEWORKS"] . "default/autoload.php");
 ?>

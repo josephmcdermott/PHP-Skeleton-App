@@ -52,17 +52,17 @@ function show_login_form() {
 		$tmp_array = array();
 		$_SESSION[$final_global_template_vars["session_key"]]["associated_groups"] = \slimlocal\models\utility::array_flatten($user_account->get_user_account_groups($_SESSION[$final_global_template_vars["session_key"]]["user_account_id"]),$tmp_array,'group_id');
 
-		// Landing page exception. If coming from the register page, set to "/modules".
-		$final_landing_page = ($landing_page == "/user_account/register/") ? "/modules" : $landing_page;
-		// Landing page exception. If coming from the home page, set to "/modules".
-		$final_landing_page = ($landing_page == "/") ? "/modules" : $landing_page;
+		// Landing page exception. If coming from the register page, set to "/dashboard".
+		$final_landing_page = ($landing_page == "/user_account/register/") ? "/dashboard" : $landing_page;
+		// Landing page exception. If coming from the home page, set to "/dashboard".
+		$final_landing_page = ($landing_page == "/") ? "/dashboard" : $landing_page;
 
 		$app->redirect($final_landing_page);
 	}
 
 	// If logged in, don't render the login form.
 	if(isset($_SESSION[$final_global_template_vars["session_key"]])) {
-		$app->redirect("/modules/");
+		$app->redirect("/dashboard/");
 	}
 
 	$app->render('login_form.php',array(

@@ -16,7 +16,7 @@
 /**
  * Settings
  *
- * Settings for the Modules module.
+ * Settings for the Dashboard module.
  *
  * @author      Goran Halusa <gor@webcraftr.com>
  * @since       1.0.0
@@ -27,7 +27,7 @@
  * the global settings, and it will overwrite it
  */
 $default_module_settings = array(
-	"module_name" => "Modules"
+	"module_name" => "Dashboard"
 	,"module_description" => "Display all available modules."
 	,"module_icon_path" => "/" . $_SERVER["CORE_TYPE"] . "/lib/images/icons/pixelistica-blue-icons/png/64x64/layout_squares_small.png"
 	,"menu_hidden" => true
