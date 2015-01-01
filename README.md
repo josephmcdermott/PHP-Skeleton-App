@@ -137,7 +137,10 @@ At this point, you should have successfully spawned a complete "PHP Skeleton App
 
 ## Documentation
 
-* Coming soon... <URL_HERE>
+* [PHP Skeleton App Documentation](http://phpskeleton.com/) (coming soon)
+* [PHPDocs](http://phpskeleton.com/docs/)
+* Until I get the documentation out there, you can look at the anatomy of any of the modules which are included and present by default.
+* On deck: I'm going to develop a "Module Creator", which will spawn a bare-bones module at the click of a button, or via command line.
 
 ## About the Author
 
