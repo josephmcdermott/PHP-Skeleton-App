@@ -2,7 +2,7 @@
 /**
  * The PHP Skeleton App
  *
- * @author      Goran Halusa
+ * @author      Goran Halusa <gor@webcraftr.com>
  * @copyright   2015 Goran Halusa
  * @link        https://github.com/ghalusa/PHP-Skeleton-App
  * @license     https://github.com/ghalusa/PHP-Skeleton-App/wiki/License
@@ -14,16 +14,18 @@
  */
 
 /**
- * Functions
+ * Dump
  *
- * Functions for the PHP Skeleton App.
+ * For debugging. Outputs data using var_dump(), encapsulated by the <pre> tag, with the option to die() or let it ride.
+ * If an IP address is passed, then only that IP address will be able to view the output.
  *
- * @package     PHP Skeleton App
- * @author      Goran Halusa
- * @since       1.0.0
+ * @param   mixed   $data         The data value
+ * @param   bool    $die          The data value
+ * @param   string  $ip_address   The data value
+ * @return  mixed   The formatted data
  */
 
-function dump($data = false,$die = true, $ip_address=false){
+function dump($data = false, $die = true, $ip_address=false){
 	if(!$ip_address || $ip_address == $_SERVER["REMOTE_ADDR"]){
 		echo '<pre>';
 		var_dump($data);
@@ -33,6 +35,15 @@ function dump($data = false,$die = true, $ip_address=false){
 	}
 }
 
+/**
+ * Check Authenticated
+ *
+ * If a session key is not set, this function sets a cookie to remember 
+ * the $_SERVER["REQUEST_URI"], then redirects to the login URL.
+ *
+ * @param   array   $route   The route array
+ * @return  void
+ */
 function check_authenticated(\Slim\Route $route){
 	$app = \Slim\Slim::getInstance();
 	global $final_global_template_vars;
@@ -43,6 +54,15 @@ function check_authenticated(\Slim\Route $route){
 	}
 }
 
+/**
+ * Force HTTPS
+ *
+ * Checks to see if the environment is set to production,
+ * then redirects to https mode if it's not already running in https mode.
+ *
+ * @param   array   $route   The route array
+ * @return  void
+ */
 function force_https(\Slim\Route $route){
 	$app = \Slim\Slim::getInstance();
 	global $final_global_template_vars;
@@ -57,9 +77,14 @@ function force_https(\Slim\Route $route){
 	}
 }
 
-/*
+/**
+ * Force SSL
+ *
  * Needed to create this function because the "force_https" function only forces 
  * https if the server is not marked as "dev".
+ *
+ * @param   array   $route   The route array
+ * @return  void
  */
 function force_ssl(\Slim\Route $route = null){
 	if(isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"]){
@@ -71,8 +96,13 @@ function force_ssl(\Slim\Route $route = null){
 	}
 }
 
-/*
+/**
+ * Force SSL
+ *
  * Only allow script to be run by a given IP address.
+ *
+ * @param   array   $ip_address   The array of allowed IP addresse(s)
+ * @return  void
  */
 $force_request_address = function( $ip_address=array() ){
 	return function () use ($ip_address){

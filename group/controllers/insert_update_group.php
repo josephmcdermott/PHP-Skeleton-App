@@ -2,7 +2,7 @@
 /**
  * The PHP Skeleton App
  *
- * @author      Goran Halusa
+ * @author      Goran Halusa <gor@webcraftr.com>
  * @copyright   2015 Goran Halusa
  * @link        https://github.com/ghalusa/PHP-Skeleton-App
  * @license     https://github.com/ghalusa/PHP-Skeleton-App/wiki/License
@@ -18,9 +18,8 @@
  *
  * Controller for the Group module.
  *
- * @package     PHP Skeleton App
- * @author      Goran Halusa
- * @since       1.0.0
+ * @param \Slim\Route $route The route data array
+ * @return void
  */
 
 function insert_update_group(\Slim\Route $route){

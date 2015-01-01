@@ -2,7 +2,7 @@
 /**
  * The PHP Skeleton App
  *
- * @author      Goran Halusa
+ * @author      Goran Halusa <gor@webcraftr.com>
  * @copyright   2015 Goran Halusa
  * @link        https://github.com/ghalusa/PHP-Skeleton-App
  * @license     https://github.com/ghalusa/PHP-Skeleton-App/wiki/License
@@ -16,18 +16,13 @@
 /**
  * Apply Permissions
  *
- * Controller for the Site module.
- *
- * @package     PHP Skeleton App
- * @author      Goran Halusa
- * @since       1.0.0
- */
-
-/**
  * This function is used ONLY to make sure if a user has a sufficient role to be on a page...
  * NOT to apply permissions as to what the user can view ON that page.
+ *
+ * @author      Goran Halusa <gor@webcraftr.com>
+ * @since       1.0.0
+ * @param       array $role_perm_key
  */
-
 global $apply_permissions;
 $apply_permissions = function($role_perm_key = array()) {
 	return function ($redirect = true) use ($role_perm_key) {

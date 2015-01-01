@@ -2,7 +2,7 @@
 /**
  * The PHP Skeleton App
  *
- * @author      Goran Halusa
+ * @author      Goran Halusa <gor@webcraftr.com>
  * @copyright   2015 Goran Halusa
  * @link        https://github.com/ghalusa/PHP-Skeleton-App
  * @license     https://github.com/ghalusa/PHP-Skeleton-App/wiki/License
@@ -13,27 +13,39 @@
  * file that was distributed with this source code.
  */
 
+namespace slimlocal\models;
+
+use finfo;
+
 /**
  * Utility
  *
  * Utility class for the PHP Skeleton App.
  *
- * @package     PHP Skeleton App
- * @author      Goran Halusa
+ * @author      Goran Halusa <gor@webcraftr.com>
  * @since       1.0.0
  */
+class utility {
 
-namespace slimlocal\models;
+  /**
+   * Constructor
+   *
+   * Placeholder in case we want to put something here later
+   */
+  public function __construct(){
+  	// Placeholder in case we want to put something here later.
+  }
 
-use finfo;
-
-class utility{
-
-    public function __construct(){
-    	// Placeholder in case we want to put something here later.
-    }
-
-	public static function include_all_files_in_directory($dir,$recursive=false){
+  /**
+   * Include All Files In Directory
+   *
+   * Includes all files in a directory, with the option of recursively scanning the directory.
+   *
+   * @param     string    $dir          The directory
+   * @param     bool      $recursive    Scan the directory recursively
+   * @return    void
+   */
+	public static function include_all_files_in_directory($dir, $recursive = false){
 		if(is_dir($dir)){
 			if ($handle = opendir($dir)) {
 			    while (false !== ($entry = readdir($handle))) {
@@ -53,7 +65,16 @@ class utility{
 		}
 	}
 
-	public static function gump_parse_errors($gump_failed_validation_array,$array_prepend=false){
+  /**
+   * Gump Parse Errors
+   *
+   * Parse errors returned by Gump.
+   *
+   * @param     array     $gump_failed_validation_array    The failed validation array returned by Gump
+   * @param     string    $array_prepend                   Prepend the array with the supplied character
+   * @return    array     The array of errors
+   */
+	public static function gump_parse_errors($gump_failed_validation_array, $array_prepend = false){
 		$error_array = array();
 		foreach($gump_failed_validation_array as $single_error){
 			if($single_error["rule"] == "validate_required"){
@@ -71,7 +92,17 @@ class utility{
 		}
 	}
 
-	public static function array_flatten($passed_array, &$output_array = false, $array_key=false){
+  /**
+   * Array Flatten
+   *
+   * Flatten an array, returning a single level array.
+   *
+   * @param       object    $passed_array    The multidimensional array
+   * @param       array     $output_array    The outputted array
+   * @param       string    $array_key       The array key
+   * @return      array     The single level array
+   */
+	public static function array_flatten($passed_array, &$output_array = false, $array_key = false){
 	    if(!is_array($output_array)){
 	        $output_array = array();
 	    }
@@ -87,6 +118,13 @@ class utility{
 	    return $output_array;
 	}
 
+  /**
+   * Gen UUID
+   *
+   * Generate a UUID.
+   *
+   * @return    string    The UUID
+   */
 	public static function gen_uuid() {
 	    return sprintf( '%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
 	        // 32 bits for "time_low"
@@ -109,7 +147,15 @@ class utility{
 	    );
 	}
 
-	//taken from the php.net filesize page in the comments
+  /**
+   * Format Bytes
+   *
+   * Return a human readable format of a file size.
+   * Taken from the php.net filesize page in the comments.
+   *
+   * @param     int     $a_bytes    The integer
+   * @return    string  The integer with the appropriate units
+   */
 	public static function _format_bytes($a_bytes){
 	    if ($a_bytes < 1024) {
 	        return $a_bytes .' B';
@@ -132,6 +178,14 @@ class utility{
 	    }
 	}
 
+  /**
+   * Get MIME Type
+   *
+   * Return the MIME type of a file.
+   *
+   * @param     string    $file    The file
+   * @return    string    The MIME type
+   */
 	public static function get_mime_type($file){
 		$arrayZips = array("application/zip", "application/x-zip", "application/x-zip-compressed");
 		$mime_map = array(
@@ -159,7 +213,19 @@ class utility{
 		}
 	}
 
-	public function subvalue_sort($passed_array, $subkey, $sort="DESC", $start=false, $stop=false){
+  /**
+   * Subvalue Sort
+   *
+   * Description coming soon.
+   *
+   * @param     string     $passed_array   The passed array
+   * @param     string     $subkey         Subkey
+   * @param     string     $sort           Sort
+   * @param     bool       $start          Start
+   * @param     bool       $stop           Stop
+   * @return    array      The final array
+   */
+	public function subvalue_sort($passed_array, $subkey, $sort = "DESC", $start = false, $stop = false){
         $first_temp_array = array();
 		$second_temp_array = array();
         foreach($passed_array as $k => $v){
@@ -188,7 +254,17 @@ class utility{
         return $final_array;
     }
 
-	public function check_date($passed_date,$input_format="form",$output_format="form"){
+  /**
+   * Check Date
+   *
+   * Description coming soon.
+   *
+   * @param     string     $passed_date      The passed date
+   * @param     string     $input_format     Input format
+   * @param     string     $output_format    Output format
+   * @return    string     The date
+   */
+	public function check_date($passed_date, $input_format = "form", $output_format = "form"){
 		$form_values = array(
 			"form" => array(
 				"zeros_check" => "00/00/0000"

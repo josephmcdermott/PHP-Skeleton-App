@@ -2,7 +2,7 @@
 /**
  * The PHP Skeleton App
  *
- * @author      Goran Halusa
+ * @author      Goran Halusa <gor@webcraftr.com>
  * @copyright   2015 Goran Halusa
  * @link        https://github.com/ghalusa/PHP-Skeleton-App
  * @license     https://github.com/ghalusa/PHP-Skeleton-App/wiki/License
@@ -16,24 +16,45 @@
 /**
  * Authenticate
  *
- * Class for the Authenticate module.
+ * Class for the Authenticate module, providing methods for authentication.
  *
- * @package     PHP Skeleton App
- * @author      Goran Halusa
+ * @author      Goran Halusa <gor@webcraftr.com>
  * @since       1.0.0
  */
 
 class Authenticate{
-	private $session_key = "";
-	public $db;
 
-  public function __construct($db_connection=false,$session_key=false){
-	if($db_connection && is_object($db_connection)) {
-		$this->db = $db_connection;
-	}
-	$this->session_key = $session_key;
+  /**
+   * @var string  $session_key    The session key
+   */
+  private $session_key = "";
+
+  /**
+   * @var object  $db   The database connection object
+   */
+  public $db;
+
+  /**
+   * Constructor
+   * @param object   $db_connection   The database connection object
+   * @param string   $session_key     The session key
+   */
+  public function __construct($db_connection=false, $session_key=false) {
+	  if($db_connection && is_object($db_connection)) {
+		  $this->db = $db_connection;
+	  }
+	  $this->session_key = $session_key;
   }
 
+  /**
+   * Authenticate Local
+   *
+   * Run a query to find an active local user account.
+   *
+   * @param       string $username     The data value
+   * @param       string $password     The data value
+   * @return      array|bool           The query result
+   */
 	public function authenticate_local($username, $password) {
 		$result = false;
 		if($username && $password){
@@ -52,7 +73,17 @@ class Authenticate{
 		return $result;
 	}
 
-	public function log_login_attempt( $user_account_id, $cn, $result ) {
+  /**
+   * Log Login Attempt
+   *
+   * Run a query to insert a login attempt.
+   *
+   * @param       string $user_account_id   The data value
+   * @param       string $cn                The data value
+   * @param       string $result            The data value
+   * @return      void
+   */
+	public function log_login_attempt($user_account_id, $cn, $result) {
 		$statement = $this->db->prepare("
         	INSERT INTO core_framework.login_attempt
         	(user_account_id

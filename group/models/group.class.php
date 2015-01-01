@@ -2,7 +2,7 @@
 /**
  * The PHP Skeleton App
  *
- * @author      Goran Halusa
+ * @author      Goran Halusa <gor@webcraftr.com>
  * @copyright   2015 Goran Halusa
  * @link        https://github.com/ghalusa/PHP-Skeleton-App
  * @license     https://github.com/ghalusa/PHP-Skeleton-App/wiki/License
@@ -16,18 +16,29 @@
 /**
  * Group
  *
- * Class for the Group module.
+ * Class for the Group module, providing methods for browsing and managing groups.
  *
- * @package     PHP Skeleton App
- * @author      Goran Halusa
+ * @author      Goran Halusa <gor@webcraftr.com>
  * @since       1.0.0
  */
 
 class Group {
 
+  /**
+   * @var string  $session_key    The session key
+   */
   private $session_key = "";
+
+  /**
+   * @var object  $db   The database connection object
+   */
   public $db;
 
+  /**
+   * Constructor
+   * @param object   $db_connection   The database connection object
+   * @param string   $session_key     The session key
+   */
   public function __construct($db_connection = false, $session_key = false) {
     if($db_connection && is_object($db_connection)) {
       $this->db = $db_connection;
@@ -35,6 +46,18 @@ class Group {
     $this->session_key = $session_key;
   }
 
+  /**
+   * Browse Groups
+   *
+   * Run a query to retreive all groups in the database.
+   *
+   * @param   string  $sort_field     The data value
+   * @param   string  $sort_order     The data value
+   * @param   int  $start_record      The data value
+   * @param   int  $stop_record       The data value
+   * @param   string  $search         The data value
+   * @return  array|bool              The query result
+   */
   public function browse_groups(
     $sort_field = false
     ,$sort_order = 'DESC'
@@ -100,6 +123,14 @@ class Group {
     return $data;
   }
 
+  /**
+   * Delete Group
+   *
+   * Run a query to remove a group from the database.
+   *
+   * @param       int $group_id      The data value
+   * @return      void
+   */
   public function delete_group($group_id) {
     $statement = $this->db->prepare("
       UPDATE `group`
@@ -109,6 +140,14 @@ class Group {
     $statement->execute();
   }
 
+  /**
+   * Flatten Group Hierarchy
+   *
+   * Flatten the group array, returning a single level array.
+   *
+   * @param       object $group_hierarchy    The multidimensional array
+   * @return      array                      The single level array
+   */
   public function flatten_group_hierarchy($group_hierarchy) {
     $single_level_array = array();
     foreach($group_hierarchy as $single_node) {
@@ -125,6 +164,16 @@ class Group {
     return $single_level_array;
   }
 
+  /**
+   * Get Descendants
+   *
+   * Query the database for a group's descendants.
+   *
+   * @param       object $groups             The array
+   * @param       int $level                 The level
+   * @param       string $indent_char        The character used to indent in the resulting list
+   * @return      array|bool                 The single level array
+   */
   public function get_descendants(&$groups, $level = 0, $indent_char = "-") {
     $level += 1;
     $indent_string = "";
@@ -155,6 +204,14 @@ class Group {
     }
   }
 
+  /**
+   * Get Group Hierarchy
+   *
+   * Query the database for a group's hierarchy.
+   *
+   * @param       string $indent_char        The character used to indent in the resulting list
+   * @return      array|bool                 The query result
+   */
   public function get_group_hierarchy($indent_char = "-") {
     // Get the root nodes.
     $statement = $this->db->prepare("
@@ -174,6 +231,14 @@ class Group {
     return $root_nodes;
   }
 
+  /**
+   * Get Group Record
+   *
+   * Query the database for one group and its parent group
+   *
+   * @param       int $group_id        The data value
+   * @return      array|bool           The guery result
+   */
   public function get_group_record($group_id) {
     $statement = $this->db->prepare("
       SELECT *
@@ -198,6 +263,14 @@ class Group {
     return $data;
   }
 
+  /**
+   * Get Groups
+   *
+   * Query the database for one group and its parent group
+   *
+   * @param       array|int $group_ids    The data value
+   * @return      array|bool              The query result
+   */
   public function get_groups($group_ids = false) {
     $pdo_params = array(
       1 //active
@@ -227,6 +300,15 @@ class Group {
     return $statement->fetchAll(PDO::FETCH_ASSOC);
   }
 
+  /**
+   * Insert/Update Group
+   *
+   * Run a queries to insert and update groups in the database.
+   *
+   * @param       array $data       The data array
+   * @param       array $group_id   The data value
+   * @return      array|bool        The group id
+   */
   public function insert_update_group( $data, $group_id = false ) {
 
       $pdo_params = array(
@@ -347,8 +429,15 @@ class Group {
       return $group_id;
     }
 
-  // Get all the admins and editors for supplied groups,
-  // AS WELL AS the admin/editors for their parent groups.
+  /**
+   * Get Admin Info From Group List
+   *
+   * Query for all of the admins and editors for the supplied groups,
+   * as well as all of the admin/editors for their parent groups.
+   *
+   * @param       array $group_list    The data array
+   * @return      array|bool           The group id
+   */
   public function get_admin_info_from_group_list( $group_list ) {
     $statement = $this->db->prepare("
       SELECT user_account.user_account_email

@@ -2,7 +2,7 @@
 /**
  * The PHP Skeleton App
  *
- * @author      Goran Halusa
+ * @author      Goran Halusa <gor@webcraftr.com>
  * @copyright   2015 Goran Halusa
  * @link        https://github.com/ghalusa/PHP-Skeleton-App
  * @license     https://github.com/ghalusa/PHP-Skeleton-App/wiki/License
@@ -16,18 +16,29 @@
 /**
  * User Account
  *
- * Class for the User Account module.
+ * Class for the User Account module, providing methods for browsing and managing users.
  *
- * @package     PHP Skeleton App
- * @author      Goran Halusa
+ * @author      Goran Halusa <gor@webcraftr.com>
  * @since       1.0.0
  */
 
 class UserAccount {
 
+  /**
+   * @var string  $session_key    The session key
+   */
   private $session_key = "";
+
+  /**
+   * @var object  $db   The database connection object
+   */
   public $db;
 
+  /**
+   * Constructor
+   * @param object   $db_connection   The database connection object
+   * @param string   $session_key     The session key
+   */
   public function __construct( $db_connection = false, $session_key = false ) {
     if($db_connection && is_object($db_connection)) {
       $this->db = $db_connection;
@@ -35,6 +46,19 @@ class UserAccount {
     $this->session_key = $session_key;
   }
 
+  /**
+   * Browse User Accounts
+   *
+   * Run a query to retreive all users in the database.
+   *
+   * @param   string  $sort_field     The data value
+   * @param   string  $sort_order     The data value
+   * @param   int  $start_record      The data value
+   * @param   int  $stop_record       The data value
+   * @param   string  $search         The data value
+   * @param   int  $user_account_id   The data value
+   * @return  array|bool              The query result
+   */
   public function browse_user_accounts(
     $sort_field = false
     ,$sort_order = 'DESC'
@@ -99,6 +123,13 @@ class UserAccount {
     return $data;
   }
 
+  /**
+   * Get Universal Administrator Emails
+   *
+   * Run a query to retrieve all administrator emails from the database.
+   *
+   * @return      array|bool     The query result
+   */
   public function get_universal_administrator_emails() {
     $statement = $this->db->prepare("
       SELECT user_account.user_account_email
@@ -110,6 +141,14 @@ class UserAccount {
     return $statement->fetchAll(PDO::FETCH_ASSOC);
   }
 
+  /**
+   * Get User Account Groups
+   *
+   * Run a query to retrieve all of a user's groups from the database.
+   *
+   * @param       int $user_account_id    The data value
+   * @return      array|bool              The query result
+   */
   public function get_user_account_groups($user_account_id) {
     $statement = $this->db->prepare("
       SELECT `group`.group_id
@@ -123,6 +162,15 @@ class UserAccount {
     return $statement->fetchAll(PDO::FETCH_ASSOC);
   }
 
+  /**
+   * Get User Group Roles
+   *
+   * Run a query to retrieve all of a user's group roles from the database.
+   *
+   * @param       int $user_account_id    The data value
+   * @param       int $group_id           The data value
+   * @return      array|bool              The query result
+   */
   public function get_user_group_roles( $user_account_id, $group_id ) {
     $statement = $this->db->prepare("
       SELECT user_account_roles.role_id
@@ -137,6 +185,14 @@ class UserAccount {
     return $statement->fetchAll(PDO::FETCH_ASSOC);
   }
 
+  /**
+   * Get Roles
+   *
+   * Run a query to retrieve all roles from the database.
+   *
+   * @param       array $exclude_ids      The array
+   * @return      array|bool              The query result
+   */
   public function get_roles( $exclude_ids = array() ) {
     $exclude_id_sql = "";
 
@@ -153,6 +209,14 @@ class UserAccount {
     return $statement->fetchAll(PDO::FETCH_ASSOC);
   }
 
+  /**
+   * Get User Account Info
+   *
+   * Run a query to retrieve one user's account from the database.
+   *
+   * @param       int $user_account_id    The data value
+   * @return      array|bool              The query result
+   */
   public function get_user_account_info( $user_account_id = false ) {
     $statement = $this->db->prepare("
       SELECT user_account_email
@@ -166,6 +230,14 @@ class UserAccount {
     return $statement->fetch(PDO::FETCH_ASSOC);
   }
 
+  /**
+   * Get Addresses
+   *
+   * Run a query to retrieve one user's addresses from the database.
+   *
+   * @param       int $user_account_id    The data value
+   * @return      array|bool              The query result
+   */
   public function get_addresses( $user_account_id = false ) {
     $statement = $this->db->prepare("
       SELECT *
@@ -176,6 +248,16 @@ class UserAccount {
     return $statement->fetchAll(PDO::FETCH_ASSOC);
   }
 
+  /**
+   * Insert Addresses
+   *
+   * Run a query to insert addresses into the database.
+   *
+   * @param       array $data                    The array
+   * @param       int $user_account_id           The data value
+   * @param       int $editor_user_account_id    The data value
+   * @return      array|bool                     The query result
+   */
   public function insert_addresses( $data, $user_account_id, $editor_user_account_id ) {
 
     $address_data = array();
@@ -239,11 +321,25 @@ class UserAccount {
 
   }
 
-  public function insert_update_user_account($data
+  /**
+   * Insert/Update User Account
+   *
+   * Run queries to insert and update user accounts in the database.
+   *
+   * @param       array $data                                   The array
+   * @param       int $user_account_id                          The data value
+   * @param       bool $update_groups                           True/False
+   * @param       int $proxy_role_id                            The data value
+   * @param       bool $role_perm_manage_all_accounts_access    The data value
+   * @return      array|bool                                    The query result
+   */
+  public function insert_update_user_account(
+    $data
     ,$user_account_id
     ,$update_groups = true
     ,$proxy_role_id = false
-    ,$role_perm_manage_all_accounts_access = false) {
+    ,$role_perm_manage_all_accounts_access = false
+  ) {
 
     $account_exists = $this->account_exists($user_account_id);
     if(!$account_exists) {
@@ -344,6 +440,14 @@ class UserAccount {
     }
   }
 
+  /**
+   * Find User Account
+   *
+   * Run a query to search the database for user accounts.
+   *
+   * @param       string $search                 The data value
+   * @return      array|bool                     The query result
+   */
   public function find_user_account( $search ) {
     $statement = $this->db->prepare("
       SELECT CONCAT(first_name, ' ', last_name) AS displayname
@@ -359,6 +463,14 @@ class UserAccount {
     return $statement->fetchAll(PDO::FETCH_ASSOC);
   }
 
+  /**
+   * Delete User Account
+   *
+   * Run a query to delete a user account, and groups, from the database.
+   *
+   * @param       int $user_account_id           The data value
+   * @return      array|bool                     The query result
+   */
   public function delete_user_account( $user_account_id ) {
     $statement = $this->db->prepare("
       DELETE FROM user_account
@@ -373,6 +485,16 @@ class UserAccount {
     $statement->execute();
   }
 
+  /**
+   * Delete User Groups
+   *
+   * Run a query to delete a user account's groups from the database.
+   *
+   * @param       array $data                    The array
+   * @param       int $user_account_id           The data value
+   * @param       int $editor_user_account_id    The data value
+   * @return      array|bool                     The query result
+   */
   public function delete_user_groups( $user_account_id ) {
     $statement = $this->db->prepare("
       DELETE FROM user_account_groups
@@ -381,6 +503,14 @@ class UserAccount {
     $statement->execute();
   }
 
+  /**
+   * Account Exists
+   *
+   * Run a query to determine if a user account exists in the database.
+   *
+   * @param       int $user_account_id           The data value
+   * @return      array|bool                     The query result
+   */
   public function account_exists( $user_account_id ) {
     $statement = $this->db->prepare("
       SELECT *
@@ -391,6 +521,14 @@ class UserAccount {
     return $statement->fetch(PDO::FETCH_ASSOC);
   }
 
+  /**
+   * Account Email Exists
+   *
+   * Run a query to determine if a user account email exists in the database.
+   *
+   * @param       string $user_account_email     The data value
+   * @return      array|bool                     The query result
+   */
   public function account_email_exists( $user_account_email ) {
     $statement = $this->db->prepare("
       SELECT user_account_id, user_account_email
@@ -401,6 +539,14 @@ class UserAccount {
     return $statement->fetch(PDO::FETCH_ASSOC);
   }
 
+  /**
+   * Is Registered
+   *
+   * Run a query to determine if a user account has been registered.
+   *
+   * @param       int $user_account_id           The data value
+   * @return      array|bool                     The query result
+   */
   public function is_registered( $user_account_id ) {
     $statement = $this->db->prepare("
       SELECT user_account.acceptable_use_policy
@@ -416,8 +562,14 @@ class UserAccount {
     return $statement->fetch(PDO::FETCH_ASSOC);
   }
 
-  // Gets all the roles that the user is associated to.
-  // Returns an array all all the roles.
+  /**
+   * Get User Roles List
+   *
+   * Run a query to retrieve a user account's roles.
+   *
+   * @param       int $user_account_id           The data value
+   * @return      array|bool                     The query result
+   */
   public function get_user_roles_list( $user_account_id ) {
     $statement = $this->db->prepare("
       SELECT DISTINCT role_id
@@ -428,6 +580,15 @@ class UserAccount {
     return $statement->fetchAll(PDO::FETCH_ASSOC);
   }
 
+  /**
+   * Update Acceptable Use Policy
+   *
+   * Run a query to update a user account's acceptable use policy.
+   *
+   * @param       int $user_account_id    The data value
+   * @param       int $value              The data value
+   * @return      array|bool              The query result
+   */
   public function update_acceptable_use_policy( $user_account_id, $value ) {
     $statement = $this->db->prepare("
       UPDATE user_account
@@ -438,8 +599,14 @@ class UserAccount {
     $statement->execute();
   }
 
-  /*
-   * Gets all the proxies that the user is associated with for a specific group.
+  /**
+   * Get User's Proxies For Groups
+   *
+   * Run a query to retrieve all the proxies that the user is associated with for a specific group.
+   *
+   * @param       int $user_account_id    The data value
+   * @param       int $group_id           The data value
+   * @return      array|bool              The query result
    */
   public function get_users_proxies_for_group( $user_account_id, $group_id ) {
     $statement = $this->db->prepare("
@@ -456,6 +623,15 @@ class UserAccount {
     return $statement->fetchAll(PDO::FETCH_ASSOC);
   }
 
+  /**
+   * Get User Group Roles Map
+   *
+   * Run queries to retrieve a user's current group values.
+   *
+   * @param       int $user_account_id    The data value
+   * @param       int $proxy_id           The data value
+   * @return      array|bool              The query result
+   */
   public function get_user_group_roles_map( $user_account_id, $proxy_id = false ) {
     $current_group_values = $this->get_user_account_groups($user_account_id);
     foreach($current_group_values as $index => $single_group) {
@@ -474,7 +650,17 @@ class UserAccount {
     return $current_group_values;
   }
 
-  // If you are assigned a role for a group, that role applies to all of that group's decendants.
+  /**
+   * Has Role
+   *
+   * Run a query to determine if a user has a role.
+   * If assigned a role for a group, that role applies to all of that group's decendants.
+   *
+   * @param       int $user_account_id    The data value
+   * @param       array $roles            The data value
+   * @param       int $group_id           The data value
+   * @return      array|bool              The query result
+   */
   public function has_role( $user_account_id, $roles = array(), $group_id = false ) {
     $statement = $this->db->prepare("
       SELECT ancestor
@@ -489,6 +675,15 @@ class UserAccount {
     return $statement->fetchAll(PDO::FETCH_ASSOC);
   }
 
+  /**
+   * Update Emailed Hash
+   *
+   * Run a query to update an emailed hash.
+   *
+   * @param       int $user_account_id    The data value
+   * @param       string $emailed_hash    The data value
+   * @return      array|bool              The query result
+   */
   public function update_emailed_hash( $user_account_id = false, $emailed_hash = false ) {
 
     $updated = false;
@@ -513,6 +708,16 @@ class UserAccount {
     return $updated;
   }
 
+  /**
+   * Update Password
+   *
+   * Run a query to update a password.
+   *
+   * @param       int $user_account_password    The data value
+   * @param       int $user_account_id          The data value
+   * @param       string $emailed_hash          The data value
+   * @return      bool                          True/False
+   */
   public function update_password( $user_account_password = false, $user_account_id = false, $emailed_hash = false ) {
 
     $updated = false;

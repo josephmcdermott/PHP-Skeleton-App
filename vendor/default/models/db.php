@@ -2,7 +2,7 @@
 /**
  * The PHP Skeleton App
  *
- * @author      Goran Halusa
+ * @author      Goran Halusa <gor@webcraftr.com>
  * @copyright   2015 Goran Halusa
  * @link        https://github.com/ghalusa/PHP-Skeleton-App
  * @license     https://github.com/ghalusa/PHP-Skeleton-App/wiki/License
@@ -13,30 +13,45 @@
  * file that was distributed with this source code.
  */
 
+namespace slimlocal\models;
+
+use PDO;
+
 /**
  * DB
  *
  * Database class for the PHP Skeleton App.
  *
- * @package     PHP Skeleton App
- * @author      Goran Halusa
+ * @author      Goran Halusa <gor@webcraftr.com>
  * @since       1.0.0
  */
-
-namespace slimlocal\models;
-
-use PDO;
-
 class db{
+
+	/**
+   * @var object  $db   The database connection object
+   */
 	private $db;
 
-    public function __construct($db_connection_params=false){
-		if($db_connection_params && is_array($db_connection_params)){
+	/**
+   * Constructor
+   *
+   * @param object   $db_connection_params   The database connection object
+   */
+  public function __construct($db_connection_params = false) {
+		if($db_connection_params && is_array($db_connection_params)) {
 			$this->db = $this->db_connect($db_connection_params);
 		}
-    }
+  }
 
-	private function db_connect($db_connection_params){
+  /**
+   * DB Connect
+   *
+   * Connect to a database and establish a resource.
+   *
+   * @param     object $db_connection_params    The database connection object
+   * @return    resource                        The database connection resource
+   */
+	private function db_connect($db_connection_params) {
 		if(empty($db_connection_params['type'])){
 			$db_connection_params['type'] = 'mysql';
 		}
@@ -69,10 +84,24 @@ class db{
 		return $database_handle;
 	}
 
+	/**
+   * Get Resource
+   *
+   * Establish the database resource.
+   *
+   * @return    resource    The database connection resource
+   */
 	public function get_resource(){
 		return $this->db;
 	}
 
+	/**
+   * Close Connection
+   *
+   * Set the database resource to null.
+   *
+   * @return    resource    The database connection resource
+   */
 	public function close_connection(){
 		$this->db = null;
 	}
