@@ -1,8 +1,8 @@
-SetEnv PATH_TO_FRAMEWORKS frameworks_path_placeholder
+SetEnv PATH_TO_VENDOR vendor_path_placeholder
 SetEnv CORE_TYPE vendor
 SetEnv IS_DEV true
 
-SetEnvIfNoCase Host "^([^\.]*)\.com$" PATH_TO_FRAMEWORKS=frameworks_path_placeholder CORE_TYPE=vendor IS_DEV=true
+SetEnvIfNoCase Host "^([^\.]*)\.com$" PATH_TO_VENDOR=vendor_path_placeholder CORE_TYPE=vendor IS_DEV=true
 
 RewriteEngine On
 
