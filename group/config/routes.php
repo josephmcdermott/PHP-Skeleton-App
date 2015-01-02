@@ -22,11 +22,11 @@
  * @since       1.0.0
  */
 
-$app->get('/', "check_authenticated", $apply_permissions("role_perm_browse_groups_access"), "browse_groups"); 
-$app->post('/datatables_browse_groups', "check_authenticated", $apply_permissions("role_perm_browse_groups_access"), "datatables_browse_groups"); 
+$app->get('/', "check_authenticated", apply_permissions("role_perm_browse_groups_access", $final_global_template_vars), "browse_groups"); 
+$app->post('/datatables_browse_groups', "check_authenticated", apply_permissions("role_perm_browse_groups_access", $final_global_template_vars), "datatables_browse_groups"); 
 
-$app->get('/manage(/:group_id)', "check_authenticated", $apply_permissions("role_perm_manage_groups_access"), "show_group_form"); 
-$app->post('/manage(/:group_id)', "enforce_csrf_guard", "check_authenticated", $apply_permissions("role_perm_manage_groups_access"), "insert_update_group", "show_group_form"); 
+$app->get('/manage(/:group_id)', "check_authenticated", apply_permissions("role_perm_manage_groups_access", $final_global_template_vars), "show_group_form"); 
+$app->post('/manage(/:group_id)', "enforce_csrf_guard", "check_authenticated", apply_permissions("role_perm_manage_groups_access", $final_global_template_vars), "insert_update_group", "show_group_form"); 
 
-$app->post('/delete', "enforce_csrf_guard", "check_authenticated", $apply_permissions("role_perm_manage_groups_access"), "delete_group");
+$app->post('/delete', "enforce_csrf_guard", "check_authenticated", apply_permissions("role_perm_manage_groups_access", $final_global_template_vars), "delete_group");
 ?>

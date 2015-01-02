@@ -24,7 +24,7 @@
 
 function browse_user_accounts(){
 	$app = \Slim\Slim::getInstance();
-  global $final_global_template_vars;
+  $final_global_template_vars = $app->config('final_global_template_vars');
 
   // Determine if user can manage all accounts. If not, limit the query to only the user's user_account_id.
   $has_permission = array_intersect($_SESSION[$final_global_template_vars["session_key"]]["user_role_list"], $final_global_template_vars["role_perm_manage_all_accounts_access"]);

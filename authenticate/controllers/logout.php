@@ -24,7 +24,7 @@
  
 function logout(){
 	$app = \Slim\Slim::getInstance();
-	global $final_global_template_vars;
+	$final_global_template_vars = $app->config('final_global_template_vars');
 	unset($_SESSION[$final_global_template_vars["session_key"]]);
 	$app->redirect($final_global_template_vars["login_url"]);
 }

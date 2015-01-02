@@ -32,21 +32,21 @@
   }
   ini_set('session.cookie_httponly',1);
 
-  require_once $_SERVER["PATH_TO_FRAMEWORKS"] . 'slim/slim/Slim/Slim.php';
+  require_once $_SERVER["PATH_TO_VENDOR"] . 'slim/slim/Slim/Slim.php';
   \Slim\Slim::registerAutoloader();
-  require_once $_SERVER["PATH_TO_FRAMEWORKS"] . 'slim/views/Twig.php';
-  require_once $_SERVER["PATH_TO_FRAMEWORKS"] . 'default/functions/functions.php';
-  require_once $_SERVER["PATH_TO_FRAMEWORKS"] . 'default/models/utility.php';
+  require_once $_SERVER["PATH_TO_VENDOR"] . 'slim/views/Twig.php';
+  require_once $_SERVER["PATH_TO_VENDOR"] . 'default/functions/functions.php';
+  require_once $_SERVER["PATH_TO_VENDOR"] . 'default/models/utility.php';
 
   // Added due to PHP errors - by Gor, gor@webcraftr.com, 2013-07-16
   // "PHP Strict Standards:  Non-static method slimlocal\models\utility::subvalue_sort()
-  // should not be called statically in /Users/gorgor/Dropbox/Sites/frameworks/default/autoload.php on line 169"
+  // should not be called statically in /vendor/default/autoload.php on line 169"
   $utility = new \slimlocal\models\utility();
 
-  \slimlocal\models\utility::include_all_files_in_directory($_SERVER["PATH_TO_FRAMEWORKS"] . "default/models");
+  \slimlocal\models\utility::include_all_files_in_directory($_SERVER["PATH_TO_VENDOR"] . "default/models");
 
   // Cet core settings - default settings that propogate across all sites.
-  require_once $_SERVER["PATH_TO_FRAMEWORKS"] . "default/settings/settings.php";
+  require_once $_SERVER["PATH_TO_VENDOR"] . "default/settings/settings.php";
   $final_global_template_vars = array_merge($final_global_template_vars, $default_core_settings);
 
   // Get the site settings (default_global_settings) if it exists.
@@ -101,7 +101,7 @@
   // Documentation for Slim Views and Twig integration:
   // https://github.com/codeguy/Slim-Views
 
-  $app->view()->parserDirectory = $_SERVER["PATH_TO_FRAMEWORKS"]."twig/twig/lib/Twig";
+  $app->view()->parserDirectory = $_SERVER["PATH_TO_VENDOR"]."twig/twig/lib/Twig";
 
   // Supply paths to all possible template locations.
   $app->view()->twigTemplateDirs = array(
@@ -218,7 +218,7 @@
 
   // Changed from static call to instanciated due to PHP errors - by Gor, gor@webcraftr.com, 2013-07-16
   // "PHP Strict Standards:  Non-static method slimlocal\models\utility::subvalue_sort()
-  // should not be called statically in /Users/gorgor/Dropbox/Sites/frameworks/default/autoload.php on line 169"
+  // should not be called statically in /vendor/default/autoload.php on line 169"
   $modules_list_array = $utility->subvalue_sort($modules_list_array, 'sort_order');
   $final_global_template_vars["default_module_list"] = $modules_list_array;
   $final_global_template_vars["visible_module_count"] = $visible_module_count;
@@ -264,6 +264,8 @@
       $log_db->close_connection();
     });
   }
+  
+  $app->config('final_global_template_vars', $final_global_template_vars);
 
   // Run the app.
   $app->run();

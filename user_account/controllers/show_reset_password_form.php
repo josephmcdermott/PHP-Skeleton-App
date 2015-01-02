@@ -25,7 +25,7 @@
 function show_reset_password_form(){
   $app = \Slim\Slim::getInstance();
   $env = $app->environment();
-  global $final_global_template_vars;
+  $final_global_template_vars = $app->config('final_global_template_vars');
 
   $app->render('reset_password_form.php',array(
     "page_title" => "Reset Password"

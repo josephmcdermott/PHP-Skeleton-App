@@ -39,9 +39,9 @@ $default_global_settings = array(
   ,"module_icon_path" => "/dashboard/library/images/module_default_icon.png"
   // Are we on an AWS EC2 instance? MediaTemple? DigitalOcean? e.g. "aws_ec2" (anything goes)
   ,"hosting_vendor" => false
-  // Path to PHPMailer - e.g. /mnt/lib/phpmailer/class.phpmailer.php
+  // Path to PHPMailer - e.g. /vendor/phpmailer/class.phpmailer.php
   ,"path_to_phpmailer" => false
-  // Path to SMTP settings - e.g. /mnt/lib/aws_smtp_settings/settings.php
+  // Path to SMTP settings - e.g. /path/to/aws_smtp_settings/settings.php
   ,"path_to_smtp_settings" => false
   // An alternative email address to use instead of the default "admin@".$_SERVER["SERVER_NAME"]
   ,"send_emails_from" => "admin@".$_SERVER["SERVER_NAME"]
@@ -55,7 +55,7 @@ $default_global_settings = array(
     ,"email_on_connection_failure" => true
     #~admin_emails~#
   )
-  ,"core_templates" => $_SERVER["PATH_TO_FRAMEWORKS"] . "default/templates/default_bootstrap"
+  ,"core_templates" => $_SERVER["PATH_TO_VENDOR"] . "default/templates/default_bootstrap"
   ,"menu_template_name" => "default_bootstrap_side_nav.html"
   ,"layout_template_name" => "default_bootstrap_admin.html"
   ,"site_templates" => $_SERVER["DOCUMENT_ROOT"] . "/site/templates"

@@ -25,7 +25,7 @@
 function form(){
   $app = \Slim\Slim::getInstance();
   $env = $app->environment();
-  global $final_global_template_vars;
+  $final_global_template_vars = $app->config('final_global_template_vars');
 
   // Redirect to the installer if database variables aren't present, and if we aren't already there.
   if(
@@ -39,7 +39,7 @@ function form(){
     exit;
   }
 
-  require_once $_SERVER["PATH_TO_FRAMEWORKS"] . "wixel/gump/gump.class.php";
+  require_once $_SERVER["PATH_TO_VENDOR"] . "wixel/gump/gump.class.php";
   $gump = new GUMP();
 
   $data = $posted_data = $app->request()->post() ? $app->request()->post() : false;

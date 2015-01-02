@@ -24,7 +24,7 @@
 
 function relay(){
 	$app = \Slim\Slim::getInstance();
-	global $final_global_template_vars;
+	$final_global_template_vars = $app->config('final_global_template_vars');
   $app->render('home.php',array(
     "page_title" => "Home"
   ));

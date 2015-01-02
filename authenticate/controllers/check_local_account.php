@@ -24,7 +24,8 @@
 
 function check_local_account(){
 	$app = \Slim\Slim::getInstance();
-	global $final_global_template_vars;
+	$final_global_template_vars = $app->config('final_global_template_vars');
+	
 	require_once $final_global_template_vars["default_module_list"]["user_account"]["absolute_path_to_this_module"] . "/models/user_account.class.php";
 	$env = $app->environment();
 	$db_conn = new \slimlocal\models\db($final_global_template_vars["db_connection"]);

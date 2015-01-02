@@ -24,7 +24,7 @@
  
 function show_register_form(){
 	$app = \Slim\Slim::getInstance();
-	global $final_global_template_vars;
+	$final_global_template_vars = $app->config('final_global_template_vars');
 	require_once $final_global_template_vars["default_module_list"]["user_account"]["absolute_path_to_this_module"] . "/models/user_account.class.php";
 	require_once $final_global_template_vars["default_module_list"]["group"]["absolute_path_to_this_module"] . "/models/group.class.php";
 	$env = $app->environment();

@@ -25,10 +25,11 @@
 
 function insert_update_user_account(\Slim\Route $route){
   $app = \Slim\Slim::getInstance();
-  global $final_global_template_vars;
+  $final_global_template_vars = $app->config('final_global_template_vars');
+  
   require_once $final_global_template_vars["absolute_path_to_this_module"] . "/models/user_account.class.php";
   require_once $final_global_template_vars["default_module_list"]["group"]["absolute_path_to_this_module"] . "/models/group.class.php";
-  require_once $_SERVER["PATH_TO_FRAMEWORKS"] . "wixel/gump/gump.class.php";
+  require_once $_SERVER["PATH_TO_VENDOR"] . "wixel/gump/gump.class.php";
   // URL parameters matched in the route.
   $params = $route->getParams();
   $user_account_id = isset($params["user_account_id"]) ? $params["user_account_id"] : false;

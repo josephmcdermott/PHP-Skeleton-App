@@ -34,10 +34,20 @@ $default_module_settings = array(
 	,"menu_hidden" => isset($_SESSION[$default_global_settings["session_key"]]) && $_SESSION[$default_global_settings["session_key"]] ? false : true
 	,"pages" => array(
 		array(
-			"label" => "Browse Groups", "path" => "/", "display" => $apply_permissions("role_perm_browse_groups_access")
+			"label" => "Browse Groups", 
+			"path" => "/", 
+			"display" => apply_permissions(
+				"role_perm_browse_groups_access", 
+				$final_global_template_vars
+			)
 		)
 		,array(
-			"label" => "Create Group", "path" => "/manage", "display" => $apply_permissions("role_perm_manage_groups_access")
+			"label" => "Create Group", 
+			"path" => "/manage", 
+			"display" => apply_permissions(
+				"role_perm_manage_groups_access", 
+				$final_global_template_vars
+			)
 		)
 	)
 	,"sort_order" => 4

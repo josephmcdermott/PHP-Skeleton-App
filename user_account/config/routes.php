@@ -22,16 +22,16 @@
  * @since       1.0.0
  */
 
-$app->get('/', "check_authenticated", $apply_permissions("role_perm_browse_accounts_access"), "browse_user_accounts");
-$app->post('/datatables_browse_user_accounts', "check_authenticated", $apply_permissions("role_perm_browse_accounts_access"), "datatables_browse_user_accounts");
+$app->get('/', "check_authenticated", apply_permissions("role_perm_browse_accounts_access", $final_global_template_vars), "browse_user_accounts");
+$app->post('/datatables_browse_user_accounts', "check_authenticated", apply_permissions("role_perm_browse_accounts_access", $final_global_template_vars), "datatables_browse_user_accounts");
 
-$app->get('/manage(/:user_account_id)', "check_authenticated", $apply_permissions("role_perm_manage_accounts_access"), $user_account_permissions, "show_user_account_form");
-$app->post('/manage(/:user_account_id)', "enforce_csrf_guard", "check_authenticated", $apply_permissions("role_perm_manage_accounts_access"), $user_account_permissions, "insert_update_user_account", "show_user_account_form");
+$app->get('/manage(/:user_account_id)', "check_authenticated", apply_permissions("role_perm_manage_accounts_access", $final_global_template_vars), $user_account_permissions, "show_user_account_form");
+$app->post('/manage(/:user_account_id)', "enforce_csrf_guard", "check_authenticated", apply_permissions("role_perm_manage_accounts_access", $final_global_template_vars), $user_account_permissions, "insert_update_user_account", "show_user_account_form");
 
-$app->get('/find', "check_authenticated", $apply_permissions("role_perm_manage_all_accounts_access"), "show_find_user_account_form");
-$app->get('/find/(:q)', "check_authenticated", $apply_permissions("role_perm_manage_all_accounts_access"), "find_user_account");
+$app->get('/find', "check_authenticated", apply_permissions("role_perm_manage_all_accounts_access", $final_global_template_vars), "show_find_user_account_form");
+$app->get('/find/(:q)', "check_authenticated", apply_permissions("role_perm_manage_all_accounts_access", $final_global_template_vars), "find_user_account");
 
-$app->post('/delete', "enforce_csrf_guard", "check_authenticated", $apply_permissions("role_perm_manage_all_accounts_access"), $user_account_delete_permissions, "delete_user_account");
+$app->post('/delete', "enforce_csrf_guard", "check_authenticated", apply_permissions("role_perm_manage_all_accounts_access", $final_global_template_vars), $user_account_delete_permissions, "delete_user_account");
 
 $app->get('/register/', "show_register_form");
 $app->post('/register/', "enforce_csrf_guard", "insert_user_account", "show_register_form");

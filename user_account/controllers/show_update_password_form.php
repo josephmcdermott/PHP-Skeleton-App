@@ -25,7 +25,7 @@
 function show_update_password_form(){
   $app = \Slim\Slim::getInstance();
   $env = $app->environment();
-  global $final_global_template_vars;
+  $final_global_template_vars = $app->config('final_global_template_vars');
 
   $get_data = $app->request()->get() ? $app->request()->get() : false;
 

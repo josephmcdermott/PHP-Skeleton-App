@@ -16,7 +16,7 @@
 /**
  * Top-level Index
  *
- * Checks to see if the .htaccess needs the PATH_TO_FRAMEWORKS environment variable set.
+ * Checks to see if the .htaccess needs the PATH_TO_VENDOR environment variable set.
  * Includes the autoload.php script at the top-level.
  *
  * @author      Goran Halusa <gor@webcraftr.com>
@@ -26,8 +26,8 @@
 $file_name = ".htaccess";
 $original_file = file_get_contents($_SERVER['DOCUMENT_ROOT'].'/'.$file_name);
 
-if(stristr($original_file, "frameworks_path_placeholder")) {
-  $parsed = str_replace('frameworks_path_placeholder', $_SERVER['DOCUMENT_ROOT'].'/vendor/', $original_file);
+if(stristr($original_file, "vendor_path_placeholder")) {
+  $parsed = str_replace('vendor_path_placeholder', $_SERVER['DOCUMENT_ROOT'].'/vendor/', $original_file);
   unlink($_SERVER['DOCUMENT_ROOT'].'/'.$file_name);
   $file_handle = fopen($_SERVER['DOCUMENT_ROOT'].'/'.$file_name, 'w') or die("can't open file");
   fwrite($file_handle, $parsed);
@@ -37,5 +37,5 @@ if(stristr($original_file, "frameworks_path_placeholder")) {
   exit;
 }
 
-include_once($_SERVER["PATH_TO_FRAMEWORKS"] . "default/autoload.php");
+include_once($_SERVER["PATH_TO_VENDOR"] . "default/autoload.php");
 ?>

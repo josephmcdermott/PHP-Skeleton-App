@@ -25,7 +25,7 @@
 function show_register_form() {
   $app = \Slim\Slim::getInstance();
   $env = $app->environment();
-  global $final_global_template_vars;
+  $final_global_template_vars = $app->config('final_global_template_vars');
 
   $data = $app->request()->post() ? $app->request()->post() : false;
 

@@ -20,5 +20,5 @@
  * @since       1.0.0
  */
 
-include_once($_SERVER["PATH_TO_FRAMEWORKS"] . "default/autoload.php");
+include_once($_SERVER["PATH_TO_VENDOR"] . "default/autoload.php");
 ?>

@@ -24,8 +24,9 @@
 
 function authenticate_user() {
   $app = \Slim\Slim::getInstance();
-  global $final_global_template_vars;
-  require_once $_SERVER["PATH_TO_FRAMEWORKS"] . "wixel/gump/gump.class.php";
+  $final_global_template_vars = $app->config('final_global_template_vars');
+  
+  require_once $_SERVER["PATH_TO_VENDOR"] . "wixel/gump/gump.class.php";
   require_once $final_global_template_vars["absolute_path_to_this_module"] . "/models/authenticate.class.php";
 
   $db_conn = new \slimlocal\models\db( $final_global_template_vars["db_connection"] );

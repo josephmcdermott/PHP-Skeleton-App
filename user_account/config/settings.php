@@ -44,16 +44,31 @@ $default_module_settings = array(
 	,"pages" => $role_perm_manage_all_accounts_access ?
 	array(
 		array(
-			"label" => "Browse User Accounts", "path" => "/", "display" => $apply_permissions("role_perm_browse_accounts_access")
+			"label" => "Browse User Accounts", 
+			"path" => "/", 
+			"display" => apply_permissions(
+				"role_perm_browse_accounts_access", 
+				$final_global_template_vars
+			)
 		)
 		,array(
-			"label" => "Find User Account", "path" => "/find", "display" => $apply_permissions("role_perm_manage_all_accounts_access")
+			"label" => "Find User Account", 
+			"path" => "/find", 
+			"display" => apply_permissions(
+				"role_perm_manage_all_accounts_access", 
+				$final_global_template_vars
+			)
 		)
 	)
 	:
 	array(
 		array(
-			"label" => "Manage Your Account", "path" => "/manage/".$user_account_id, "display" => $apply_permissions("role_perm_manage_accounts_access")
+			"label" => "Manage Your Account", 
+			"path" => "/manage/".$user_account_id, 
+			"display" => apply_permissions(
+				"role_perm_manage_accounts_access", 
+				$final_global_template_vars
+			)
 		)
 	)
 	,"sort_order" => 3
