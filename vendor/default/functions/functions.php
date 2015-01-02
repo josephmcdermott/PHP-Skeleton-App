@@ -68,9 +68,9 @@ function force_https(\Slim\Route $route){
 	$final_global_template_vars = $app->config('final_global_template_vars');
 	if(empty($final_global_template_vars["is_dev"])){
 		// Means we are on a production box.
-		if(isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"]){
+    if( (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || ($_SERVER['SERVER_PORT'] == 443) ) {
 			// It's already SSL... do nothing.
-		}else{
+		} else {
 			$redirect= "https://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
 			$app->redirect($redirect);
 		}
@@ -87,9 +87,9 @@ function force_https(\Slim\Route $route){
  * @return  void
  */
 function force_ssl(\Slim\Route $route = null){
-	if(isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"]){
+	if( (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || ($_SERVER['SERVER_PORT'] == 443) ) {
 		// It's already SSL... do nothing.
-	}else{
+	} else {
 		$redirect= "https://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
 		header("Location: " . $redirect);
 		die();
