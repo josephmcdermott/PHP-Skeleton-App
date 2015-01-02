@@ -342,57 +342,29 @@ class UserAccount {
     ,$role_perm_manage_all_accounts_access = false
   ) {
 
-    $account_exists = $this->account_exists($user_account_id);
-    if(!$account_exists) {
-      // Insert
-      $statement = $this->db->prepare("
-        INSERT INTO user_account
-        (user_account_id
-        ,user_account_email
-        ,user_account_password
-        ,first_name
-        ,last_name
-        ,created_date
-        ,modified_date)
-        VALUES
-        (:user_account_id
-        ,:user_account_email
-        ,:user_account_password
-        ,:first_name
-        ,:last_name
-        ,NOW()
-        ,NOW())");
-      $statement->bindValue(":user_account_id", $user_account_id, PDO::PARAM_INT);
-      $statement->bindValue(":user_account_email", $data["user_account_email"], PDO::PARAM_STR);
-      $statement->bindValue(":user_account_password", $data["user_account_password"], PDO::PARAM_STR);
-      $statement->bindValue(":first_name", $data["first_name"], PDO::PARAM_STR);
-      $statement->bindValue(":last_name", $data["last_name"], PDO::PARAM_STR);
-      $statement->execute();
-    } else {
-      // Update
+    // Update
+    $statement = $this->db->prepare("
+      UPDATE user_account
+      SET user_account_email = :user_account_email
+      ,first_name = :first_name
+      ,last_name = :last_name
+      ,modified_date = NOW()
+      WHERE user_account_id = :user_account_id");
+    $statement->bindValue(":user_account_email", $data["user_account_email"], PDO::PARAM_STR);
+    $statement->bindValue(":first_name", $data["first_name"], PDO::PARAM_STR);
+    $statement->bindValue(":last_name", $data["last_name"], PDO::PARAM_STR);
+    $statement->bindValue(":user_account_id", $user_account_id, PDO::PARAM_INT);
+    $statement->execute();
+    // Update the password if user has entered one.
+    if(!empty($data["user_account_password"])) {
       $statement = $this->db->prepare("
         UPDATE user_account
-        SET user_account_email = :user_account_email
-        ,first_name = :first_name
-        ,last_name = :last_name
+        SET user_account_password = :user_account_password
         ,modified_date = NOW()
         WHERE user_account_id = :user_account_id");
-      $statement->bindValue(":user_account_email", $data["user_account_email"], PDO::PARAM_STR);
-      $statement->bindValue(":first_name", $data["first_name"], PDO::PARAM_STR);
-      $statement->bindValue(":last_name", $data["last_name"], PDO::PARAM_STR);
+      $statement->bindValue(":user_account_password", sha1($data["user_account_password"]), PDO::PARAM_STR);
       $statement->bindValue(":user_account_id", $user_account_id, PDO::PARAM_INT);
       $statement->execute();
-      // Update the password if user has entered one.
-      if(!empty($data["user_account_password"])) {
-        $statement = $this->db->prepare("
-          UPDATE user_account
-          SET user_account_password = :user_account_password
-          ,modified_date = NOW()
-          WHERE user_account_id = :user_account_id");
-        $statement->bindValue(":user_account_password", sha1($data["user_account_password"]), PDO::PARAM_STR);
-        $statement->bindValue(":user_account_id", $user_account_id, PDO::PARAM_INT);
-        $statement->execute();
-      }
     }
 
     if( $update_groups && $role_perm_manage_all_accounts_access ) {
