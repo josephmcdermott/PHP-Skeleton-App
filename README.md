@@ -6,6 +6,14 @@ The PHP Skeleton App creates an object-oriented PHP MVC environment, tailored fo
 
 Out of the box, it provides the ability to set up and run a public-facing website, authenticate to the administrative side, and create users and groups. All of the baseline database tables are created on first run, along with the first "Universal Administrator".
 
+**Note: The PHP Skeleton App is currently under development and perpetually evolving.**
+
+This is my first go at publishing something extensive on GitHub. I'm far from perfect, and have been in somewhat of a bubble. Regardless, I have decided to get my feet wet so I can collect feedback from the community, and grow as a developer. So, your constructive criticism is encouraged. I'll do my best to learn from my mistakes and deliver the goods.
+
+Thanks!
+
+-Gor
+
 * * *
 
 ## Features
