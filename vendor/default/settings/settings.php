@@ -35,5 +35,6 @@ $default_core_settings = array(
 	,"default_site_module" => $_SERVER["DOCUMENT_ROOT"]. "/site"
   // Provide the path to a local navbar and include it to override the default navbar.
 	,"navbar" => ""
+  ,"csrf_key" => "csrf_key"
 );
 ?>

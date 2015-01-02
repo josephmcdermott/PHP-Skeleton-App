@@ -106,6 +106,7 @@ class UserAccount {
       LEFT JOIN user_account ON user_account.user_account_id = user_account_groups.user_account_id
       LEFT JOIN `group` ON `group`.group_id = user_account_groups.group_id
       WHERE 1 = 1
+      AND user_account.active = 1
       {$and_user_account_id}
       {$search_sql}
       GROUP BY user_account_groups.user_account_id

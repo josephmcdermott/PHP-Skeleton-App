@@ -16,13 +16,14 @@
       </div>
     {% else %}
       <form method="POST">
-          <div class="form-group">
-            <label for="user_account_email">Your Email Address:</label>
-            <input name="user_account_email" type="text" required="true" autofocus="autofocus" class="form-control">
-          </div>
-          <div class="form-group">
-            <input class="btn btn-primary" type="submit" value="Submit">
-          </div>
+        {% include 'csrf_input.html' %}
+        <div class="form-group">
+          <label for="user_account_email">Your Email Address:</label>
+          <input name="user_account_email" type="text" required="true" autofocus="autofocus" class="form-control">
+        </div>
+        <div class="form-group">
+          <input class="btn btn-primary" type="submit" value="Submit">
+        </div>
       </form>
     {% endif %}
   </div>

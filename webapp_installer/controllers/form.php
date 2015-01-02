@@ -354,6 +354,10 @@ function form(){
       var_dump( $db->errorInfo() ); die('The INSERT INTO user_account_groups failed.');
     }
 
+    // Don't return the user account password and the CSRF key value.
+    unset($data['user_account_password']);
+    unset($data['csrf_key']);
+
     $data['success_message'] = 'installed';
   }
 

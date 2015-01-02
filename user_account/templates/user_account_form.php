@@ -22,7 +22,7 @@
     {% endif %}
 
     <form id="user_account_form" method="POST">
-
+      {% include 'csrf_input.html' %}
       <div class="row">
         <!-- Column 1 -->
         <div class="col-sm-6 col-md-6">

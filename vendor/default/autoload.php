@@ -126,6 +126,15 @@
     force_ssl();
   }
 
+  // Add CSRF tokens to session and make available to twig.
+  if($app->request()->getMethod() == 'GET' || empty($_SESSION[$final_global_template_vars["csrf_key"]])) {
+    $uuid = \slimlocal\models\utility::gen_uuid();
+    $final_global_template_vars["csrf_token"] = $uuid;
+    $_SESSION[$final_global_template_vars["csrf_key"]] = $final_global_template_vars["csrf_token"];
+  } else {
+    $final_global_template_vars["csrf_token"] = $_SESSION[$final_global_template_vars["csrf_key"]];
+  }
+
   // Create an array of all the modules.
   $modules_list_array = array();
   $visible_module_count = 0;

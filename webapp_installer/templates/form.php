@@ -14,7 +14,7 @@
   {% endif %}
   {% if data.success_message %}
     <div class="alert alert-success">
-      <h4>Success</h4>
+      <h4>All Set!</h4>
       <p>The installation was successful. You can <a href="/authenticate/">login here</a>.</p>
     </div>
   {% endif %}
@@ -34,6 +34,7 @@
     <p style="margin:20px 0 20px 20px;"><i class="glyphicon glyphicon-info-sign"></i> All fields are required.</p>
     <p style="margin:20px 0 20px 20px;"><i class="glyphicon glyphicon-cog"></i> <strong>Difficulties?</strong> <a href="/webapp_installer/library/env.php">Run the Environment Check</a></p>
     <form method="POST">
+      {% include 'csrf_input.html' %}
       <div class="col-sm-6 col-md-6" style="padding-left:20px;">
         <div class="form-group">
           <label for="user_account_email">Your Email Address:</label>

@@ -99,7 +99,7 @@
 						    type:"POST"
 						    ,dateType:"json"
 						    ,url: "{{ path_to_this_module }}/delete"
-						    ,data: ({id: JSON.stringify(delete_ids)})
+						    ,data: ({id: JSON.stringify(delete_ids), csrf_key: "{{ csrf_token }}"})
 						    ,success: function(ajax_return){
 						    	$('#browse').dataTable().fnDraw();
 						    }

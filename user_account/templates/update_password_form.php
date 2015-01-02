@@ -16,6 +16,7 @@
       </div>
     {% endif %}
       <form method="POST">
+        {% include 'csrf_input.html' %}
         <div class="form-group">
           <label class="control-label" for="user_account_password">Change Password:</label>
           <div class="controls">

@@ -19,6 +19,7 @@
   {% else %}
     <p style="margin:20px 0 20px 20px;">All fields are required.</p>
     <form method="POST">
+      {% include 'csrf_input.html' %}
       <div class="col-sm-6 col-md-6" style="padding-left:20px;">
         <div class="form-group">
           <label for="user_account_email">Your Email Address:</label>

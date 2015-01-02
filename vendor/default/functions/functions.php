@@ -96,8 +96,20 @@ function force_ssl(\Slim\Route $route = null){
 	}
 }
 
+/*
+ * Ability to prevent against CSRF attacks
+ */
+function enforce_csrf_guard(){
+	$app = \Slim\Slim::getInstance();
+	global $final_global_template_vars;
+	$submitted_token = $app->request()->post($final_global_template_vars['csrf_key']);
+	if(empty($submitted_token) || $submitted_token != $_SESSION[$final_global_template_vars['csrf_key']]){
+		$app->halt(400, 'Invalid or missing CSRF token.');
+	}
+}
+
 /**
- * Force SSL
+ * Force Request Address
  *
  * Only allow script to be run by a given IP address.
  *

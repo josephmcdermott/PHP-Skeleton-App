@@ -16,6 +16,7 @@
         </div>
     {% endif %}
     <form method="POST">
+      {% include 'csrf_input.html' %}
       <div class="form-group">
         <label for="user_account_email">User Name (email address):</label>
         <input name="user_account_email" type="text" autofocus="autofocus" class="form-control">

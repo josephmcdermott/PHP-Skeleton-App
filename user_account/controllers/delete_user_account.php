@@ -22,7 +22,7 @@
  * @since       1.0.0
  */
 
-function delete_user_account(){
+function delete_user_account() {
 	$app = \Slim\Slim::getInstance();
 	global $final_global_template_vars;
 	require_once $final_global_template_vars["absolute_path_to_this_module"] . "/models/user_account.class.php";
@@ -30,7 +30,7 @@ function delete_user_account(){
 	$db_resource = $db_conn->get_resource();
 	$useraccount = new UserAccount($db_resource,$final_global_template_vars["session_key"]);
 	$delete_ids = json_decode($app->request()->post("id"));
-	foreach($delete_ids as $single_id){
+	foreach($delete_ids as $single_id) {
 		$useraccount->delete_user_account($single_id);
 	}
 }
