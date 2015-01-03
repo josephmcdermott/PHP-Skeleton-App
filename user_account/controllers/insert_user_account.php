@@ -30,11 +30,11 @@ function insert_user_account(){
   require_once $_SERVER["PATH_TO_VENDOR"] . "wixel/gump/gump.class.php";
   require_once $final_global_template_vars["absolute_path_to_this_module"] . "/models/user_account.class.php";
   require_once $final_global_template_vars["default_module_list"]["authenticate"]["absolute_path_to_this_module"] . "/models/authenticate.class.php";
-  $authenticate = new Authenticate( $db_resource, $final_global_template_vars["session_key"] );
-  
+
   $db_conn = new \slimlocal\models\db( $final_global_template_vars["db_connection"] );
   $db_resource = $db_conn->get_resource();
   $useraccount = new UserAccount( $db_resource, $final_global_template_vars["session_key"] );
+  $authenticate = new Authenticate( $db_resource, $final_global_template_vars["session_key"] );
   $gump = new GUMP();
 
   $posted_data = $app->request()->post() ? $app->request()->post() : false;
