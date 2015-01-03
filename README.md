@@ -6,9 +6,17 @@ The PHP Skeleton App creates an object-oriented PHP MVC environment, tailored fo
 
 Out of the box, it provides the ability to set up and run a public-facing website, authenticate to the administrative side, and create users and groups. All of the baseline database tables are created on first run, along with the first "Universal Administrator".
 
-**Note: The PHP Skeleton App is currently under development and perpetually evolving.**
+## This is an Initial Pre-Release of The PHP Skeleton App ##
 
-This is my first go at publishing something extensive on GitHub. I'm far from perfect, and have been in somewhat of a bubble. Regardless, I have decided to get my feet wet so I can collect feedback from the community, and grow as a developer. So, your constructive criticism is encouraged. I'll do my best to learn from my mistakes and deliver the goods.
+This is my first go at publishing something extensive on GitHub. I'm far from perfect, and have been in somewhat of a bubble. Regardless, I have decided to get my feet wet so I can collect feedback from the community, and grow as a developer. So, your constructive criticism is encouraged. I'll do my best to learn from any mistakes and deliver the goods.
+
+### Roadmap ###
+
+* While the application works, it admittedly requires some refinements to get it to a level I'm happy with, mainly with the architecture and coding standards.
+
+* The goal is to get the codebase to a level which conforms to the [Framework Interoperability Group's](http://www.php-fig.org/) (PHP-FIG) [PHP Standard Recommendation](http://www.php-fig.org/faq/#what-does-psr-stand-for) (PSR).
+
+* That is to say, the codebase is heavily under development and currently evolving. Use if you wish, but know that there may be some big changes along the way. I will try to keep things backwards-compatible, but there are no guarantees until the codebase meets the aforementioned benchmarks.
 
 Thanks!
 
