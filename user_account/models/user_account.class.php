@@ -100,13 +100,13 @@ class UserAccount {
         user_account_groups.user_account_id AS manage
         ,user_account_groups.user_account_id
         ,CONCAT(user_account.first_name, ' ', user_account.last_name) AS name
+        ,user_account.active
         ,GROUP_CONCAT(DISTINCT group.name SEPARATOR ', ') AS groups
         ,user_account_groups.user_account_id AS DT_RowId
       FROM user_account_groups
       LEFT JOIN user_account ON user_account.user_account_id = user_account_groups.user_account_id
       LEFT JOIN `group` ON `group`.group_id = user_account_groups.group_id
       WHERE 1 = 1
-      AND user_account.active = 1
       {$and_user_account_id}
       {$search_sql}
       GROUP BY user_account_groups.user_account_id

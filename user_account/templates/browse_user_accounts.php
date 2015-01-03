@@ -17,6 +17,7 @@
       <th class="text-center">Manage</th>
       <th class="text-center">Name</th>
       <th class="text-center">Group</th>
+      <th class="text-center">Active</th>
     </tr>
   </thead>
 </table>
@@ -32,7 +33,8 @@
 					"columns": [
 							{ "data": "manage" },
 							{ "data": "name" },
-							{ "data": "groups" }
+							{ "data": "groups" },
+							{ "data": "active" }
 						],				
 					"dom": '<"wrapper"fli><"col-sm-3 col-md-3 datatables_bulk_actions">pt<"bottom"ip><"clear">',
 					"pagingType": "simple_numbers",
