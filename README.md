@@ -87,31 +87,19 @@ http://YOUR_DOMAIN/webapp_installer/library/env.php
 
 ### STEP 1
 
-#### Clone the Repository Into the Web Root
-
-For example: */var/www/*
-
-**Note: The web root directory must be completely empty.**
-
-```bash
-git clone https://github.com/ghalusa/PHP-Skeleton-App.git /PATH/TO/YOUR_EMPTY_WEB_ROOT_DIRECTORY/
-```
-
-### STEP 2
-
 #### Run Composer (non global installation)
 
 ```bash
-php composer.phar install
+php composer.phar create-project ghalusa/php-skeleton-app /PATH/TO/YOUR_EMPTY_WEB_ROOT_DIRECTORY/ dev-master
 ```
 
 #### OR... Run Composer (global installation)
 
 ```bash
-composer install
+composer create-project ghalusa/php-skeleton-app /PATH/TO/YOUR_EMPTY_WEB_ROOT_DIRECTORY/ dev-master
 ```
 
-### STEP 3
+### STEP 2
 
 #### First, Make Sure Apache Has Permissions to Do Stuff
 *(This can be changed back after the installation is finished.)*
@@ -120,7 +108,7 @@ composer install
 sudo chown -R www-data:www-data /PATH/TO/YOUR_EMPTY_WEB_ROOT_DIRECTORY/
 ```
 
-### STEP 4
+### STEP 3
 
 #### Run the Web App Installer...
 
