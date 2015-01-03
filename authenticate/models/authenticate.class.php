@@ -47,6 +47,33 @@ class Authenticate{
   }
 
   /**
+   * Generate Hash
+   *
+   * Hash a password using BCrypt as the hashing technique.
+   *
+   * @param       string $password    The data value
+   * @return      string
+   */
+  public function generate_hashed_password($password) {
+    if (defined("CRYPT_BLOWFISH") && CRYPT_BLOWFISH) {
+      $salt = '$2y$11$' . substr(md5(uniqid(rand(), true)), 0, 22);
+      return crypt($password, $salt);
+    }
+  }
+
+  /**
+   * Verify Hashed Password
+   *
+   * Verify a hashed password.
+   *
+   * @param       string $password    The data value
+   * @return      bool
+   */
+  private function verify_hashed_password($password, $hashedPassword) {
+    return crypt($password, $hashedPassword) == $hashedPassword;
+  }
+
+  /**
    * Authenticate Local
    *
    * Run a query to find an active local user account.
@@ -59,16 +86,18 @@ class Authenticate{
 		$result = false;
 		if($username && $password){
 			$statement = $this->db->prepare("
-				SELECT user_account_id, user_account_email, first_name, last_name
+				SELECT user_account_id, user_account_email, user_account_password, first_name, last_name
 				FROM user_account
 				WHERE user_account_email = :user_account_email
-				AND user_account_password = :user_account_password
         AND active = 1
 			");
 			$statement->bindValue(":user_account_email", $username, PDO::PARAM_STR);
-			$statement->bindValue(":user_account_password", sha1($password), PDO::PARAM_STR);
 			$statement->execute();
-			$result = $statement->fetch(PDO::FETCH_ASSOC);
+			$data = $statement->fetch(PDO::FETCH_ASSOC);
+
+      $result = $this->verify_hashed_password($password, $data["user_account_password"]) ? $data : false;
+      unset($result["user_account_password"]);
+
 		}
 		return $result;
 	}

@@ -29,6 +29,7 @@ function insert_update_user_account(\Slim\Route $route){
   
   require_once $final_global_template_vars["absolute_path_to_this_module"] . "/models/user_account.class.php";
   require_once $final_global_template_vars["default_module_list"]["group"]["absolute_path_to_this_module"] . "/models/group.class.php";
+  require_once $final_global_template_vars["default_module_list"]["authenticate"]["absolute_path_to_this_module"] . "/models/authenticate.class.php";
   require_once $_SERVER["PATH_TO_VENDOR"] . "wixel/gump/gump.class.php";
   // URL parameters matched in the route.
   $params = $route->getParams();
@@ -37,6 +38,7 @@ function insert_update_user_account(\Slim\Route $route){
   $db_resource = $db_conn->get_resource();
   $useraccount = new UserAccount($db_resource,$final_global_template_vars["session_key"]);
   $group = new Group($db_resource,$final_global_template_vars["session_key"]);
+  $authenticate = new authenticate( $db_resource, $final_global_template_vars["session_key"] );
   $post = $app->request()->post();
 
   $errors = false;
@@ -142,6 +144,12 @@ function insert_update_user_account(\Slim\Route $route){
   }
 
   if(!$errors) {
+
+    // Hash the incoming password (with some salt).
+    if(!empty($post["user_account_password"])) {
+      $post["user_account_password"] = $authenticate->generate_hashed_password($post["user_account_password"]);
+    }
+
     $useraccount->insert_update_user_account($post, $user_account_id, true, $final_global_template_vars["proxy_id"], $role_perm_manage_all_accounts_access);
     $useraccount->insert_addresses($post, $user_account_id, $_SESSION[$final_global_template_vars["session_key"]]["user_account_id"]);
     $app->flash('message', 'Account successfully updated.');

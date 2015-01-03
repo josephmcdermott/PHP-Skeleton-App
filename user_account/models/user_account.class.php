@@ -362,7 +362,7 @@ class UserAccount {
         SET user_account_password = :user_account_password
         ,modified_date = NOW()
         WHERE user_account_id = :user_account_id");
-      $statement->bindValue(":user_account_password", sha1($data["user_account_password"]), PDO::PARAM_STR);
+      $statement->bindValue(":user_account_password", $data["user_account_password"], PDO::PARAM_STR);
       $statement->bindValue(":user_account_id", $user_account_id, PDO::PARAM_INT);
       $statement->execute();
     }
@@ -702,7 +702,7 @@ class UserAccount {
         SET user_account_password = :user_account_password, active = 1
         WHERE user_account_id = :user_account_id
         AND emailed_hash = :emailed_hash");
-      $statement->bindValue(":user_account_password", sha1($user_account_password), PDO::PARAM_STR);
+      $statement->bindValue(":user_account_password", $user_account_password, PDO::PARAM_STR);
       $statement->bindValue(":user_account_id", $user_account_id, PDO::PARAM_INT);
       $statement->bindValue(":emailed_hash", $emailed_hash, PDO::PARAM_STR);
       $statement->execute();

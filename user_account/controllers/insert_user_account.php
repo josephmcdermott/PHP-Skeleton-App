@@ -29,6 +29,9 @@ function insert_user_account(){
   
   require_once $_SERVER["PATH_TO_VENDOR"] . "wixel/gump/gump.class.php";
   require_once $final_global_template_vars["absolute_path_to_this_module"] . "/models/user_account.class.php";
+  require_once $final_global_template_vars["default_module_list"]["authenticate"]["absolute_path_to_this_module"] . "/models/authenticate.class.php";
+  $authenticate = new Authenticate( $db_resource, $final_global_template_vars["session_key"] );
+  
   $db_conn = new \slimlocal\models\db( $final_global_template_vars["db_connection"] );
   $db_resource = $db_conn->get_resource();
   $useraccount = new UserAccount( $db_resource, $final_global_template_vars["session_key"] );
@@ -77,7 +80,7 @@ function insert_user_account(){
       (user_account_email, user_account_password, first_name, last_name, acceptable_use_policy, created_date, active, emailed_hash)
       VALUES ( :user_account_email, :user_account_password, :first_name, :last_name, 1, NOW(), 0, :emailed_hash )");
     $statement->bindValue(":user_account_email", $posted_data['user_account_email'], PDO::PARAM_STR);
-    $statement->bindValue(":user_account_password", sha1($posted_data['user_account_password']), PDO::PARAM_STR);
+    $statement->bindValue(":user_account_password", $authenticate->generate_hashed_password($posted_data['user_account_password']), PDO::PARAM_STR);
     $statement->bindValue(":first_name", $posted_data['first_name'], PDO::PARAM_STR);
     $statement->bindValue(":last_name", $posted_data['last_name'], PDO::PARAM_STR);
     $statement->bindValue(":emailed_hash", $emailed_hash, PDO::PARAM_STR);

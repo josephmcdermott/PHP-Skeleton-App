@@ -29,9 +29,11 @@ function update_password(){
   
   require_once $_SERVER["PATH_TO_VENDOR"] . "wixel/gump/gump.class.php";
   require_once $final_global_template_vars["absolute_path_to_this_module"] . "/models/user_account.class.php";
+  require_once $final_global_template_vars["default_module_list"]["authenticate"]["absolute_path_to_this_module"] . "/models/authenticate.class.php";
   $db_conn = new \slimlocal\models\db( $final_global_template_vars["db_connection"] );
   $db_resource = $db_conn->get_resource();
   $useraccount = new UserAccount( $db_resource, $final_global_template_vars["session_key"] );
+  $authenticate = new authenticate( $db_resource, $final_global_template_vars["session_key"] );
   $gump = new GUMP();
 
   $post = $app->request()->post() ? $app->request()->post() : false;
@@ -83,7 +85,11 @@ function update_password(){
   if( empty($errors) && $post ) {
 
     // Attempt to update the user_account_password and set the account to active (returns boolean)
-    $updated = $useraccount->update_password( $post["user_account_password"], $account_email_exists['user_account_id'], $post["emailed_hash"] );
+    $updated = $useraccount->update_password(
+      $authenticate->generate_hashed_password($post["user_account_password"]),
+      $account_email_exists['user_account_id'],
+      $post["emailed_hash"]
+    );
 
     if($updated) {
       // Prepare email
@@ -135,7 +141,7 @@ function update_password(){
 
   } else {
 
-    $app->flash('message', $errors["user_account_password_check"]);
+    $app->flash('message', $errors["user_account_password"]);
     $app->redirect($final_global_template_vars["path_to_this_module"]."/reset/?user_account_email=".$account_email_exists['user_account_email']."&emailed_hash=".$post["emailed_hash"]);
 
   }

@@ -131,6 +131,9 @@ function form(){
     $db_conn = new \slimlocal\models\db($db_vars);
     $db = $db_conn->get_resource();
 
+    require_once $final_global_template_vars["default_module_list"]["authenticate"]["absolute_path_to_this_module"] . "/models/authenticate.class.php";
+    $authenticate = new Authenticate( $db, $final_global_template_vars["session_key"] );
+
     $statement = $db->prepare("CREATE TABLE `user_account` (
       `user_account_id` int(10) NOT NULL AUTO_INCREMENT,
       `user_account_email` varchar(255) NOT NULL,
@@ -156,7 +159,7 @@ function form(){
       (user_account_email, user_account_password, first_name, last_name, acceptable_use_policy, created_date, active)
       VALUES ( :user_account_email, :user_account_password, :first_name, :last_name, 1, NOW(), 1 )");
     $statement->bindValue(":user_account_email", $posted_data['user_account_email'], PDO::PARAM_STR);
-    $statement->bindValue(":user_account_password", sha1($posted_data['user_account_password']), PDO::PARAM_STR);
+    $statement->bindValue(":user_account_password", $authenticate->generate_hashed_password($posted_data['user_account_password']), PDO::PARAM_STR);
     $statement->bindValue(":first_name", $posted_data['first_name'], PDO::PARAM_STR);
     $statement->bindValue(":last_name", $posted_data['last_name'], PDO::PARAM_STR);
     $statement->execute();

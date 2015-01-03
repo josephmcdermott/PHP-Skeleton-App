@@ -27,6 +27,11 @@ function show_reset_password_form(){
   $env = $app->environment();
   $final_global_template_vars = $app->config('final_global_template_vars');
 
+  // If logged in, redirect to the Dashboard.
+  if(isset($_SESSION[$final_global_template_vars["session_key"]])) {
+    $app->redirect("/dashboard/");
+  }
+
   $app->render('reset_password_form.php',array(
     "page_title" => "Reset Password"
     ,"hide_page_header" => true

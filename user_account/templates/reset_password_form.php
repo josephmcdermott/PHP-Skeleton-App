@@ -1,20 +1,20 @@
 {% extends layout_template_name %}
 {% block content %}
-  <div class="jumbotron">
-    <h2>{{ page_title }}</h2>
-    {% if errors %}
-      <div class="alert alert-error">
-        <h4>Error</h4>
-        {% for single_error in errors %}
-          <p>{{ single_error }}</p>
-        {% endfor %}
-      </div>
-    {% endif %}
-    {% if flash.message %}
-      <div class="alert alert-info">
-        <p>{{ flash.message }}</p>
-      </div>
-    {% else %}
+  {% if errors %}
+    <div class="alert alert-error">
+      <h4>Error</h4>
+      {% for single_error in errors %}
+        <p>{{ single_error }}</p>
+      {% endfor %}
+    </div>
+  {% endif %}
+  {% if flash.message %}
+    <div class="alert alert-info">
+      <p>{{ flash.message }}</p>
+    </div>
+  {% else %}
+    <div class="jumbotron">
+      <h2>{{ page_title }}</h2>
       <form method="POST">
         {% include 'csrf_input.html' %}
         <div class="form-group">
@@ -25,6 +25,6 @@
           <input class="btn btn-primary" type="submit" value="Submit">
         </div>
       </form>
-    {% endif %}
-  </div>
+    </div>
+  {% endif %}
 {% endblock %}
