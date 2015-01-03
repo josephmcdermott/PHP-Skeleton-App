@@ -108,14 +108,15 @@ class Authenticate{
    *
    * Run a query to insert a login attempt.
    *
-   * @param       string $user_account_id   The data value
-   * @param       string $cn                The data value
-   * @param       string $result            The data value
-   * @return      void
+   * @todo add table creation sql to the webapp_installer module and uncomment from authenticate/controllers/authenticate_user.php
+   * @param string $user_account_id The data value
+   * @param string $cn The data value
+   * @param string $result The data value
+   * @return void
    */
 	public function log_login_attempt($user_account_id, $cn, $result) {
 		$statement = $this->db->prepare("
-        	INSERT INTO core_framework.login_attempt
+        	INSERT INTO login_attempt
         	(user_account_id
         	,username
         	,ip_address
