@@ -148,7 +148,7 @@ Follow [@goranhalusa](http://www.twitter.com/goranhalusa) on Twitter to receive 
 
 ### Acknowledgements
 
-* [PHP Weekly](http://phpweekly.com/): Thanks for including The PHP Skeleton App in your [weekly email](http://mailer.inovica.com/newsletter.php?id=49&eid=140771)!
+* [PHP Weekly](http://phpweekly.com/): Thanks for including The PHP Skeleton App in your [weekly email](http://www.phpweekly.com/archive/2015-01-01.html)!
 
 ### Disclaimer
 
