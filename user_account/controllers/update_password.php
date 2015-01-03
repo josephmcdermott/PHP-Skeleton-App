@@ -30,11 +30,16 @@ function update_password(){
   require_once $_SERVER["PATH_TO_VENDOR"] . "wixel/gump/gump.class.php";
   require_once $final_global_template_vars["absolute_path_to_this_module"] . "/models/user_account.class.php";
   require_once $final_global_template_vars["default_module_list"]["authenticate"]["absolute_path_to_this_module"] . "/models/authenticate.class.php";
+  require_once $_SERVER["PATH_TO_VENDOR"] . "phpmailer/phpmailer/PHPMailerAutoload.php";
+
   $db_conn = new \slimlocal\models\db( $final_global_template_vars["db_connection"] );
   $db_resource = $db_conn->get_resource();
+
   $useraccount = new UserAccount( $db_resource, $final_global_template_vars["session_key"] );
   $authenticate = new authenticate( $db_resource, $final_global_template_vars["session_key"] );
   $gump = new GUMP();
+  $mail = new PHPMailer();
+
 
   $post = $app->request()->post() ? $app->request()->post() : false;
 
@@ -92,21 +97,24 @@ function update_password(){
     );
 
     if($updated) {
-      // Prepare email
-      $to = $account_email_exists["user_account_email"]; // Send email to our user
-      $subject = 'Your Password Has Been Reset'; // Give the email a subject
+
+      // Prepare the email.
+
+      // Send an email to the user.
+      $to = $account_email_exists["user_account_email"];
+      // The email subject.
+      $subject = 'Your Password Has Been Reset';
+      // The message.
       $message = '<h2>Your Password Has Been Reset</h2>
       <hr>
-      <p>If you did not execute this change, please contact the site administrator as soon as possible.</p>'; // Our message above including the link
+      <p>If you did not execute this change, please contact the site administrator as soon as possible.</p>';
 
-      // Send email
       // For the ability to send emails from an AWS EC2 instance
       // If you need this functionality, you can configure the settings accordingly in /default_global_settings.php
       if($final_global_template_vars["hosting_vendor"] && ($final_global_template_vars["hosting_vendor"] == "aws_ec2")) {
 
-        // Since we're on AWS EC2, we need to use PHPMailer. Yes, it sucks.
-        require_once($final_global_template_vars["path_to_phpmailer"]);
         require_once($final_global_template_vars["path_to_smtp_settings"]);
+
         // SMTP Settings
         $mail = new PHPMailer();
         $mail->IsSMTP();
@@ -115,19 +123,17 @@ function update_password(){
         $mail->Host       = $email['settings']['host'];
         $mail->Username   = $email['settings']['username'];
         $mail->Password   = $email['settings']['password'];
-
-        $mail->SetFrom($final_global_template_vars["send_emails_from"], $final_global_template_vars["site_name"].' Accounts'); // From (verified email address)
-        $mail->Subject = $subject; // Subject
-        $mail->MsgHTML( $message );
-        $mail->AddAddress( $post['user_account_email'] ); // Recipient
-        $mail->Send(); // Send email
-
-      } else {
-
-        $headers = 'From:' . $final_global_template_vars["send_emails_from"] . "\r\n"; // Set from headers
-        mail($to, $subject, $message, $headers); // Send email
-
       }
+
+      // From (verified email address).
+      $mail->SetFrom($final_global_template_vars["send_emails_from"], $final_global_template_vars["site_name"].' Accounts');
+      // Subject
+      $mail->Subject = $subject;
+      $mail->MsgHTML( $message );
+      // Recipient
+      $mail->AddAddress( $post['user_account_email'] );
+      // Send the email.
+      $mail->Send();
 
       $app->flash('message', 'Your password has been reset.');
       $app->redirect($final_global_template_vars["path_to_this_module"]."/password/");

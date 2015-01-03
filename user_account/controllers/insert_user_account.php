@@ -30,12 +30,15 @@ function insert_user_account(){
   require_once $_SERVER["PATH_TO_VENDOR"] . "wixel/gump/gump.class.php";
   require_once $final_global_template_vars["absolute_path_to_this_module"] . "/models/user_account.class.php";
   require_once $final_global_template_vars["default_module_list"]["authenticate"]["absolute_path_to_this_module"] . "/models/authenticate.class.php";
+  require_once $_SERVER["PATH_TO_VENDOR"] . "phpmailer/phpmailer/PHPMailerAutoload.php";
+  require_once $final_global_template_vars["path_to_smtp_settings"];
 
   $db_conn = new \slimlocal\models\db( $final_global_template_vars["db_connection"] );
   $db_resource = $db_conn->get_resource();
   $useraccount = new UserAccount( $db_resource, $final_global_template_vars["session_key"] );
   $authenticate = new Authenticate( $db_resource, $final_global_template_vars["session_key"] );
   $gump = new GUMP();
+  $mail = new PHPMailer();
 
   $posted_data = $app->request()->post() ? $app->request()->post() : false;
 
@@ -144,45 +147,33 @@ function insert_user_account(){
     // For the ability to send emails from an AWS EC2 instance
     // If you need this functionality, you can configure the settings accordingly in /default_global_settings.php
     if($final_global_template_vars["hosting_vendor"] && ($final_global_template_vars["hosting_vendor"] == "aws_ec2")) {
-
-      // Since we're on AWS EC2, we need to use PHPMailer. Yes, it sucks.
-      require_once($final_global_template_vars["path_to_phpmailer"]);
-      require_once($final_global_template_vars["path_to_smtp_settings"]);
-
       // SMTP Settings
-      $mail = new PHPMailer();
       $mail->IsSMTP();
       $mail->SMTPAuth   = $email['settings']['smtpauth'];
       $mail->SMTPSecure = $email['settings']['smtpsecure'];
       $mail->Host       = $email['settings']['host'];
       $mail->Username   = $email['settings']['username'];
       $mail->Password   = $email['settings']['password'];
-
-      // Send email to user
-      $mail->SetFrom( $final_global_template_vars["send_emails_from"], $final_global_template_vars["site_name"].' Accounts'); // From (verified email address)
-      $mail->Subject = $subject; // Subject
-      $mail->MsgHTML( $message );
-      $mail->AddAddress( $to ); // Recipient
-      $mail->Send();
-
-      $mail->ClearAllRecipients();
-
-      // Send email to Universal Administrators
-      $mail->Subject = $subject_admins; // Subject
-      $mail->MsgHTML( $message_admins );
-      // Universal Admin recipients
-      foreach($universal_administrator_emails as $email) {
-        $mail->AddAddress( $email["user_account_email"] );
-      }
-      $mail->Send();
-
-    } else {
-
-      $headers = 'From:' . $final_global_template_vars["send_emails_from"] . "\r\n"; // Set from headers
-      mail($to, $subject, $message, $headers); // Send email to user
-      mail($to_admins, $subject_admins, $message_admins, $headers); // Send email to Universal Administrators
-
     }
+
+    // Send email to user
+    $mail->SetFrom( $final_global_template_vars["send_emails_from"], $final_global_template_vars["site_name"].' Accounts'); // From (verified email address)
+    $mail->Subject = $subject; // Subject
+    $mail->MsgHTML( $message );
+    $mail->AddAddress( $to ); // Recipient
+    $mail->Send();
+
+    $mail->ClearAllRecipients();
+
+    // Send email to Universal Administrators
+    $mail->Subject = $subject_admins; // Subject
+    $mail->MsgHTML( $message_admins );
+    // Universal Admin recipients
+    foreach($universal_administrator_emails as $email) {
+      $mail->AddAddress( $email["user_account_email"] );
+    }
+    $mail->Send();
+
   }
 
   if(!$errors) {

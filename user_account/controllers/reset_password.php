@@ -28,9 +28,13 @@ function reset_password(){
   $final_global_template_vars = $app->config('final_global_template_vars');
   
   require_once $final_global_template_vars["absolute_path_to_this_module"] . "/models/user_account.class.php";
+  require_once $_SERVER["PATH_TO_VENDOR"] . "phpmailer/phpmailer/PHPMailerAutoload.php";
+
   $db_conn = new \slimlocal\models\db( $final_global_template_vars["db_connection"] );
   $db_resource = $db_conn->get_resource();
+
   $useraccount = new UserAccount( $db_resource, $final_global_template_vars["session_key"] );
+  $mail = new PHPMailer();
 
   $posted_data = $app->request()->post() ? $app->request()->post() : false;
 
@@ -53,43 +57,43 @@ function reset_password(){
     $updated = $useraccount->update_emailed_hash( $account_email_exists['user_account_id'], $emailed_hash );
 
     if($updated) {
-      // Prepare email
-      $to = $account_email_exists["user_account_email"]; // Send email to our user
-      $subject = 'Reset Password'; // Give the email a subject
+
+      // Prepare the email.
+
+      // Send an email to the user.
+      $to = $account_email_exists["user_account_email"];
+      // The email subject.
+      $subject = 'Reset Password';
+      // The message, including the link.
       $message = '<h2>Reset Your Password</h2>
       <hr>
       <p>Please click this link to reset your password:<br />
-      <a href="http://'.$_SERVER["SERVER_NAME"].'/user_account/reset/?user_account_email='.$account_email_exists['user_account_email'].'&emailed_hash='.$emailed_hash.'">http://'.$_SERVER["SERVER_NAME"].'/user_account/reset/?user_account_email='.$account_email_exists['user_account_email'].'&emailed_hash='.$emailed_hash.'</a></p>'; // Our message above including the link
+      <a href="http://'.$_SERVER["SERVER_NAME"].'/user_account/reset/?user_account_email='.$account_email_exists['user_account_email'].'&emailed_hash='.$emailed_hash.'">http://'.$_SERVER["SERVER_NAME"].'/user_account/reset/?user_account_email='.$account_email_exists['user_account_email'].'&emailed_hash='.$emailed_hash.'</a></p>';
 
-      // Send email
-      // For the ability to send emails from an AWS EC2 instance
+      // For the ability to send emails from an AWS EC2 instance...
       // If you need this functionality, you can configure the settings accordingly in /default_global_settings.php
       if($final_global_template_vars["hosting_vendor"] && ($final_global_template_vars["hosting_vendor"] == "aws_ec2")) {
 
-        // Since we're on AWS EC2, we need to use PHPMailer. Yes, it sucks.
-        require_once($final_global_template_vars["path_to_phpmailer"]);
-        require_once($final_global_template_vars["path_to_smtp_settings"]);
+        require_once $final_global_template_vars["path_to_smtp_settings"];
+
         // SMTP Settings
-        $mail = new PHPMailer();
         $mail->IsSMTP();
         $mail->SMTPAuth   = $email['settings']['smtpauth'];
         $mail->SMTPSecure = $email['settings']['smtpsecure'];
         $mail->Host       = $email['settings']['host'];
         $mail->Username   = $email['settings']['username'];
         $mail->Password   = $email['settings']['password'];
-
-        $mail->SetFrom($final_global_template_vars["send_emails_from"], $final_global_template_vars["site_name"].' Accounts'); // From (verified email address)
-        $mail->Subject = $subject; // Subject
-        $mail->MsgHTML( $message );
-        $mail->AddAddress( $posted_data['user_account_email'] ); // Recipient
-        $mail->Send(); // Send email
-
-      } else {
-
-        $headers = 'From:' . $final_global_template_vars["send_emails_from"] . "\r\n"; // Set from headers
-        mail($to, $subject, $message, $headers); // Send email
-
       }
+
+      // From (verified email address).
+      $mail->SetFrom($final_global_template_vars["send_emails_from"], $final_global_template_vars["site_name"].' Accounts');
+      // Subject
+      $mail->Subject = $subject;
+      $mail->MsgHTML( $message );
+      // Recipient
+      $mail->AddAddress( $posted_data['user_account_email'] );
+      // Send the email.
+      $mail->Send();
 
       $app->flash('message', 'Thank you. Further instructions are being sent to your email address.');
 
