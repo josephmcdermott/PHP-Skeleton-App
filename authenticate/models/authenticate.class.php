@@ -66,8 +66,9 @@ class Authenticate{
    *
    * Verify a hashed password.
    *
-   * @param       string $password    The data value
-   * @return      bool
+   * @param   string $password        The data value
+   * @param   string $hashedPassword  The data value
+   * @return  bool
    */
   private function verify_hashed_password($password, $hashedPassword) {
     return crypt($password, $hashedPassword) == $hashedPassword;
