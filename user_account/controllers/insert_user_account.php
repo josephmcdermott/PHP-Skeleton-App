@@ -31,7 +31,6 @@ function insert_user_account(){
   require_once $final_global_template_vars["absolute_path_to_this_module"] . "/models/user_account.class.php";
   require_once $final_global_template_vars["default_module_list"]["authenticate"]["absolute_path_to_this_module"] . "/models/authenticate.class.php";
   require_once $_SERVER["PATH_TO_VENDOR"] . "phpmailer/phpmailer/PHPMailerAutoload.php";
-  require_once $final_global_template_vars["path_to_smtp_settings"];
 
   $db_conn = new \slimlocal\models\db( $final_global_template_vars["db_connection"] );
   $db_resource = $db_conn->get_resource();
@@ -147,6 +146,9 @@ function insert_user_account(){
     // For the ability to send emails from an AWS EC2 instance
     // If you need this functionality, you can configure the settings accordingly in /default_global_settings.php
     if($final_global_template_vars["hosting_vendor"] && ($final_global_template_vars["hosting_vendor"] == "aws_ec2")) {
+
+      require_once $final_global_template_vars["path_to_smtp_settings"];
+      
       // SMTP Settings
       $mail->IsSMTP();
       $mail->SMTPAuth   = $email['settings']['smtpauth'];
