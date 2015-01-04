@@ -146,7 +146,7 @@ function form(){
       `created_date` datetime DEFAULT NULL,
       `modified_date` datetime DEFAULT NULL,
       PRIMARY KEY (`user_account_id`)
-    ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8");
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='This table stores user accounts'");
     $statement->execute();
     $error = $db->errorInfo();
     if( $error[0] != "00000" )
@@ -188,7 +188,7 @@ function form(){
       PRIMARY KEY (`user_account_addresses_id`),
       KEY `created_by_user_account_id` (`created_by_user_account_id`),
       KEY `last_modified_user_account_id` (`last_modified_user_account_id`)
-    ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8");
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='This table stores user account addresses'");
     $statement->execute();
     $error = $db->errorInfo();
     if( $error[0] != "00000" )
@@ -214,7 +214,7 @@ function form(){
       PRIMARY KEY (`group_id`),
       KEY `created_by_user_account_id` (`created_by_user_account_id`),
       KEY `last_modified_user_account_id` (`last_modified_user_account_id`)
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8");
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='This table stores groups for user accounts'");
     $statement->execute();
     $error = $db->errorInfo();
     if( $error[0] != "00000" )
@@ -297,7 +297,7 @@ function form(){
       KEY `role_id` (`role_id`),
       KEY `user_account_id` (`user_account_id`),
       KEY `group_id` (`group_id`)
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8");
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='This table stores user account groups'");
     $statement->execute();
     $error = $db->errorInfo();
     if( $error[0] != "00000" )
@@ -309,7 +309,7 @@ function form(){
       `user_account_groups_id` int(10) NOT NULL DEFAULT '0',
       `proxy_user_account_id` int(10) NOT NULL DEFAULT '0',
       PRIMARY KEY (`user_account_groups_id`,`proxy_user_account_id`)
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8");
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='This table stores user account proxy users'");
     $statement->execute();
     $error = $db->errorInfo();
     if( $error[0] != "00000" )
@@ -321,7 +321,7 @@ function form(){
       `role_id` int(10) NOT NULL AUTO_INCREMENT,
       `label` varchar(50) DEFAULT NULL,
       PRIMARY KEY (`role_id`)
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8");
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='This table stores user account roles'");
     $statement->execute();
     $error = $db->errorInfo();
     if( $error[0] != "00000" )
@@ -355,6 +355,22 @@ function form(){
     if( $error[0] != "00000" )
     {
       var_dump( $db->errorInfo() ); die('The INSERT INTO user_account_groups failed.');
+    }
+
+    $statement = $db->prepare("CREATE TABLE `login_attempt` (
+      `login_attempt_id` int(11) NOT NULL AUTO_INCREMENT,
+      `user_account_email` varchar(255) NOT NULL,
+      `ip_address` varchar(255) NOT NULL DEFAULT '0',
+      `result` varchar(255) DEFAULT NULL,
+      `page` varchar(255) DEFAULT NULL,
+      `created_date` datetime DEFAULT NULL,
+      PRIMARY KEY (`login_attempt_id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='This table is used to log login attempts'");
+    $statement->execute();
+    $error = $db->errorInfo();
+    if( $error[0] != "00000" )
+    {
+      var_dump( $db->errorInfo() ); die('The CREATE TABLE `login_attempt` failed.');
     }
 
     // Don't return the user account password and the CSRF key value.

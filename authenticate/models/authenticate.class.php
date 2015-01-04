@@ -40,10 +40,10 @@ class Authenticate{
    * @param string   $session_key     The session key
    */
   public function __construct($db_connection=false, $session_key=false) {
-	  if($db_connection && is_object($db_connection)) {
-		  $this->db = $db_connection;
-	  }
-	  $this->session_key = $session_key;
+    if($db_connection && is_object($db_connection)) {
+      $this->db = $db_connection;
+    }
+    $this->session_key = $session_key;
   }
 
   /**
@@ -83,63 +83,61 @@ class Authenticate{
    * @param       string $password     The data value
    * @return      array|bool           The query result
    */
-	public function authenticate_local($username, $password) {
-		$result = false;
-		if($username && $password){
-			$statement = $this->db->prepare("
-				SELECT user_account_id, user_account_email, user_account_password, first_name, last_name
-				FROM user_account
-				WHERE user_account_email = :user_account_email
+  public function authenticate_local($username, $password) {
+    $result = false;
+    if($username && $password){
+      $statement = $this->db->prepare("
+        SELECT
+           user_account_id
+          ,user_account_email
+          ,user_account_password
+          ,first_name
+          ,last_name
+        FROM user_account
+        WHERE user_account_email = :user_account_email
         AND active = 1
-			");
-			$statement->bindValue(":user_account_email", $username, PDO::PARAM_STR);
-			$statement->execute();
-			$data = $statement->fetch(PDO::FETCH_ASSOC);
+      ");
+      $statement->bindValue(":user_account_email", $username, PDO::PARAM_STR);
+      $statement->execute();
+      $data = $statement->fetch(PDO::FETCH_ASSOC);
 
       $result = $this->verify_hashed_password($password, $data["user_account_password"]) ? $data : false;
       unset($result["user_account_password"]);
 
-		}
-		return $result;
-	}
+    }
+    return $result;
+  }
 
   /**
    * Log Login Attempt
    *
    * Run a query to insert a login attempt.
    *
-   * @todo add table creation sql to the webapp_installer module and uncomment from authenticate/controllers/authenticate_user.php
-   * @param string $user_account_id The data value
-   * @param string $cn The data value
+   * @param string $user_account_email The data value
    * @param string $result The data value
    * @return void
    */
-	public function log_login_attempt($user_account_id, $cn, $result) {
-		$statement = $this->db->prepare("
-        	INSERT INTO login_attempt
-        	(user_account_id
-        	,username
-        	,ip_address
-        	,result
-        	,domain
-        	,page
-        	,created_date)
-        	VALUES
-        	(:user_account_id
-			,:username
-			,:ip_address
-			,:result
-			,:domain
-			,:page
-			,NOW())");
-		$statement->bindValue(":user_account_id", $user_account_id, PDO::PARAM_INT);
-		$statement->bindValue(":username", $cn, PDO::PARAM_STR);
-		$statement->bindValue(":ip_address", $_SERVER['REMOTE_ADDR'], PDO::PARAM_STR);
-		$statement->bindValue(":result", $result, PDO::PARAM_STR);
-		$statement->bindValue(":domain", $_SERVER['HTTP_HOST'], PDO::PARAM_STR);
-		$statement->bindValue(":page", $_SERVER['REQUEST_URI'], PDO::PARAM_STR);
-		$statement->execute();
-	}
+  public function log_login_attempt($user_account_email, $result) {
+    $statement = $this->db->prepare("
+      INSERT INTO login_attempt
+        (user_account_email
+        ,ip_address
+        ,result
+        ,page
+        ,created_date)
+      VALUES
+        (:user_account_email
+        ,:ip_address
+        ,:result
+        ,:page
+        ,NOW())
+    ");
+    $statement->bindValue(":user_account_email", $user_account_email, PDO::PARAM_STR);
+    $statement->bindValue(":ip_address", $_SERVER['REMOTE_ADDR'], PDO::PARAM_STR);
+    $statement->bindValue(":result", $result, PDO::PARAM_STR);
+    $statement->bindValue(":page", $_SERVER['REQUEST_URI'], PDO::PARAM_STR);
+    $statement->execute();
+  }
 }
 
 ?>

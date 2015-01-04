@@ -44,14 +44,11 @@ function authenticate_user() {
     $validated = array( array("field"=>"user_account_email", "value"=>"", "rule"=>"") );
     // Query the database for the user_account_email and password.
     try {
-
       $local_validated = $authenticate->authenticate_local(
         $app->request()->post('user_account_email')
         ,$app->request()->post('password')
       );
-
     } catch (Exception $e) {
-      //echo $e->getMessage();
       $local_validated = FALSE;
     }
 
@@ -61,18 +58,16 @@ function authenticate_user() {
       foreach($final_global_template_vars["auth_session_keys"] as $single_key) {
         $_SESSION[$final_global_template_vars["session_key"]][$single_key] = $local_validated[$single_key];
       }
-
-      // $authenticate->log_login_attempt($local_validated["user_account_id"]
-      //     ,$local_validated["cn"]
-      //     ,1);
+      // Log the successful login attempt.
+      $authenticate->log_login_attempt($local_validated["user_account_email"], "succeeded");
     }
-
   }
 
   if($validated === TRUE) {
-    // show_login_form.php redirects to the redirect cookie key instead of doing it here.
+    // The show_login_form.php redirects to the redirect cookie key instead of doing it here.
   } else {
-    // $authenticate->log_login_attempt(false,$app->request()->post('user_account_email'),"fail");
+    // Log the failed login attempt.
+    $authenticate->log_login_attempt($app->request()->post("user_account_email"), "failed");
     $env = $app->environment();
     $env["default_validation_errors"] = $validated;
   }
