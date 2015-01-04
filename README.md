@@ -67,7 +67,7 @@ Thanks!
 *These requirements are what I have found to be true. It's likely that I may have missed something along the way. If so, please let me know.*
 
 ##### Linux
-* So far, only tested on Linux Ubuntu 14.04 (trusty)
+* So far, only tested on Linux Ubuntu 14.04 (trusty) running on an Amazon EC2 instance and another on a DigitalOcean Droplet.
 
 ##### Apache
 * Modules: alias, deflate, dir, env, headers, mime, php5, rewrite, setenvif
