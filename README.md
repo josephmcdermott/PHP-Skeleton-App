@@ -148,11 +148,11 @@ At this point, you should have successfully spawned a complete "PHP Skeleton App
 
 ## About the Author
 
-The PHP Skeleton App is created and maintained by [Goran Halusa](http://halusanation.com/), a Web Architect, artist, musician, and chef.
+The PHP Skeleton App is created and maintained by [Goran Halusa](http://halusanation.com/).
 
 ### Twitter
 
-Follow [@goranhalusa](http://www.twitter.com/goranhalusa) on Twitter to receive the very latest news and updates about The PHP Skeleton App.
+Follow [@phpskeleton](http://www.twitter.com/phpskeleton) on Twitter to receive the very latest news and updates about The PHP Skeleton App.
 
 ### Acknowledgements
 
