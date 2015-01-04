@@ -2,6 +2,7 @@
 {% block styles_head %}
   {{ parent() }}
   <link href="//cdnjs.cloudflare.com/ajax/libs/chosen/0.9.11/chosen.css" rel="stylesheet" type="text/css" />
+  <link href="//cdnjs.cloudflare.com/ajax/libs/sweetalert/0.3.2/sweet-alert.min.css" rel="stylesheet" type="text/css">
 {% endblock %}
 {% block content %}
     {% if flash.message %}
@@ -99,7 +100,7 @@
       <hr style="clear:both;">
 
       <div class="field-group" style="clear:both;">
-        <input class="btn btn-primary" type="submit" value="Submit">
+        <input class="btn btn-primary" type="submit" value="Save Edits">
       </div>
     </form>
 {% endblock %}
@@ -107,57 +108,55 @@
   {{ parent() }}
   <script type="text/javascript" src="/{{ core_type }}/lib/javascripts/chosen/chosen-0.9.11/chosen.jquery.min.js"></script>
   <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/sweetalert/0.3.2/sweet-alert.min.js"></script>
 
   <script id="single_user_address_template" type="text/template">
-    <div id="<%- single_user_address_container_id %>" class="row-fluid">
+    <div id="<%- single_user_address_container_id %>" class="row">
       <!-- Column 1 -->
-      <div class="span6">
-        <div class="control-group">
+      <div class="col-sm-6 col-md-6">
+        <div class="form-group">
           <label class="control-label" for="label[<%- user_address_id %>]"><span style="color:red;">*</span>Label:</label>
           <div class="controls">
-            <input name="label[<%- user_address_id %>]" id="label[<%- user_address_id %>]" type="text" required="true" value="<%- address_label %>"/>
+            <input name="label[<%- user_address_id %>]" id="label[<%- user_address_id %>]" type="text" required="true" value="<%- address_label %>" class="form-control">
           </div>
         </div>
-        <div class="control-group">
+        <div class="form-group">
           <label class="control-label" for="address_1[<%- user_address_id %>]"><span style="color:red;">*</span>Address 1:</label>
           <div class="controls">
-            <input name="address_1[<%- user_address_id %>]" id="address_1[<%- user_address_id %>]" type="text" required="true" value="<%- address_1 %>" />
+            <input name="address_1[<%- user_address_id %>]" id="address_1[<%- user_address_id %>]" type="text" required="true" value="<%- address_1 %>" class="form-control">
           </div>
         </div>
-        <div class="control-group">
+        <div class="form-group">
           <label class="control-label" for="address_2[<%- user_address_id %>]">Address 2:</label>
           <div class="controls">
-            <input name="address_2[<%- user_address_id %>]" id="address_2[<%- user_address_id %>]" type="text" value="<%- address_2 %>" />
+            <input name="address_2[<%- user_address_id %>]" id="address_2[<%- user_address_id %>]" type="text" value="<%- address_2 %>" class="form-control">
           </div>
         </div>
       </div>
       <!-- Column 2 -->
-      <div class="span6">
-        <div class="control-group">
+      <div class="col-sm-6 col-md-6">
+        <div class="form-group">
           <label class="control-label" for="city[<%- user_address_id %>]"><span style="color:red;">*</span>City:</label>
           <div class="controls">
-            <input name="city[<%- user_address_id %>]" id="city[<%- user_address_id %>]" type="text" required="true" value="<%- city %>" />
+            <input name="city[<%- user_address_id %>]" id="city[<%- user_address_id %>]" type="text" required="true" value="<%- city %>" class="form-control">
           </div>
         </div>
-        <div class="control-group">
+        <div class="form-group">
           <label class="control-label" for="state[<%- user_address_id %>]"><span style="color:red;">*</span>State:</label>
           <div class="controls">
-            <input name="state[<%- user_address_id %>]" id="state[<%- user_address_id %>]" type="text" required="true" value="<%- state %>" />
+            <input name="state[<%- user_address_id %>]" id="state[<%- user_address_id %>]" type="text" required="true" value="<%- state %>" class="form-control">
           </div>
         </div>
-        <div class="control-group">
+        <div class="form-group">
           <label class="control-label" for="zip[<%- user_address_id %>]"><span style="color:red;">*</span>Zip Code:</label>
           <div class="controls">
-            <input name="zip[<%- user_address_id %>]" id="zip[<%- user_address_id %>]" type="text" required="true" value="<%- zip %>" />
+            <input name="zip[<%- user_address_id %>]" id="zip[<%- user_address_id %>]" type="text" required="true" value="<%- zip %>" class="form-control">
           </div>
         </div>
       </div>
-      <button
-        type="button"
-        name="remove"
-        class="btn btn-small remove_user_address"
-        title="Delete Address"
-        id="delete_user_address_button"><i class="icon-minus-sign"></i> Delete Address</button>
+      <div class="col-sm-12 col-md-12" style="margin-bottom: 10px;">
+        <button type="button" name="remove" class="btn remove_user_address btn-default btn-sm" title="Delete Address" id="delete_user_address_button"><i class="icon-minus-sign"></i> Delete Address</button>
+      </div>
       <hr>
     </div>
   </script>
@@ -360,17 +359,39 @@
 
       // Remove address block
       $("#user_account_form").on("click", ".remove_user_address", function(event){
-        if( confirm('Are you sure you want to delete this address?') )
-        {
-          var current_address_count = parseInt( $("#address_count").val() );
-          $("#address_count").attr( "value", (current_address_count-1) );
-          var this_address_block = $(this).parent('.row-fluid');
-          this_address_block.fadeOut(300);
+
+        var current_address_count = parseInt( $("#address_count").val() );
+        $("#address_count").attr( "value", (current_address_count-1) );
+        var this_address_block = $(this).parent().prev().parent(".row");
+
+        swal({
+          title: "Confirm",
+          text: "Are you sure you want to delete the selected item(s)?",
+          type: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#DD6B55",
+          confirmButtonText: "Yes, delete the item(s).",
+          closeOnConfirm: true
+        },
+        function(){
+          this_address_block.fadeOut(500);
           setTimeout(function() {
             this_address_block.remove();
-          }, 1000);
-        }
+          }, 1500);
+        });
+
+        // if( confirm('Are you sure you want to delete this address?') )
+        // {
+        //   var current_address_count = parseInt( $("#address_count").val() );
+        //   $("#address_count").attr( "value", (current_address_count-1) );
+        //   var this_address_block = $(this).parent().prev().parent(".row");
+        //   this_address_block.fadeOut(300);
+        //   setTimeout(function() {
+        //     this_address_block.remove();
+        //   }, 1000);
+        // }
       });
+
     });
   </script>
 {% endblock %}
