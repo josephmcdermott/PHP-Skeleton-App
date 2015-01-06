@@ -112,4 +112,3 @@ if(
   header("Location: /webapp_installer/");
   exit;
 }
-?>
