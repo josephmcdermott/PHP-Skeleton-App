@@ -1,5 +1,7 @@
 ![alt text](http://halusanation.com/wp-content/uploads/2014/12/php_skeleton_app.jpg "The PHP Skeleton App Header Image")
 
+[![Build Status](https://scrutinizer-ci.com/g/ghalusa/PHP-Skeleton-App/badges/build.png?b=master)](https://scrutinizer-ci.com/g/ghalusa/PHP-Skeleton-App/build-status/master)
+
 # The PHP Skeleton App
 
 The PHP Skeleton App creates an object-oriented PHP MVC environment, tailored for rapid development. The environment makes use of the [Slim PHP micro framework](http://slimframework.com/), [Twig](http://twig.sensiolabs.org/) for templating, and [Twitter Bootstrap 3](http://getbootstrap.com/) for the theme.
