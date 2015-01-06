@@ -32,8 +32,8 @@ function insert_update_user_account(\Slim\Route $route)
     require_once $final_global_template_vars["default_module_list"]["group"]["absolute_path_to_this_module"] . "/models/group.class.php";
     require_once $final_global_template_vars["default_module_list"]["authenticate"]["absolute_path_to_this_module"] . "/models/authenticate.class.php";
     require_once $_SERVER["PATH_TO_VENDOR"] . "wixel/gump/gump.class.php";
-  // URL parameters matched in the route.
-  $params = $route->getParams();
+    // URL parameters matched in the route.
+    $params = $route->getParams();
     $user_account_id = isset($params["user_account_id"]) ? $params["user_account_id"] : false;
     $db_conn = new \slimlocal\models\db($final_global_template_vars["db_connection"]);
     $db_resource = $db_conn->get_resource();
@@ -44,20 +44,19 @@ function insert_update_user_account(\Slim\Route $route)
 
     $errors = false;
     $gump = new GUMP();
-    $rules_addresses = array();
     $rules_password = array();
 
     $rules = array(
-    "first_name" => "required|alpha_numeric"
-    ,"last_name" => "required|alpha_numeric"
-    ,"user_account_email" => "required|valid_email"
-  );
+        "first_name" => "required|alpha_numeric"
+        ,"last_name" => "required|alpha_numeric"
+        ,"user_account_email" => "required|valid_email"
+    );
 
     if (isset($post["user_account_password"]) && !empty($post["user_account_password"])) {
         $rules_password = array(
-      "user_account_password" => "max_len,100|min_len,6"
-      ,"password_check" => "required|max_len,100|min_len,6"
-    );
+            "user_account_password" => "max_len,100|min_len,6"
+            ,"password_check" => "required|max_len,100|min_len,6"
+        );
     }
 
     $rules = array_merge($rules, $rules_password);
@@ -98,9 +97,9 @@ function insert_update_user_account(\Slim\Route $route)
         foreach ($proposed_group_value as $single_group_info) {
             foreach ($single_group_info["roles"] as $single_role_id) {
                 $tmp_array = array(
-          "group_id" => $single_group_info["group_id"]
-          ,"role_id" => $single_role_id
-        );
+                    "group_id" => $single_group_info["group_id"]
+                    ,"role_id" => $single_role_id
+                );
                 $proposed_group_role_array[] = json_encode($tmp_array);
             }
         }
@@ -108,9 +107,9 @@ function insert_update_user_account(\Slim\Route $route)
         foreach ($current_group_values as $single_group_info) {
             foreach ($single_group_info["roles"] as $single_role_id) {
                 $tmp_array = array(
-          "group_id" => $single_group_info["group_id"]
-          ,"role_id" => $single_role_id
-        );
+                    "group_id" => $single_group_info["group_id"]
+                    ,"role_id" => $single_role_id
+                );
                 $current_group_role_array[] = json_encode($tmp_array);
             }
         }

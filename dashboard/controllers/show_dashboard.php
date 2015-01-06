@@ -25,7 +25,6 @@
 function show_dashboard()
 {
     $app = \Slim\Slim::getInstance();
-    $final_global_template_vars = $app->config('final_global_template_vars');
     $app->render('modules_dashboard.php', array(
         "page_title" => "Dashboard"
     ));

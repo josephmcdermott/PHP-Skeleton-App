@@ -35,7 +35,6 @@ function submit_registration(\Slim\Route $route)
     $db_conn = new \slimlocal\models\db($final_global_template_vars["db_connection"]);
     $db_resource = $db_conn->get_resource();
     $user_account = new UserAccount($db_resource, $final_global_template_vars["session_key"]);
-    $group = new Group($db_resource, $final_global_template_vars["session_key"]);
     $gump = new GUMP();
     $errors = array();
 
