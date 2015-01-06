@@ -22,17 +22,17 @@
  * @since       1.0.0
  */
 
-function find_user_account(){
-	$app = \Slim\Slim::getInstance();
-	$final_global_template_vars = $app->config('final_global_template_vars');
-	
-	require_once $final_global_template_vars["absolute_path_to_this_module"] . "/models/user_account.class.php";
-	$db_conn = new \slimlocal\models\db($final_global_template_vars["db_connection"]);
-	$db_resource = $db_conn->get_resource();
-	$useraccount = new UserAccount($db_resource,$final_global_template_vars["session_key"]);
-	$search = $app->request()->get("q");
-	$results = $useraccount->find_user_account($search);
-	echo json_encode($results);
-	die();
+function find_user_account()
+{
+    $app = \Slim\Slim::getInstance();
+    $final_global_template_vars = $app->config('final_global_template_vars');
+    
+    require_once $final_global_template_vars["absolute_path_to_this_module"] . "/models/user_account.class.php";
+    $db_conn = new \slimlocal\models\db($final_global_template_vars["db_connection"]);
+    $db_resource = $db_conn->get_resource();
+    $useraccount = new UserAccount($db_resource, $final_global_template_vars["session_key"]);
+    $search = $app->request()->get("q");
+    $results = $useraccount->find_user_account($search);
+    echo json_encode($results);
+    die();
 }
-?>

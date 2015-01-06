@@ -22,10 +22,10 @@
  * @since       1.0.0
  */
  
-function show_access_denied(){
-	$app = \Slim\Slim::getInstance();
-	$app->render('access_denied.php',array(
-		"page_title" => false
-	));
-} 
-?>
+function show_access_denied()
+{
+    $app = \Slim\Slim::getInstance();
+    $app->render('access_denied.php', array(
+        "page_title" => false
+    ));
+}

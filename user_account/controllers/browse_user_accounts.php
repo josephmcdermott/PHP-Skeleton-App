@@ -22,21 +22,21 @@
  * @since       1.0.0
  */
 
-function browse_user_accounts(){
-	$app = \Slim\Slim::getInstance();
-  $final_global_template_vars = $app->config('final_global_template_vars');
+function browse_user_accounts()
+{
+    $app = \Slim\Slim::getInstance();
+    $final_global_template_vars = $app->config('final_global_template_vars');
 
   // Determine if user can manage all accounts. If not, limit the query to only the user's user_account_id.
   $has_permission = array_intersect($_SESSION[$final_global_template_vars["session_key"]]["user_role_list"], $final_global_template_vars["role_perm_manage_all_accounts_access"]);
-  $role_perm_manage_all_accounts_access = empty($has_permission) ? false : true;
-  $user_account_id = !$role_perm_manage_all_accounts_access ? $_SESSION[$final_global_template_vars["session_key"]]["user_account_id"] : false;
+    $role_perm_manage_all_accounts_access = empty($has_permission) ? false : true;
+    $user_account_id = !$role_perm_manage_all_accounts_access ? $_SESSION[$final_global_template_vars["session_key"]]["user_account_id"] : false;
 
-  if($user_account_id) {
-    $app->redirect($final_global_template_vars["path_to_this_module"]."/manage/".$user_account_id);
-  }
+    if ($user_account_id) {
+        $app->redirect($final_global_template_vars["path_to_this_module"]."/manage/".$user_account_id);
+    }
 
-	$app->render('browse_user_accounts.php',array(
-		"page_title" => "Browse User Accounts"
-	));
+    $app->render('browse_user_accounts.php', array(
+        "page_title" => "Browse User Accounts"
+    ));
 }
-?>

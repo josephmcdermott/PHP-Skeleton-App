@@ -24,4 +24,3 @@
 
 $app->get('/', "form");
 $app->post('/', "enforce_csrf_guard", "form");
-?>

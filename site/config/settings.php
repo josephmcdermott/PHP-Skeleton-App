@@ -27,8 +27,7 @@
  * the global settings, and it will overwrite it
  */
 $default_module_settings = array(
-	"module_name" => "Site"
-	,"module_description" => "Root level access to site"
-	,"menu_hidden" => true
+    "module_name" => "Site"
+    ,"module_description" => "Root level access to site"
+    ,"menu_hidden" => true
 );
-?>

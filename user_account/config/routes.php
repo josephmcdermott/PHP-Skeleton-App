@@ -43,4 +43,3 @@ $app->post('/password/', "enforce_csrf_guard", "reset_password");
 
 $app->get('/reset/', "show_update_password_form");
 $app->post('/reset/', "enforce_csrf_guard", "update_password");
-?>

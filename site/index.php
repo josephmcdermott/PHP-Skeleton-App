@@ -21,4 +21,3 @@
  */
 
 include_once($_SERVER["PATH_TO_VENDOR"] . "default/autoload.php");
-?>

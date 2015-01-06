@@ -23,7 +23,6 @@
  */
 
 $default_module_includes = array(
-	"js" => array()
-	,"css" => array()
+    "js" => array()
+    ,"css" => array()
 );
-?>

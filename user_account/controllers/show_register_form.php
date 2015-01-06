@@ -22,19 +22,15 @@
  * @since       1.0.0
  */
 
-function show_register_form() {
-  $app = \Slim\Slim::getInstance();
-  $env = $app->environment();
-  $final_global_template_vars = $app->config('final_global_template_vars');
+function show_register_form()
+{
+    $app = \Slim\Slim::getInstance();
+    $env = $app->environment();
+    $final_global_template_vars = $app->config('final_global_template_vars');
 
-  $data = $app->request()->post() ? $app->request()->post() : false;
+    $data = $app->request()->post() ? $app->request()->post() : false;
 
-  $app->render('register_form.php',array(
-    "page_title" => "Register"
-    ,"hide_page_header" => true
-    ,"path_to_this_module" => $final_global_template_vars["path_to_this_module"]
-    ,"errors" => $env["default_validation_errors"]
-    ,"data" => $data
+    $app->render('register_form.php', array(
+    "page_title" => "Register", "hide_page_header" => true, "path_to_this_module" => $final_global_template_vars["path_to_this_module"], "errors" => $env["default_validation_errors"], "data" => $data
   ));
 }
-?>

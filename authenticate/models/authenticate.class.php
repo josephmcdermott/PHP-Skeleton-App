@@ -22,9 +22,9 @@
  * @since       1.0.0
  */
 
-class Authenticate{
-
-  /**
+class Authenticate
+{
+    /**
    * @var string  $session_key    The session key
    */
   private $session_key = "";
@@ -39,11 +39,12 @@ class Authenticate{
    * @param object   $db_connection   The database connection object
    * @param string   $session_key     The session key
    */
-  public function __construct($db_connection=false, $session_key=false) {
-    if($db_connection && is_object($db_connection)) {
-      $this->db = $db_connection;
-    }
-    $this->session_key = $session_key;
+  public function __construct($db_connection=false, $session_key=false)
+  {
+      if ($db_connection && is_object($db_connection)) {
+          $this->db = $db_connection;
+      }
+      $this->session_key = $session_key;
   }
 
   /**
@@ -54,11 +55,12 @@ class Authenticate{
    * @param       string $password    The data value
    * @return      string
    */
-  public function generate_hashed_password($password) {
-    if (defined("CRYPT_BLOWFISH") && CRYPT_BLOWFISH) {
-      $salt = '$2y$11$' . substr(md5(uniqid(rand(), true)), 0, 22);
-      return crypt($password, $salt);
-    }
+  public function generate_hashed_password($password)
+  {
+      if (defined("CRYPT_BLOWFISH") && CRYPT_BLOWFISH) {
+          $salt = '$2y$11$' . substr(md5(uniqid(rand(), true)), 0, 22);
+          return crypt($password, $salt);
+      }
   }
 
   /**
@@ -70,8 +72,9 @@ class Authenticate{
    * @param   string $hashedPassword  The data value
    * @return  bool
    */
-  private function verify_hashed_password($password, $hashedPassword) {
-    return crypt($password, $hashedPassword) == $hashedPassword;
+  private function verify_hashed_password($password, $hashedPassword)
+  {
+      return crypt($password, $hashedPassword) == $hashedPassword;
   }
 
   /**
@@ -83,10 +86,11 @@ class Authenticate{
    * @param       string $password     The data value
    * @return      array|bool           The query result
    */
-  public function authenticate_local($username, $password) {
-    $result = false;
-    if($username && $password){
-      $statement = $this->db->prepare("
+  public function authenticate_local($username, $password)
+  {
+      $result = false;
+      if ($username && $password) {
+          $statement = $this->db->prepare("
         SELECT
            user_account_id
           ,user_account_email
@@ -97,15 +101,14 @@ class Authenticate{
         WHERE user_account_email = :user_account_email
         AND active = 1
       ");
-      $statement->bindValue(":user_account_email", $username, PDO::PARAM_STR);
-      $statement->execute();
-      $data = $statement->fetch(PDO::FETCH_ASSOC);
+          $statement->bindValue(":user_account_email", $username, PDO::PARAM_STR);
+          $statement->execute();
+          $data = $statement->fetch(PDO::FETCH_ASSOC);
 
-      $result = $this->verify_hashed_password($password, $data["user_account_password"]) ? $data : false;
-      unset($result["user_account_password"]);
-
-    }
-    return $result;
+          $result = $this->verify_hashed_password($password, $data["user_account_password"]) ? $data : false;
+          unset($result["user_account_password"]);
+      }
+      return $result;
   }
 
   /**
@@ -117,8 +120,9 @@ class Authenticate{
    * @param string $result The data value
    * @return void
    */
-  public function log_login_attempt($user_account_email, $result) {
-    $statement = $this->db->prepare("
+  public function log_login_attempt($user_account_email, $result)
+  {
+      $statement = $this->db->prepare("
       INSERT INTO login_attempt
         (user_account_email
         ,ip_address
@@ -132,12 +136,10 @@ class Authenticate{
         ,:page
         ,NOW())
     ");
-    $statement->bindValue(":user_account_email", $user_account_email, PDO::PARAM_STR);
-    $statement->bindValue(":ip_address", $_SERVER['REMOTE_ADDR'], PDO::PARAM_STR);
-    $statement->bindValue(":result", $result, PDO::PARAM_STR);
-    $statement->bindValue(":page", $_SERVER['REQUEST_URI'], PDO::PARAM_STR);
-    $statement->execute();
+      $statement->bindValue(":user_account_email", $user_account_email, PDO::PARAM_STR);
+      $statement->bindValue(":ip_address", $_SERVER['REMOTE_ADDR'], PDO::PARAM_STR);
+      $statement->bindValue(":result", $result, PDO::PARAM_STR);
+      $statement->bindValue(":page", $_SERVER['REQUEST_URI'], PDO::PARAM_STR);
+      $statement->execute();
   }
 }
-
-?>

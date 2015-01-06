@@ -1,7 +1,7 @@
 {% extends layout_template_name %}
 {% block content %}
 	<div class="jumbotron">
-		<h2>Access Denied</h2> 
+		<h2>Access Denied</h2>
 	</div>
 	{% if flash.message %}
 		<div class="alert alert-danger">

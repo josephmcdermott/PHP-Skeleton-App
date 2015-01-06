@@ -22,43 +22,42 @@
  * @since       1.0.0
  */
 
-function reset_password(){
-  $app = \Slim\Slim::getInstance();
-  $env = $app->environment();
-  $final_global_template_vars = $app->config('final_global_template_vars');
+function reset_password()
+{
+    $app = \Slim\Slim::getInstance();
+    $env = $app->environment();
+    $final_global_template_vars = $app->config('final_global_template_vars');
   
-  require_once $final_global_template_vars["absolute_path_to_this_module"] . "/models/user_account.class.php";
-  require_once $_SERVER["PATH_TO_VENDOR"] . "phpmailer/phpmailer/PHPMailerAutoload.php";
+    require_once $final_global_template_vars["absolute_path_to_this_module"] . "/models/user_account.class.php";
+    require_once $_SERVER["PATH_TO_VENDOR"] . "phpmailer/phpmailer/PHPMailerAutoload.php";
 
-  $db_conn = new \slimlocal\models\db( $final_global_template_vars["db_connection"] );
-  $db_resource = $db_conn->get_resource();
+    $db_conn = new \slimlocal\models\db($final_global_template_vars["db_connection"]);
+    $db_resource = $db_conn->get_resource();
 
-  $useraccount = new UserAccount( $db_resource, $final_global_template_vars["session_key"] );
-  $mail = new PHPMailer();
+    $useraccount = new UserAccount($db_resource, $final_global_template_vars["session_key"]);
+    $mail = new PHPMailer();
 
-  $posted_data = $app->request()->post() ? $app->request()->post() : false;
+    $posted_data = $app->request()->post() ? $app->request()->post() : false;
 
   // Is the email address in the database?
-  if($posted_data) {
-    $account_email_exists = $useraccount->account_email_exists( $posted_data["user_account_email"] );
+  if ($posted_data) {
+      $account_email_exists = $useraccount->account_email_exists($posted_data["user_account_email"]);
 
-    if(!$account_email_exists) {
-      $app->flash('message', 'The entered email address was not found in our database.');
-      $app->redirect($final_global_template_vars["path_to_this_module"]."/password/");
-    }
+      if (!$account_email_exists) {
+          $app->flash('message', 'The entered email address was not found in our database.');
+          $app->redirect($final_global_template_vars["path_to_this_module"]."/password/");
+      }
   }
 
   // If there are no errors, process posted data and email to user
-  if( $account_email_exists && $posted_data ) {
-
-    $emailed_hash = md5( rand(0,1000) );
+  if ($account_email_exists && $posted_data) {
+      $emailed_hash = md5(rand(0, 1000));
 
     // Attempt to update the emailed_hash and set account to inactive (returns boolean)
-    $updated = $useraccount->update_emailed_hash( $account_email_exists['user_account_id'], $emailed_hash );
+    $updated = $useraccount->update_emailed_hash($account_email_exists['user_account_id'], $emailed_hash);
 
-    if($updated) {
-
-      // Prepare the email.
+      if ($updated) {
+          // Prepare the email.
 
       // Send an email to the user.
       $to = $account_email_exists["user_account_email"];
@@ -72,39 +71,33 @@ function reset_password(){
 
       // For the ability to send emails from an AWS EC2 instance...
       // If you need this functionality, you can configure the settings accordingly in /default_global_settings.php
-      if($final_global_template_vars["hosting_vendor"] && ($final_global_template_vars["hosting_vendor"] == "aws_ec2")) {
-
-        require_once $final_global_template_vars["path_to_smtp_settings"];
+      if ($final_global_template_vars["hosting_vendor"] && ($final_global_template_vars["hosting_vendor"] == "aws_ec2")) {
+          require_once $final_global_template_vars["path_to_smtp_settings"];
 
         // SMTP Settings
         $mail->IsSMTP();
-        $mail->SMTPAuth   = $email['settings']['smtpauth'];
-        $mail->SMTPSecure = $email['settings']['smtpsecure'];
-        $mail->Host       = $email['settings']['host'];
-        $mail->Username   = $email['settings']['username'];
-        $mail->Password   = $email['settings']['password'];
+          $mail->SMTPAuth   = $email['settings']['smtpauth'];
+          $mail->SMTPSecure = $email['settings']['smtpsecure'];
+          $mail->Host       = $email['settings']['host'];
+          $mail->Username   = $email['settings']['username'];
+          $mail->Password   = $email['settings']['password'];
       }
 
       // From (verified email address).
       $mail->SetFrom($final_global_template_vars["send_emails_from"], $final_global_template_vars["site_name"].' Accounts');
       // Subject
       $mail->Subject = $subject;
-      $mail->MsgHTML( $message );
+          $mail->MsgHTML($message);
       // Recipient
-      $mail->AddAddress( $posted_data['user_account_email'] );
+      $mail->AddAddress($posted_data['user_account_email']);
       // Send the email.
       $mail->Send();
 
-      $app->flash('message', 'Thank you. Further instructions are being sent to your email address.');
+          $app->flash('message', 'Thank you. Further instructions are being sent to your email address.');
+      } else {
+          $app->flash('message', 'Processing failed.');
+      }
 
-    } else {
-
-      $app->flash('message', 'Processing failed.');
-
-    }
-
-    $app->redirect($final_global_template_vars["path_to_this_module"]."/password/");
+      $app->redirect($final_global_template_vars["path_to_this_module"]."/password/");
   }
-
 }
-?>

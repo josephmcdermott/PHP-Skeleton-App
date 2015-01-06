@@ -27,14 +27,13 @@
  * the global settings, and it will overwrite it
  */
 $default_module_settings = array(
-	"module_name" => "Web Application Installer"
-	,"module_description" => "Sets up a default environment"
-	,"module_icon_path" => "/" . $_SERVER["CORE_TYPE"] . "/lib/images/icons/pixelistica-blue-icons/png/64x64/wired.png"
-	,"menu_hidden" => true
-	,"pages" => array(
-		array(
-			"label" => "Install", "path" => "/", "display" => false
-		)
-	)
+    "module_name" => "Web Application Installer"
+    ,"module_description" => "Sets up a default environment"
+    ,"module_icon_path" => "/" . $_SERVER["CORE_TYPE"] . "/lib/images/icons/pixelistica-blue-icons/png/64x64/wired.png"
+    ,"menu_hidden" => true
+    ,"pages" => array(
+        array(
+            "label" => "Install", "path" => "/", "display" => false
+        )
+    )
 );
-?>

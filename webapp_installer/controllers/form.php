@@ -22,27 +22,28 @@
  * @since       1.0.0
  */
 
-function form(){
-  $app = \Slim\Slim::getInstance();
-  $env = $app->environment();
-  $final_global_template_vars = $app->config('final_global_template_vars');
+function form()
+{
+    $app = \Slim\Slim::getInstance();
+    $env = $app->environment();
+    $final_global_template_vars = $app->config('final_global_template_vars');
 
   // Redirect to the installer if database variables aren't present, and if we aren't already there.
-  if(
-    isset($final_global_template_vars["db_connection"]["name"]) && 
-    isset($final_global_template_vars["db_connection"]["host"]) && 
-    isset($final_global_template_vars["db_connection"]["user"]) && 
-    isset($final_global_template_vars["db_connection"]["password"]) && 
+  if (
+    isset($final_global_template_vars["db_connection"]["name"]) &&
+    isset($final_global_template_vars["db_connection"]["host"]) &&
+    isset($final_global_template_vars["db_connection"]["user"]) &&
+    isset($final_global_template_vars["db_connection"]["password"]) &&
     $_SERVER["REQUEST_URI"] == "/webapp_installer/"
   ) {
-    header("Location: ".$final_global_template_vars["login_url"]."/");
-    exit;
+      header("Location: ".$final_global_template_vars["login_url"]."/");
+      exit;
   }
 
-  require_once $_SERVER["PATH_TO_VENDOR"] . "wixel/gump/gump.class.php";
-  $gump = new GUMP();
+    require_once $_SERVER["PATH_TO_VENDOR"] . "wixel/gump/gump.class.php";
+    $gump = new GUMP();
 
-  $data = $posted_data = $app->request()->post() ? $app->request()->post() : false;
+    $data = $posted_data = $app->request()->post() ? $app->request()->post() : false;
 
   // GUMP validation rules
   $rules = array(
@@ -61,64 +62,63 @@ function form(){
   );
 
   // Validation using GUMP
-  if($posted_data) {
-    $validated = array();
-    $errors = array();
-    $validated = $gump->validate($posted_data, $rules);
-    if($validated !== TRUE){
-      $errors = \slimlocal\models\utility::gump_parse_errors($validated);
-    }
-    if($errors) {
-      $env = $app->environment();
-      $env["default_validation_errors"] = $errors;
-    }
+  if ($posted_data) {
+      $validated = array();
+      $errors = array();
+      $validated = $gump->validate($posted_data, $rules);
+      if ($validated !== true) {
+          $errors = \slimlocal\models\utility::gump_parse_errors($validated);
+      }
+      if ($errors) {
+          $env = $app->environment();
+          $env["default_validation_errors"] = $errors;
+      }
   }
 
-  $default_validation_errors = isset($env["default_validation_errors"]) ? $env["default_validation_errors"] : false;
+    $default_validation_errors = isset($env["default_validation_errors"]) ? $env["default_validation_errors"] : false;
 
   // If there are no errors, begin the second round of checks
-  if( !$default_validation_errors && $posted_data ) {
-
-    // Check to see if the database user exists
+  if (!$default_validation_errors && $posted_data) {
+      // Check to see if the database user exists
     $link = @mysqli_connect($posted_data['database_host'], $posted_data['database_username'], $posted_data['database_password']);
-    if(!$link) {
-      // die('Could not connect to the database. Please check your parameters.');
+      if (!$link) {
+          // die('Could not connect to the database. Please check your parameters.');
       $app->flash('message', 'Could not connect to the database. Please check your parameters.');
-      $app->redirect($final_global_template_vars["path_to_this_module"]);
-    }
+          $app->redirect($final_global_template_vars["path_to_this_module"]);
+      }
     // Next, check to see if the database exists by making $posted_data['database_name'] the current db
     $db_selected = mysqli_select_db($link, $posted_data['database_name']);
-    if(!$db_selected) {
-      // die('Cannot use the "'.$posted_data['database_name'].'" database. Does it exist?');
+      if (!$db_selected) {
+          // die('Cannot use the "'.$posted_data['database_name'].'" database. Does it exist?');
       $app->flash('message', 'Cannot use the "'.$posted_data['database_name'].'" database. Does it exist?');
-      $app->redirect($final_global_template_vars["path_to_this_module"]);
-    }
+          $app->redirect($final_global_template_vars["path_to_this_module"]);
+      }
 
     // If there are no MYSQL errors, overwrite the default_global_settings.php file
     $file_name = "default_global_settings.php";
-    $original_file = file_get_contents($_SERVER['DOCUMENT_ROOT'].'/'.$file_name);
-    $parsed = str_replace('#~site_name~#', '"site_name" => "'.$posted_data['application_name'].'",', $original_file);
-    $parsed = str_replace('#~session_key~#', ',"session_key" => "'.$posted_data['session_key'].'"', $parsed);
-    $parsed = str_replace('#~name~#', '"name" => ($_SERVER["IS_DEV"] == "true") ? "'.$posted_data['database_name'].'" : "'.$posted_data['database_name'].'"', $parsed);
-    $parsed = str_replace('#~host~#', ',"host" => "'.$posted_data['database_host'].'"', $parsed);
-    $parsed = str_replace('#~user~#', ',"user" => "'.$posted_data['database_username'].'"', $parsed);
-    $parsed = str_replace('#~password~#', ',"password" => "'.$posted_data['database_password'].'",', $parsed);
-    $parsed = str_replace('#~admin_emails~#', ',"admin_emails" => "'.$posted_data['user_account_email'].'",', $parsed);
-    unlink($_SERVER['DOCUMENT_ROOT'].'/'.$file_name);
-    $file_handle = fopen($_SERVER['DOCUMENT_ROOT'].'/'.$file_name, 'w') or die("can't open file");
-    fwrite($file_handle, $parsed);
-    fclose($file_handle);
-    chmod($_SERVER['DOCUMENT_ROOT'].'/'.$file_name, 0664);
+      $original_file = file_get_contents($_SERVER['DOCUMENT_ROOT'].'/'.$file_name);
+      $parsed = str_replace('#~site_name~#', '"site_name" => "'.$posted_data['application_name'].'",', $original_file);
+      $parsed = str_replace('#~session_key~#', ',"session_key" => "'.$posted_data['session_key'].'"', $parsed);
+      $parsed = str_replace('#~name~#', '"name" => ($_SERVER["IS_DEV"] == "true") ? "'.$posted_data['database_name'].'" : "'.$posted_data['database_name'].'"', $parsed);
+      $parsed = str_replace('#~host~#', ',"host" => "'.$posted_data['database_host'].'"', $parsed);
+      $parsed = str_replace('#~user~#', ',"user" => "'.$posted_data['database_username'].'"', $parsed);
+      $parsed = str_replace('#~password~#', ',"password" => "'.$posted_data['database_password'].'",', $parsed);
+      $parsed = str_replace('#~admin_emails~#', ',"admin_emails" => "'.$posted_data['user_account_email'].'",', $parsed);
+      unlink($_SERVER['DOCUMENT_ROOT'].'/'.$file_name);
+      $file_handle = fopen($_SERVER['DOCUMENT_ROOT'].'/'.$file_name, 'w') or die("can't open file");
+      fwrite($file_handle, $parsed);
+      fclose($file_handle);
+      chmod($_SERVER['DOCUMENT_ROOT'].'/'.$file_name, 0664);
 
     // Overwrite the .htaccess file
     $file_name = ".htaccess";
-    $original_file = file_get_contents($_SERVER['DOCUMENT_ROOT'].'/'.$file_name);
-    $parsed = str_replace('"^([^\.]*)\.com$"', $posted_data['cname'], $original_file);
-    unlink($_SERVER['DOCUMENT_ROOT'].'/'.$file_name);
-    $file_handle = fopen($_SERVER['DOCUMENT_ROOT'].'/'.$file_name, 'w') or die("can't open file");
-    fwrite($file_handle, $parsed);
-    fclose($file_handle);
-    chmod($_SERVER['DOCUMENT_ROOT'].'/'.$file_name, 0664);
+      $original_file = file_get_contents($_SERVER['DOCUMENT_ROOT'].'/'.$file_name);
+      $parsed = str_replace('"^([^\.]*)\.com$"', $posted_data['cname'], $original_file);
+      unlink($_SERVER['DOCUMENT_ROOT'].'/'.$file_name);
+      $file_handle = fopen($_SERVER['DOCUMENT_ROOT'].'/'.$file_name, 'w') or die("can't open file");
+      fwrite($file_handle, $parsed);
+      fclose($file_handle);
+      chmod($_SERVER['DOCUMENT_ROOT'].'/'.$file_name, 0664);
 
     // Build the database tables
     $db_vars = array(
@@ -128,13 +128,13 @@ function form(){
       ,"password" => $posted_data['database_password']
     );
 
-    $db_conn = new \slimlocal\models\db($db_vars);
-    $db = $db_conn->get_resource();
+      $db_conn = new \slimlocal\models\db($db_vars);
+      $db = $db_conn->get_resource();
 
-    require_once $final_global_template_vars["default_module_list"]["authenticate"]["absolute_path_to_this_module"] . "/models/authenticate.class.php";
-    $authenticate = new Authenticate( $db, $final_global_template_vars["session_key"] );
+      require_once $final_global_template_vars["default_module_list"]["authenticate"]["absolute_path_to_this_module"] . "/models/authenticate.class.php";
+      $authenticate = new Authenticate($db, $final_global_template_vars["session_key"]);
 
-    $statement = $db->prepare("CREATE TABLE `user_account` (
+      $statement = $db->prepare("CREATE TABLE `user_account` (
       `user_account_id` int(10) NOT NULL AUTO_INCREMENT,
       `user_account_email` varchar(255) NOT NULL,
       `user_account_password` varchar(255) NOT NULL,
@@ -147,30 +147,30 @@ function form(){
       `modified_date` datetime DEFAULT NULL,
       PRIMARY KEY (`user_account_id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='This table stores user accounts'");
-    $statement->execute();
-    $error = $db->errorInfo();
-    if( $error[0] != "00000" )
-    {
-      var_dump( $db->errorInfo() ); die('CREATE TABLE `user_account` failed.');
-    }
+      $statement->execute();
+      $error = $db->errorInfo();
+      if ($error[0] != "00000") {
+          var_dump($db->errorInfo());
+          die('CREATE TABLE `user_account` failed.');
+      }
 
     // INSERT this user into the user_account table
     $statement = $db->prepare("INSERT INTO user_account
       (user_account_email, user_account_password, first_name, last_name, acceptable_use_policy, created_date, active)
       VALUES ( :user_account_email, :user_account_password, :first_name, :last_name, 1, NOW(), 1 )");
-    $statement->bindValue(":user_account_email", $posted_data['user_account_email'], PDO::PARAM_STR);
-    $statement->bindValue(":user_account_password", $authenticate->generate_hashed_password($posted_data['user_account_password']), PDO::PARAM_STR);
-    $statement->bindValue(":first_name", $posted_data['first_name'], PDO::PARAM_STR);
-    $statement->bindValue(":last_name", $posted_data['last_name'], PDO::PARAM_STR);
-    $statement->execute();
-    $error = $db->errorInfo();
-    if( $error[0] != "00000" )
-    {
-      var_dump( $db->errorInfo() ); die('The INSERT INTO user_account failed.');
-    }
-    $last_inserted_user_account_id = $db->lastInsertId();
+      $statement->bindValue(":user_account_email", $posted_data['user_account_email'], PDO::PARAM_STR);
+      $statement->bindValue(":user_account_password", $authenticate->generate_hashed_password($posted_data['user_account_password']), PDO::PARAM_STR);
+      $statement->bindValue(":first_name", $posted_data['first_name'], PDO::PARAM_STR);
+      $statement->bindValue(":last_name", $posted_data['last_name'], PDO::PARAM_STR);
+      $statement->execute();
+      $error = $db->errorInfo();
+      if ($error[0] != "00000") {
+          var_dump($db->errorInfo());
+          die('The INSERT INTO user_account failed.');
+      }
+      $last_inserted_user_account_id = $db->lastInsertId();
 
-    $statement = $db->prepare("CREATE TABLE `user_account_addresses` (
+      $statement = $db->prepare("CREATE TABLE `user_account_addresses` (
       `user_account_addresses_id` int(11) NOT NULL AUTO_INCREMENT,
       `user_account_id` int(11) NOT NULL,
       `address_label` varchar(100) NOT NULL DEFAULT '',
@@ -189,14 +189,14 @@ function form(){
       KEY `created_by_user_account_id` (`created_by_user_account_id`),
       KEY `last_modified_user_account_id` (`last_modified_user_account_id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='This table stores user account addresses'");
-    $statement->execute();
-    $error = $db->errorInfo();
-    if( $error[0] != "00000" )
-    {
-      var_dump( $db->errorInfo() ); die('CREATE TABLE `user_account_addresses` failed.');
-    }
+      $statement->execute();
+      $error = $db->errorInfo();
+      if ($error[0] != "00000") {
+          var_dump($db->errorInfo());
+          die('CREATE TABLE `user_account_addresses` failed.');
+      }
 
-    $statement = $db->prepare("CREATE TABLE `group` (
+      $statement = $db->prepare("CREATE TABLE `group` (
       `group_id` int(11) NOT NULL AUTO_INCREMENT,
       `name` varchar(100) NOT NULL DEFAULT '',
       `abbreviation` varchar(10) NOT NULL DEFAULT '',
@@ -215,14 +215,14 @@ function form(){
       KEY `created_by_user_account_id` (`created_by_user_account_id`),
       KEY `last_modified_user_account_id` (`last_modified_user_account_id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='This table stores groups for user accounts'");
-    $statement->execute();
-    $error = $db->errorInfo();
-    if( $error[0] != "00000" )
-    {
-      var_dump( $db->errorInfo() ); die('CREATE TABLE `group` failed.');
-    }
+      $statement->execute();
+      $error = $db->errorInfo();
+      if ($error[0] != "00000") {
+          var_dump($db->errorInfo());
+          die('CREATE TABLE `group` failed.');
+      }
 
-    $statement = $db->prepare("INSERT INTO `group` (
+      $statement = $db->prepare("INSERT INTO `group` (
       `group_id`
       ,`name`
       ,`abbreviation`
@@ -253,42 +253,42 @@ function form(){
       ,:user_account_id
       ,1)
     ");
-    $statement->bindValue(":user_account_id", $last_inserted_user_account_id, PDO::PARAM_INT);
-    $statement->execute();
-    $error = $db->errorInfo();
-    if( $error[0] != "00000" )
-    {
-      var_dump( $db->errorInfo() ); die('The INSERT INTO `group` failed.');
-    }
+      $statement->bindValue(":user_account_id", $last_inserted_user_account_id, PDO::PARAM_INT);
+      $statement->execute();
+      $error = $db->errorInfo();
+      if ($error[0] != "00000") {
+          var_dump($db->errorInfo());
+          die('The INSERT INTO `group` failed.');
+      }
 
-    $statement = $db->prepare("CREATE TABLE `group_closure_table` (
+      $statement = $db->prepare("CREATE TABLE `group_closure_table` (
       `ancestor` int(10) NOT NULL DEFAULT '0',
       `descendant` int(10) NOT NULL DEFAULT '0',
       `pathlength` int(10) NOT NULL DEFAULT '0',
       PRIMARY KEY (`ancestor`,`descendant`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='This table was from the guidance of Mr. Bill Karwin'");
-    $statement->execute();
-    $error = $db->errorInfo();
-    if( $error[0] != "00000" )
-    {
-      var_dump( $db->errorInfo() ); die('The CREATE TABLE `group_closure_table` failed.');
-    }
+      $statement->execute();
+      $error = $db->errorInfo();
+      if ($error[0] != "00000") {
+          var_dump($db->errorInfo());
+          die('The CREATE TABLE `group_closure_table` failed.');
+      }
 
-    $statement = $db->prepare("INSERT INTO `group_closure_table` (
+      $statement = $db->prepare("INSERT INTO `group_closure_table` (
       `ancestor`
       ,`descendant`
       ,`pathlength`
     )
     VALUES (1,1,0)
     ");
-    $statement->execute();
-    $error = $db->errorInfo();
-    if( $error[0] != "00000" )
-    {
-      var_dump( $db->errorInfo() ); die('The INSERT INTO `group_closure_table` failed.');
-    }
+      $statement->execute();
+      $error = $db->errorInfo();
+      if ($error[0] != "00000") {
+          var_dump($db->errorInfo());
+          die('The INSERT INTO `group_closure_table` failed.');
+      }
 
-    $statement = $db->prepare("CREATE TABLE `user_account_groups` (
+      $statement = $db->prepare("CREATE TABLE `user_account_groups` (
       `role_id` int(10) NOT NULL DEFAULT '0',
       `user_account_id` int(10) NOT NULL DEFAULT '0',
       `group_id` int(10) NOT NULL DEFAULT '0',
@@ -298,38 +298,38 @@ function form(){
       KEY `user_account_id` (`user_account_id`),
       KEY `group_id` (`group_id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='This table stores user account groups'");
-    $statement->execute();
-    $error = $db->errorInfo();
-    if( $error[0] != "00000" )
-    {
-      var_dump( $db->errorInfo() ); die('CREATE TABLE `user_account_groups` failed.');
-    }
+      $statement->execute();
+      $error = $db->errorInfo();
+      if ($error[0] != "00000") {
+          var_dump($db->errorInfo());
+          die('CREATE TABLE `user_account_groups` failed.');
+      }
 
-    $statement = $db->prepare("CREATE TABLE `user_account_proxy` (
+      $statement = $db->prepare("CREATE TABLE `user_account_proxy` (
       `user_account_groups_id` int(10) NOT NULL DEFAULT '0',
       `proxy_user_account_id` int(10) NOT NULL DEFAULT '0',
       PRIMARY KEY (`user_account_groups_id`,`proxy_user_account_id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='This table stores user account proxy users'");
-    $statement->execute();
-    $error = $db->errorInfo();
-    if( $error[0] != "00000" )
-    {
-      var_dump( $db->errorInfo() ); die('CREATE TABLE `user_account_proxy` failed.');
-    }
+      $statement->execute();
+      $error = $db->errorInfo();
+      if ($error[0] != "00000") {
+          var_dump($db->errorInfo());
+          die('CREATE TABLE `user_account_proxy` failed.');
+      }
 
-    $statement = $db->prepare("CREATE TABLE `user_account_roles` (
+      $statement = $db->prepare("CREATE TABLE `user_account_roles` (
       `role_id` int(10) NOT NULL AUTO_INCREMENT,
       `label` varchar(50) DEFAULT NULL,
       PRIMARY KEY (`role_id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='This table stores user account roles'");
-    $statement->execute();
-    $error = $db->errorInfo();
-    if( $error[0] != "00000" )
-    {
-      var_dump( $db->errorInfo() ); die('CREATE TABLE `user_account_roles` failed.');
-    }
+      $statement->execute();
+      $error = $db->errorInfo();
+      if ($error[0] != "00000") {
+          var_dump($db->errorInfo());
+          die('CREATE TABLE `user_account_roles` failed.');
+      }
 
-    $statement = $db->prepare("INSERT INTO `user_account_roles` (`role_id`,`label`)
+      $statement = $db->prepare("INSERT INTO `user_account_roles` (`role_id`,`label`)
       VALUES
       (1, 'Administrator'),
       (2, 'Author'),
@@ -338,26 +338,26 @@ function form(){
       (5, 'Manager'),
       (6, 'Universal Administrator')
     ");
-    $statement->execute();
-    $error = $db->errorInfo();
-    if( $error[0] != "00000" )
-    {
-      var_dump( $db->errorInfo() ); die('The INSERT INTO `user_account_roles` failed.');
-    }
+      $statement->execute();
+      $error = $db->errorInfo();
+      if ($error[0] != "00000") {
+          var_dump($db->errorInfo());
+          die('The INSERT INTO `user_account_roles` failed.');
+      }
 
     // INSERT this user into the user_account_groups table with "Universal Administrator" privileges
     $statement = $db->prepare("INSERT INTO user_account_groups
       (role_id, user_account_id, group_id)
       VALUES ( 6, :user_account_id, 1 ), ( 1, :user_account_id, 1 )");
-    $statement->bindValue(":user_account_id", $last_inserted_user_account_id, PDO::PARAM_INT);
-    $statement->execute();
-    $error = $db->errorInfo();
-    if( $error[0] != "00000" )
-    {
-      var_dump( $db->errorInfo() ); die('The INSERT INTO user_account_groups failed.');
-    }
+      $statement->bindValue(":user_account_id", $last_inserted_user_account_id, PDO::PARAM_INT);
+      $statement->execute();
+      $error = $db->errorInfo();
+      if ($error[0] != "00000") {
+          var_dump($db->errorInfo());
+          die('The INSERT INTO user_account_groups failed.');
+      }
 
-    $statement = $db->prepare("CREATE TABLE `login_attempt` (
+      $statement = $db->prepare("CREATE TABLE `login_attempt` (
       `login_attempt_id` int(11) NOT NULL AUTO_INCREMENT,
       `user_account_email` varchar(255) NOT NULL,
       `ip_address` varchar(255) NOT NULL DEFAULT '0',
@@ -366,31 +366,26 @@ function form(){
       `created_date` datetime DEFAULT NULL,
       PRIMARY KEY (`login_attempt_id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='This table is used to log login attempts'");
-    $statement->execute();
-    $error = $db->errorInfo();
-    if( $error[0] != "00000" )
-    {
-      var_dump( $db->errorInfo() ); die('The CREATE TABLE `login_attempt` failed.');
-    }
+      $statement->execute();
+      $error = $db->errorInfo();
+      if ($error[0] != "00000") {
+          var_dump($db->errorInfo());
+          die('The CREATE TABLE `login_attempt` failed.');
+      }
 
     // Don't return the user account password and the CSRF key value.
     unset($data['user_account_password']);
-    unset($data['csrf_key']);
+      unset($data['csrf_key']);
 
-    $data['success_message'] = 'installed';
+      $data['success_message'] = 'installed';
   }
 
-  if(!$posted_data) {
-    $data['cname'] = $_SERVER['SERVER_NAME'];
-    $data['database_host'] = 'localhost';
-  }
+    if (!$posted_data) {
+        $data['cname'] = $_SERVER['SERVER_NAME'];
+        $data['database_host'] = 'localhost';
+    }
 
-  $app->render('form.php',array(
-    "page_title" => "Web Application Installer"
-    ,"hide_page_header" => true
-    ,"path_to_this_module" => $final_global_template_vars["path_to_this_module"]
-    ,"errors" => $default_validation_errors
-    ,"data" => $data
+    $app->render('form.php', array(
+    "page_title" => "Web Application Installer", "hide_page_header" => true, "path_to_this_module" => $final_global_template_vars["path_to_this_module"], "errors" => $default_validation_errors, "data" => $data
   ));
 }
-?>

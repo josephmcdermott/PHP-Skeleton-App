@@ -123,12 +123,12 @@ $needed_apached_modules = array(
           <ul class="list-group">
             <?php
               $loaded_extensions = get_loaded_extensions();
-              foreach($needed_ext as $single_ext){
-                if(!in_array($single_ext,$loaded_extensions)){
-                  echo '<li class="list-group-item"><span class="label label-danger">Missing</span> <strong>' . $single_ext . '</strong></li>';
-                }else{
-                  echo '<li class="list-group-item"><span class="label label-success">Present</span> <strong>' . $single_ext . '</strong></li>';
-                }
+              foreach ($needed_ext as $single_ext) {
+                  if (!in_array($single_ext, $loaded_extensions)) {
+                      echo '<li class="list-group-item"><span class="label label-danger">Missing</span> <strong>' . $single_ext . '</strong></li>';
+                  } else {
+                      echo '<li class="list-group-item"><span class="label label-success">Present</span> <strong>' . $single_ext . '</strong></li>';
+                  }
               }
             ?>
           </ul>
@@ -138,12 +138,12 @@ $needed_apached_modules = array(
           <ul class="list-group">
             <?php
               $loaded_apache_modules = apache_get_modules();
-              foreach($needed_apached_modules as $single_apache_mod){
-                if(!in_array($single_apache_mod,$loaded_apache_modules)){
-                  echo '<li class="list-group-item"><span class="label label-danger">Missing</span> <strong>' . $single_apache_mod . '</strong></li>';
-                }else{
-                  echo '<li class="list-group-item"><span class="label label-success">Present</span> <strong>' . $single_apache_mod . '</strong></li>';
-                }
+              foreach ($needed_apached_modules as $single_apache_mod) {
+                  if (!in_array($single_apache_mod, $loaded_apache_modules)) {
+                      echo '<li class="list-group-item"><span class="label label-danger">Missing</span> <strong>' . $single_apache_mod . '</strong></li>';
+                  } else {
+                      echo '<li class="list-group-item"><span class="label label-success">Present</span> <strong>' . $single_apache_mod . '</strong></li>';
+                  }
               }
             ?>
           </ul>

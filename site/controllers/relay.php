@@ -22,11 +22,11 @@
  * @since       1.0.0
  */
 
-function relay(){
-	$app = \Slim\Slim::getInstance();
-	$final_global_template_vars = $app->config('final_global_template_vars');
-  $app->render('home.php',array(
+function relay()
+{
+    $app = \Slim\Slim::getInstance();
+    $final_global_template_vars = $app->config('final_global_template_vars');
+    $app->render('home.php', array(
     "page_title" => "Home"
   ));
 }
-?>

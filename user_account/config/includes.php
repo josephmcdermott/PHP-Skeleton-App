@@ -23,9 +23,8 @@
  */
 
 $default_module_includes = array(
-	"js" => array()
-	,"css" => array(
-		"user_account_module_css" => "/user_account/library/css/styles.css"
-	)
+    "js" => array()
+    ,"css" => array(
+        "user_account_module_css" => "/user_account/library/css/styles.css"
+    )
 );
-?>

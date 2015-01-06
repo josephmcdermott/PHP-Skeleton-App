@@ -23,4 +23,3 @@
  */
 
 $app->get('/', "check_authenticated", "show_dashboard");
-?>

@@ -22,27 +22,27 @@
  * @since       1.0.0
  */
 
-function datatables_browse_groups(){
-	$app = \Slim\Slim::getInstance();
-	$final_global_template_vars = $app->config('final_global_template_vars');
-	
-	require_once $final_global_template_vars["absolute_path_to_this_module"] . "/models/group.class.php";
-	$db_conn = new \slimlocal\models\db($final_global_template_vars["db_connection"]);
-	$db_resource = $db_conn->get_resource();
-	$group = new Group($db_resource,$final_global_template_vars["session_key"]);
+function datatables_browse_groups()
+{
+    $app = \Slim\Slim::getInstance();
+    $final_global_template_vars = $app->config('final_global_template_vars');
+    
+    require_once $final_global_template_vars["absolute_path_to_this_module"] . "/models/group.class.php";
+    $db_conn = new \slimlocal\models\db($final_global_template_vars["db_connection"]);
+    $db_resource = $db_conn->get_resource();
+    $group = new Group($db_resource, $final_global_template_vars["session_key"]);
 
-	$search = $app->request()->post('search');
-  $search_value = !empty($search["value"]) ? $search["value"] : false;
+    $search = $app->request()->post('search');
+    $search_value = !empty($search["value"]) ? $search["value"] : false;
 
-	$data = $group->browse_groups(
-		false,
-		$app->request()->post('order'),
-		$app->request()->post('start'),
-		$app->request()->post('length'),
-		$search_value
-	);
+    $data = $group->browse_groups(
+        false,
+        $app->request()->post('order'),
+        $app->request()->post('start'),
+        $app->request()->post('length'),
+        $search_value
+    );
 
-	echo json_encode($data);
-	die();
+    echo json_encode($data);
+    die();
 }
-?>

@@ -23,9 +23,8 @@
  */
 
 $default_module_includes = array(
-	"js" => array()
-	,"css" => array(
-		"request_module_css" => "/group/library/css/styles.css"
-	)
+    "js" => array()
+    ,"css" => array(
+        "request_module_css" => "/group/library/css/styles.css"
+    )
 );
-?>

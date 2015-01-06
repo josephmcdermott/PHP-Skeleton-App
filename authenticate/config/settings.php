@@ -40,4 +40,3 @@ $default_module_settings = array(
   ,"display_sign_up" => true
   ,"display_password_reset" => true
 );
-?>

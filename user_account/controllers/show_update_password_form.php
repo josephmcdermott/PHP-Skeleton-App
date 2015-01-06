@@ -22,19 +22,15 @@
  * @since       1.0.0
  */
 
-function show_update_password_form(){
-  $app = \Slim\Slim::getInstance();
-  $env = $app->environment();
-  $final_global_template_vars = $app->config('final_global_template_vars');
+function show_update_password_form()
+{
+    $app = \Slim\Slim::getInstance();
+    $env = $app->environment();
+    $final_global_template_vars = $app->config('final_global_template_vars');
 
-  $get_data = $app->request()->get() ? $app->request()->get() : false;
+    $get_data = $app->request()->get() ? $app->request()->get() : false;
 
-  $app->render('update_password_form.php',array(
-    "page_title" => "Reset Your Password"
-    ,"hide_page_header" => true
-    ,"path_to_this_module" => $final_global_template_vars["path_to_this_module"]
-    ,"errors" => $env["default_validation_errors"]
-    ,"data" => $get_data
+    $app->render('update_password_form.php', array(
+    "page_title" => "Reset Your Password", "hide_page_header" => true, "path_to_this_module" => $final_global_template_vars["path_to_this_module"], "errors" => $env["default_validation_errors"], "data" => $get_data
   ));
 }
-?>

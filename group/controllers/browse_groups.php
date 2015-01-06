@@ -22,10 +22,10 @@
  * @since       1.0.0
  */
 
-function browse_groups(){
-	$app = \Slim\Slim::getInstance();
-	$app->render('browse_groups.php',array(
-		"page_title" => "Browse Groups"
-	));
+function browse_groups()
+{
+    $app = \Slim\Slim::getInstance();
+    $app->render('browse_groups.php', array(
+        "page_title" => "Browse Groups"
+    ));
 }
-?>

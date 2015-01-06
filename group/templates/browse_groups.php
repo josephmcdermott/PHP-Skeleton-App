@@ -35,7 +35,7 @@
 							{ "data": "name" },
 							{ "data": "abbreviation" },
 							{ "data": "last_modified" }
-						],				
+						],
 					"dom": '<"wrapper"fli><"col-sm-3 col-md-3 datatables_bulk_actions">pt<"bottom"ip><"clear">',
 					"pagingType": "simple_numbers",
 					"stateSave": true,

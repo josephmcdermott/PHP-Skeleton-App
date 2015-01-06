@@ -28,28 +28,27 @@
  */
 
 $default_module_settings = array(
-	"module_name" => "Groups"
-	,"module_description" => "Manage groups for application"
-	,"module_icon_path" => "/" . $_SERVER["CORE_TYPE"] . "/lib/images/icons/pixelistica-blue-icons/png/64x64/wired.png"
-	,"menu_hidden" => isset($_SESSION[$default_global_settings["session_key"]]) && $_SESSION[$default_global_settings["session_key"]] ? false : true
-	,"pages" => array(
-		array(
-			"label" => "Browse Groups", 
-			"path" => "/", 
-			"display" => apply_permissions(
-				"role_perm_browse_groups_access", 
-				$final_global_template_vars
-			)
-		)
-		,array(
-			"label" => "Create Group", 
-			"path" => "/manage", 
-			"display" => apply_permissions(
-				"role_perm_manage_groups_access", 
-				$final_global_template_vars
-			)
-		)
-	)
-	,"sort_order" => 4
+    "module_name" => "Groups"
+    ,"module_description" => "Manage groups for application"
+    ,"module_icon_path" => "/" . $_SERVER["CORE_TYPE"] . "/lib/images/icons/pixelistica-blue-icons/png/64x64/wired.png"
+    ,"menu_hidden" => isset($_SESSION[$default_global_settings["session_key"]]) && $_SESSION[$default_global_settings["session_key"]] ? false : true
+    ,"pages" => array(
+        array(
+            "label" => "Browse Groups",
+            "path" => "/",
+            "display" => apply_permissions(
+                "role_perm_browse_groups_access",
+                $final_global_template_vars
+            )
+        )
+        ,array(
+            "label" => "Create Group",
+            "path" => "/manage",
+            "display" => apply_permissions(
+                "role_perm_manage_groups_access",
+                $final_global_template_vars
+            )
+        )
+    )
+    ,"sort_order" => 4
 );
-?>

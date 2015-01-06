@@ -23,9 +23,8 @@
  */
 
 $default_module_includes = array(
-	"js" => array()
-	,"css" => array(
-		"module_css" => "/dashboard/library/css/styles.css"
-	)
+    "js" => array()
+    ,"css" => array(
+        "module_css" => "/dashboard/library/css/styles.css"
+    )
 );
-?>

@@ -22,10 +22,10 @@
  * @since       1.0.0
  */
  
-function logout(){
-	$app = \Slim\Slim::getInstance();
-	$final_global_template_vars = $app->config('final_global_template_vars');
-	unset($_SESSION[$final_global_template_vars["session_key"]]);
-	$app->redirect($final_global_template_vars["login_url"]);
+function logout()
+{
+    $app = \Slim\Slim::getInstance();
+    $final_global_template_vars = $app->config('final_global_template_vars');
+    unset($_SESSION[$final_global_template_vars["session_key"]]);
+    $app->redirect($final_global_template_vars["login_url"]);
 }
-?>

@@ -22,54 +22,49 @@
  * @since       1.0.0
  */
  
-function show_login_form() {
-	$app = \Slim\Slim::getInstance();
-	$final_global_template_vars = $app->config('final_global_template_vars');
-	
-	require_once $final_global_template_vars["default_module_list"]["user_account"]["absolute_path_to_this_module"] . "/models/user_account.class.php";
-	$env = $app->environment();
-	$db_conn = new \slimlocal\models\db($final_global_template_vars["db_connection"]);
-	$db_resource = $db_conn->get_resource();
-	$user_account = new UserAccount( $db_resource, $final_global_template_vars["session_key"] );
+function show_login_form()
+{
+    $app = \Slim\Slim::getInstance();
+    $final_global_template_vars = $app->config('final_global_template_vars');
+    
+    require_once $final_global_template_vars["default_module_list"]["user_account"]["absolute_path_to_this_module"] . "/models/user_account.class.php";
+    $env = $app->environment();
+    $db_conn = new \slimlocal\models\db($final_global_template_vars["db_connection"]);
+    $db_resource = $db_conn->get_resource();
+    $user_account = new UserAccount($db_resource, $final_global_template_vars["session_key"]);
 
-	if(empty($env["default_validation_errors"]) && $_SERVER['REQUEST_METHOD'] == "POST") {
+    if (empty($env["default_validation_errors"]) && $_SERVER['REQUEST_METHOD'] == "POST") {
+        $landing_page = $final_global_template_vars['landing_page'];
 
-		$landing_page = $final_global_template_vars['landing_page'];
+        if (isset($_COOKIE[$final_global_template_vars["redirect_cookie_key"]]) &&
+            $_COOKIE[$final_global_template_vars["redirect_cookie_key"]] &&
+            $_COOKIE[$final_global_template_vars["redirect_cookie_key"]] != "/") {
+            $landing_page = $_COOKIE[$final_global_template_vars["redirect_cookie_key"]];
+            setcookie($final_global_template_vars["redirect_cookie_key"], "", time()-3600, "/");
+            unset($_COOKIE[$final_global_template_vars["redirect_cookie_key"]]);
+        }
 
-		if(isset($_COOKIE[$final_global_template_vars["redirect_cookie_key"]]) && 
-			$_COOKIE[$final_global_template_vars["redirect_cookie_key"]] && 
-			$_COOKIE[$final_global_template_vars["redirect_cookie_key"]] != "/") {
+        // Add role list to session.
+        $_SESSION[$final_global_template_vars["session_key"]][$final_global_template_vars["current_user_roles_session_key"]] = \slimlocal\models\utility::array_flatten($user_account->get_user_roles_list($_SESSION[$final_global_template_vars["session_key"]]["user_account_id"]));
 
-			$landing_page = $_COOKIE[$final_global_template_vars["redirect_cookie_key"]];
-			setcookie($final_global_template_vars["redirect_cookie_key"], "", time()-3600, "/");
-			unset($_COOKIE[$final_global_template_vars["redirect_cookie_key"]]);
-			
-		}
+        // Add group list to session.
+        $tmp_array = array();
+        $_SESSION[$final_global_template_vars["session_key"]]["associated_groups"] = \slimlocal\models\utility::array_flatten($user_account->get_user_account_groups($_SESSION[$final_global_template_vars["session_key"]]["user_account_id"]), $tmp_array, 'group_id');
 
-		// Add role list to session.
-		$_SESSION[$final_global_template_vars["session_key"]][$final_global_template_vars["current_user_roles_session_key"]] = \slimlocal\models\utility::array_flatten($user_account->get_user_roles_list($_SESSION[$final_global_template_vars["session_key"]]["user_account_id"]));
+        // Landing page exception. If coming from the register page, set to "/dashboard".
+        $final_landing_page = ($landing_page == "/user_account/register/") ? "/dashboard" : $landing_page;
+        // Landing page exception. If coming from the home page, set to "/dashboard".
+        $final_landing_page = ($landing_page == "/") ? "/dashboard" : $landing_page;
 
-		// Add group list to session.
-		$tmp_array = array();
-		$_SESSION[$final_global_template_vars["session_key"]]["associated_groups"] = \slimlocal\models\utility::array_flatten($user_account->get_user_account_groups($_SESSION[$final_global_template_vars["session_key"]]["user_account_id"]),$tmp_array,'group_id');
+        $app->redirect($final_landing_page);
+    }
 
-		// Landing page exception. If coming from the register page, set to "/dashboard".
-		$final_landing_page = ($landing_page == "/user_account/register/") ? "/dashboard" : $landing_page;
-		// Landing page exception. If coming from the home page, set to "/dashboard".
-		$final_landing_page = ($landing_page == "/") ? "/dashboard" : $landing_page;
+    // If logged in, don't render the login form.
+    if (isset($_SESSION[$final_global_template_vars["session_key"]])) {
+        $app->redirect("/dashboard/");
+    }
 
-		$app->redirect($final_landing_page);
-	}
-
-	// If logged in, don't render the login form.
-	if(isset($_SESSION[$final_global_template_vars["session_key"]])) {
-		$app->redirect("/dashboard/");
-	}
-
-	$app->render('login_form.php',array(
-		"page_title" => "Login"
-		,"hide_page_header" => true
-		,"errors" => !empty($env["default_validation_errors"]) ? $env["default_validation_errors"] : false
-	));
+    $app->render('login_form.php', array(
+        "page_title" => "Login", "hide_page_header" => true, "errors" => !empty($env["default_validation_errors"]) ? $env["default_validation_errors"] : false
+    ));
 }
-?>

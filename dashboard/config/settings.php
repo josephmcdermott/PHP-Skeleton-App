@@ -27,15 +27,14 @@
  * the global settings, and it will overwrite it
  */
 $default_module_settings = array(
-	"module_name" => "Dashboard"
-	,"module_description" => "Display all available modules."
-	,"module_icon_path" => "/" . $_SERVER["CORE_TYPE"] . "/lib/images/icons/pixelistica-blue-icons/png/64x64/layout_squares_small.png"
-	,"menu_hidden" => true
-	,"pages" => array(
-		array(
-			"label" => "Dashboard", "path" => "/", "display" => true
-		)
-	)
-	,"sort_order" => 100
+    "module_name" => "Dashboard"
+    ,"module_description" => "Display all available modules."
+    ,"module_icon_path" => "/" . $_SERVER["CORE_TYPE"] . "/lib/images/icons/pixelistica-blue-icons/png/64x64/layout_squares_small.png"
+    ,"menu_hidden" => true
+    ,"pages" => array(
+        array(
+            "label" => "Dashboard", "path" => "/", "display" => true
+        )
+    )
+    ,"sort_order" => 100
 );
-?>
