@@ -111,7 +111,7 @@ composer create-project ghalusa/php-skeleton-app /PATH/TO/YOUR_EMPTY_WEB_ROOT_DI
 
 ### STEP 2
 
-#### First, Make Sure Apache Has Permissions to Do Stuff
+#### Make Sure Apache Has Permissions to Do Stuff
 *(This can be changed back after the installation is finished.)*
 
 ```bash
