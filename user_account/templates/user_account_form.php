@@ -71,7 +71,7 @@
       <input name="address_count" id="address_count" type="hidden" value="0" />
 
       <button type="button" name="add" class="btn btn-info add_user_address btn-sm" title="Add an Address" id="user_address_button">
-        <i class="icon-plus-sign icon-white"></i> Add an Address
+        <i class="glyphicon glyphicon-plus"></i> Add an Address
       </button>
 
       {% if role_perm_modify_own_groups %}
@@ -155,7 +155,7 @@
         </div>
       </div>
       <div class="col-sm-12 col-md-12" style="margin-bottom: 10px;">
-        <button type="button" name="remove" class="btn remove_user_address btn-default btn-sm" title="Delete Address" id="delete_user_address_button"><i class="icon-minus-sign"></i> Delete Address</button>
+        <button type="button" name="remove" class="btn remove_user_address btn-default btn-sm" title="Delete Address" id="delete_user_address_button"><i class="glyphicon glyphicon-remove"></i> Delete Address</button>
       </div>
       <hr>
     </div>
@@ -189,7 +189,7 @@
     <input class="user_lookup" placeholder="Start typing to add user..." role="typeahead" type="text" />
     </script>
     <script id="proxy_user_template" type="text/template">
-      <li class="proxy_user" data-id="<%- user_account_id %>"><%- displayname %> <a href="javascript:void(0);" role="remove_proxy_user" class="icon-remove-circle"></a></li>
+      <li class="proxy_user" data-id="<%- user_account_id %>"><%- displayname %> <a href="javascript:void(0);" role="remove_proxy_user" class="glyphicon glyphicon-remove-circle"></a></li>
     </script>
 
   {% endif %}
