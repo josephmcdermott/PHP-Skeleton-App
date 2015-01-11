@@ -29,9 +29,9 @@ function check_local_account()
     
     require_once $final_global_template_vars["default_module_list"]["user_account"]["absolute_path_to_this_module"] . "/models/user_account.class.php";
     $env = $app->environment();
-    $db_conn = new \slimlocal\models\db($final_global_template_vars["db_connection"]);
+    $db_conn = new \PHPSkeleton\models\db($final_global_template_vars["db_connection"]);
     $db_resource = $db_conn->get_resource();
-    $user_account = new UserAccount($db_resource, $final_global_template_vars["session_key"]);
+    $user_account = new \PHPSkeleton\UserAccount($db_resource, $final_global_template_vars["session_key"]);
 
     if (!empty($_SESSION[$final_global_template_vars["session_key"]]) && empty($env["default_validation_errors"])) {
         // Check to see if the author has a role in the system and is registered (AUP).

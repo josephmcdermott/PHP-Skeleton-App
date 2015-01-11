@@ -35,11 +35,11 @@ function insert_update_user_account(\Slim\Route $route)
     // URL parameters matched in the route.
     $params = $route->getParams();
     $user_account_id = isset($params["user_account_id"]) ? $params["user_account_id"] : false;
-    $db_conn = new \slimlocal\models\db($final_global_template_vars["db_connection"]);
+    $db_conn = new \PHPSkeleton\models\db($final_global_template_vars["db_connection"]);
     $db_resource = $db_conn->get_resource();
-    $useraccount = new UserAccount($db_resource, $final_global_template_vars["session_key"]);
-    $group = new Group($db_resource, $final_global_template_vars["session_key"]);
-    $authenticate = new authenticate($db_resource, $final_global_template_vars["session_key"]);
+    $useraccount = new \PHPSkeleton\UserAccount($db_resource, $final_global_template_vars["session_key"]);
+    $group = new \PHPSkeleton\Group($db_resource, $final_global_template_vars["session_key"]);
+    $authenticate = new \PHPSkeleton\Authenticate($db_resource, $final_global_template_vars["session_key"]);
     $post = $app->request()->post();
 
     $errors = false;
@@ -78,7 +78,7 @@ function insert_update_user_account(\Slim\Route $route)
 
     $errors = array();
     if ($validated !== true) {
-        $errors = \slimlocal\models\utility::gump_parse_errors($validated);
+        $errors = \phpskeleton\models\utility::gump_parse_errors($validated);
     }
 
     if (isset($errors["user_account_password_check"])) {

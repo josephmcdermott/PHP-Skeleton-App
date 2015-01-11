@@ -39,11 +39,11 @@
   require_once $_SERVER["PATH_TO_VENDOR"] . 'default/models/utility.php';
 
   // Added due to PHP errors - by Gor, gor@webcraftr.com, 2013-07-16
-  // "PHP Strict Standards:  Non-static method slimlocal\models\utility::subvalue_sort()
+  // "PHP Strict Standards:  Non-static method phpskeleton\models\utility::subvalue_sort()
   // should not be called statically in /vendor/default/autoload.php on line 169"
-  $utility = new \slimlocal\models\utility();
+  $utility = new \PHPSkeleton\models\utility();
 
-  \slimlocal\models\utility::include_all_files_in_directory($_SERVER["PATH_TO_VENDOR"] . "default/models");
+  \phpskeleton\models\utility::include_all_files_in_directory($_SERVER["PATH_TO_VENDOR"] . "default/models");
 
   // Cet core settings - default settings that propogate across all sites.
   require_once $_SERVER["PATH_TO_VENDOR"] . "default/settings/settings.php";
@@ -73,13 +73,13 @@
   $final_global_template_vars["absolute_path_to_this_module"] = $current_module_location;
 
   if(!empty($final_global_template_vars["default_site_module"]) && $current_module_location != $final_global_template_vars["default_site_module"]){
-    \slimlocal\models\utility::include_all_files_in_directory($final_global_template_vars["default_site_module"] . '/controllers',true);
+    \phpskeleton\models\utility::include_all_files_in_directory($final_global_template_vars["default_site_module"] . '/controllers',true);
   }
 
   require_once $current_module_location . "/config/settings.php";
   require_once $current_module_location . "/config/includes.php";
   // Include all of the controller functions.
-  \slimlocal\models\utility::include_all_files_in_directory($current_module_location . '/controllers',true);
+  \phpskeleton\models\utility::include_all_files_in_directory($current_module_location . '/controllers',true);
 
   // Feel free to unset keys that are in the default_global_settings/default_module_includes 
   // js and css includes if you don't want them in this module.
@@ -128,7 +128,7 @@
 
   // Add CSRF tokens to session and make available to twig.
   if($app->request()->getMethod() == 'GET' || empty($_SESSION[$final_global_template_vars["csrf_key"]])) {
-    $uuid = \slimlocal\models\utility::gen_uuid();
+    $uuid = \phpskeleton\models\utility::gen_uuid();
     $final_global_template_vars["csrf_token"] = $uuid;
     $_SESSION[$final_global_template_vars["csrf_key"]] = $final_global_template_vars["csrf_token"];
   } else {
@@ -217,7 +217,7 @@
   }
 
   // Changed from static call to instanciated due to PHP errors - by Gor, gor@webcraftr.com, 2013-07-16
-  // "PHP Strict Standards:  Non-static method slimlocal\models\utility::subvalue_sort()
+  // "PHP Strict Standards:  Non-static method phpskeleton\models\utility::subvalue_sort()
   // should not be called statically in /vendor/default/autoload.php on line 169"
   $modules_list_array = $utility->subvalue_sort($modules_list_array, 'sort_order');
   $final_global_template_vars["default_module_list"] = $modules_list_array;
@@ -246,7 +246,7 @@
         ,(isset($_SESSION[$final_global_template_vars["session_key"]]) && isset($_SESSION[$final_global_template_vars["session_key"]]['cn'])) ? $_SESSION[$final_global_template_vars["session_key"]]['cn'] : ""
         ,$final_global_template_vars["active_module"]
       );
-      $log_db = new \slimlocal\models\db($final_global_template_vars["core_framework_db"]);
+      $log_db = new \PHPSkeleton\models\db($final_global_template_vars["core_framework_db"]);
       $log_db_resource = $log_db->get_resource();
       $statement = $log_db_resource->prepare("
         INSERT INTO page_load

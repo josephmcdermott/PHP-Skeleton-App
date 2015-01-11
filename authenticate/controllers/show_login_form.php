@@ -29,9 +29,9 @@ function show_login_form()
     
     require_once $final_global_template_vars["default_module_list"]["user_account"]["absolute_path_to_this_module"] . "/models/user_account.class.php";
     $env = $app->environment();
-    $db_conn = new \slimlocal\models\db($final_global_template_vars["db_connection"]);
+    $db_conn = new \PHPSkeleton\models\db($final_global_template_vars["db_connection"]);
     $db_resource = $db_conn->get_resource();
-    $user_account = new UserAccount($db_resource, $final_global_template_vars["session_key"]);
+    $user_account = new \PHPSkeleton\UserAccount($db_resource, $final_global_template_vars["session_key"]);
 
     if (empty($env["default_validation_errors"]) && $_SERVER['REQUEST_METHOD'] == "POST") {
         $landing_page = $final_global_template_vars['landing_page'];
@@ -45,11 +45,11 @@ function show_login_form()
         }
 
         // Add role list to session.
-        $_SESSION[$final_global_template_vars["session_key"]][$final_global_template_vars["current_user_roles_session_key"]] = \slimlocal\models\utility::array_flatten($user_account->get_user_roles_list($_SESSION[$final_global_template_vars["session_key"]]["user_account_id"]));
+        $_SESSION[$final_global_template_vars["session_key"]][$final_global_template_vars["current_user_roles_session_key"]] = \phpskeleton\models\utility::array_flatten($user_account->get_user_roles_list($_SESSION[$final_global_template_vars["session_key"]]["user_account_id"]));
 
         // Add group list to session.
         $tmp_array = array();
-        $_SESSION[$final_global_template_vars["session_key"]]["associated_groups"] = \slimlocal\models\utility::array_flatten($user_account->get_user_account_groups($_SESSION[$final_global_template_vars["session_key"]]["user_account_id"]), $tmp_array, 'group_id');
+        $_SESSION[$final_global_template_vars["session_key"]]["associated_groups"] = \phpskeleton\models\utility::array_flatten($user_account->get_user_account_groups($_SESSION[$final_global_template_vars["session_key"]]["user_account_id"]), $tmp_array, 'group_id');
 
         // Landing page exception. If coming from the register page, set to "/dashboard".
         $final_landing_page = ($landing_page == "/user_account/register/") ? "/dashboard" : $landing_page;

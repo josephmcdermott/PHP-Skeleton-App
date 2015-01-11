@@ -18,8 +18,9 @@
  *       $array = XML2Array::createArray($xml);
  */
 
-namespace slimlocal\models;
+namespace phpskeleton\models;
 use DOMDocument;
+
 class XML2Array {
 
     private static $xml = null;

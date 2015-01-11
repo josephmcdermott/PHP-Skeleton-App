@@ -22,6 +22,9 @@
  * @since       1.0.0
  */
 
+namespace PHPSkeleton;
+use PDO;
+
 class Group
 {
     /**

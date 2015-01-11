@@ -28,9 +28,9 @@ function datatables_browse_groups()
     $final_global_template_vars = $app->config('final_global_template_vars');
     
     require_once $final_global_template_vars["absolute_path_to_this_module"] . "/models/group.class.php";
-    $db_conn = new \slimlocal\models\db($final_global_template_vars["db_connection"]);
+    $db_conn = new \PHPSkeleton\models\db($final_global_template_vars["db_connection"]);
     $db_resource = $db_conn->get_resource();
-    $group = new Group($db_resource, $final_global_template_vars["session_key"]);
+    $group = new \PHPSkeleton\Group($db_resource, $final_global_template_vars["session_key"]);
 
     $search = $app->request()->post('search');
     $search_value = !empty($search["value"]) ? $search["value"] : false;

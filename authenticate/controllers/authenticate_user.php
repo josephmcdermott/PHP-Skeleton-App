@@ -30,9 +30,9 @@ function authenticate_user()
     require_once $_SERVER["PATH_TO_VENDOR"] . "wixel/gump/gump.class.php";
     require_once $final_global_template_vars["absolute_path_to_this_module"] . "/models/authenticate.class.php";
 
-    $db_conn = new \slimlocal\models\db($final_global_template_vars["db_connection"]);
+    $db_conn = new \PHPSkeleton\models\db($final_global_template_vars["db_connection"]);
     $db_resource = $db_conn->get_resource();
-    $authenticate = new authenticate($db_resource, $final_global_template_vars["session_key"]);
+    $authenticate = new \PHPSkeleton\Authenticate($db_resource, $final_global_template_vars["session_key"]);
     $gump = new GUMP();
     $rules = array(
     "user_account_email" => "valid_email"

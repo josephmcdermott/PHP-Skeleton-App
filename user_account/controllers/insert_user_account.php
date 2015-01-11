@@ -33,10 +33,10 @@ function insert_user_account()
     require_once $final_global_template_vars["default_module_list"]["authenticate"]["absolute_path_to_this_module"] . "/models/authenticate.class.php";
     require_once $_SERVER["PATH_TO_VENDOR"] . "phpmailer/phpmailer/PHPMailerAutoload.php";
 
-    $db_conn = new \slimlocal\models\db($final_global_template_vars["db_connection"]);
+    $db_conn = new \PHPSkeleton\models\db($final_global_template_vars["db_connection"]);
     $db_resource = $db_conn->get_resource();
-    $useraccount = new UserAccount($db_resource, $final_global_template_vars["session_key"]);
-    $authenticate = new Authenticate($db_resource, $final_global_template_vars["session_key"]);
+    $useraccount = new \PHPSkeleton\UserAccount($db_resource, $final_global_template_vars["session_key"]);
+    $authenticate = new \PHPSkeleton\Authenticate($db_resource, $final_global_template_vars["session_key"]);
     $gump = new GUMP();
     $mail = new PHPMailer();
 
@@ -63,7 +63,7 @@ function insert_user_account()
       $errors = array();
       $validated = $gump->validate($posted_data, $rules);
       if ($validated !== true) {
-          $errors = \slimlocal\models\utility::gump_parse_errors($validated);
+          $errors = \phpskeleton\models\utility::gump_parse_errors($validated);
       }
       if ($errors) {
           $env = $app->environment();

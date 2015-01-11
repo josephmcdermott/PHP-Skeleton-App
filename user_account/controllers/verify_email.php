@@ -28,9 +28,9 @@ function verify_email()
     $final_global_template_vars = $app->config('final_global_template_vars');
   
     require_once $final_global_template_vars["absolute_path_to_this_module"] . "/models/user_account.class.php";
-    $db_conn = new \slimlocal\models\db($final_global_template_vars["db_connection"]);
+    $db_conn = new \PHPSkeleton\models\db($final_global_template_vars["db_connection"]);
     $db_resource = $db_conn->get_resource();
-    $useraccount = new UserAccount($db_resource, $final_global_template_vars["session_key"]);
+    $useraccount = new \PHPSkeleton\UserAccount($db_resource, $final_global_template_vars["session_key"]);
     $get_data = $app->request()->get() ? $app->request()->get() : false;
 
   // SELECT this user from the database

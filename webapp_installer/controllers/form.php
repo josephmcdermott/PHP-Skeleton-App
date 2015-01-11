@@ -67,7 +67,7 @@ function form()
       $errors = array();
       $validated = $gump->validate($posted_data, $rules);
       if ($validated !== true) {
-          $errors = \slimlocal\models\utility::gump_parse_errors($validated);
+          $errors = \phpskeleton\models\utility::gump_parse_errors($validated);
       }
       if ($errors) {
           $env = $app->environment();
@@ -128,11 +128,11 @@ function form()
       ,"password" => $posted_data['database_password']
     );
 
-      $db_conn = new \slimlocal\models\db($db_vars);
+      $db_conn = new \PHPSkeleton\models\db($db_vars);
       $db = $db_conn->get_resource();
 
       require_once $final_global_template_vars["default_module_list"]["authenticate"]["absolute_path_to_this_module"] . "/models/authenticate.class.php";
-      $authenticate = new Authenticate($db, $final_global_template_vars["session_key"]);
+      $authenticate = new \PHPSkeleton\Authenticate($db, $final_global_template_vars["session_key"]);
 
       $statement = $db->prepare("CREATE TABLE `user_account` (
       `user_account_id` int(10) NOT NULL AUTO_INCREMENT,

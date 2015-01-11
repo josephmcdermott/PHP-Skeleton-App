@@ -29,10 +29,10 @@ function show_register_form()
     require_once $final_global_template_vars["default_module_list"]["user_account"]["absolute_path_to_this_module"] . "/models/user_account.class.php";
     require_once $final_global_template_vars["default_module_list"]["group"]["absolute_path_to_this_module"] . "/models/group.class.php";
     $env = $app->environment();
-    $db_conn = new \slimlocal\models\db($final_global_template_vars["db_connection"]);
+    $db_conn = new \PHPSkeleton\models\db($final_global_template_vars["db_connection"]);
     $db_resource = $db_conn->get_resource();
-    $user_account = new UserAccount($db_resource, $final_global_template_vars["session_key"]);
-    $group = new Group($db_resource, $final_global_template_vars["session_key"]);
+    $user_account = new \PHPSkeleton\UserAccount($db_resource, $final_global_template_vars["session_key"]);
+    $group = new \PHPSkeleton\Group($db_resource, $final_global_template_vars["session_key"]);
     $needs_group = true;
 
     // Check to see if they are already registered (group selected).

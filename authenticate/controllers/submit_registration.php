@@ -32,9 +32,9 @@ function submit_registration(\Slim\Route $route)
     require_once $final_global_template_vars["default_module_list"]["group"]["absolute_path_to_this_module"] . "/models/group.class.php";
     require_once $_SERVER["PATH_TO_VENDOR"] . "wixel/gump/gump.class.php";
     $env = $app->environment();
-    $db_conn = new \slimlocal\models\db($final_global_template_vars["db_connection"]);
+    $db_conn = new \PHPSkeleton\models\db($final_global_template_vars["db_connection"]);
     $db_resource = $db_conn->get_resource();
-    $user_account = new UserAccount($db_resource, $final_global_template_vars["session_key"]);
+    $user_account = new \PHPSkeleton\UserAccount($db_resource, $final_global_template_vars["session_key"]);
     $gump = new GUMP();
     $errors = array();
 
@@ -49,7 +49,7 @@ function submit_registration(\Slim\Route $route)
         );
         $validated = $gump->validate($app->request()->post(), $rules);
         if ($validated !== true) {
-            $errors = \slimlocal\models\utility::gump_parse_errors($validated);
+            $errors = \phpskeleton\models\utility::gump_parse_errors($validated);
         }
     }
 
@@ -59,7 +59,7 @@ function submit_registration(\Slim\Route $route)
     );
     $validated = $gump->validate($app->request()->post(), $rules);
     if ($validated !== true) {
-        $errors = array_merge($errors, \slimlocal\models\utility::gump_parse_errors($validated));
+        $errors = array_merge($errors, \phpskeleton\models\utility::gump_parse_errors($validated));
     }
 
     if (!$errors) {
@@ -86,7 +86,7 @@ function submit_registration(\Slim\Route $route)
         }
 
         // Add role list to session.
-        $_SESSION[$final_global_template_vars["session_key"]][$final_global_template_vars["current_user_roles_session_key"]] = \slimlocal\models\utility::array_flatten($user_account->get_user_roles_list($user_account_id));
+        $_SESSION[$final_global_template_vars["session_key"]][$final_global_template_vars["current_user_roles_session_key"]] = \phpskeleton\models\utility::array_flatten($user_account->get_user_roles_list($user_account_id));
 
         // Add group to session.
         $_SESSION[$final_global_template_vars["session_key"]]["associated_groups"] = array((int)$app->request()->post("group"));

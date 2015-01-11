@@ -30,9 +30,9 @@ function show_group_form($group_id=false)
     $final_global_template_vars = $app->config('final_global_template_vars');
     
     require_once $final_global_template_vars["absolute_path_to_this_module"] . "/models/group.class.php";
-    $db_conn = new \slimlocal\models\db($final_global_template_vars["db_connection"]);
+    $db_conn = new \PHPSkeleton\models\db($final_global_template_vars["db_connection"]);
     $db_resource = $db_conn->get_resource();
-    $group = new Group($db_resource, $final_global_template_vars["session_key"]);
+    $group = new \PHPSkeleton\Group($db_resource, $final_global_template_vars["session_key"]);
 
     $group_hierarchy = $group->get_group_hierarchy("--");
     $flat_group_hierarchy = $group->flatten_group_hierarchy($group_hierarchy);
