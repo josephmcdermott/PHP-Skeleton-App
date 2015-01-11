@@ -6,7 +6,7 @@
  * @copyright   2015 Goran Halusa
  * @link        https://github.com/ghalusa/PHP-Skeleton-App
  * @license     https://github.com/ghalusa/PHP-Skeleton-App/wiki/License
- * @version     1.0.0
+ * @version     0.1.1
  * @package     PHP Skeleton App
  *
  * For the full copyright and license information, please view the LICENSE
@@ -19,7 +19,7 @@
  * Routes for the Group module.
  *
  * @author      Goran Halusa <gor@webcraftr.com>
- * @since       1.0.0
+ * @since       0.1.0
  */
 
 $app->get('/', "check_authenticated", apply_permissions("role_perm_browse_groups_access", $final_global_template_vars), "browse_groups");
