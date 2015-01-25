@@ -27,7 +27,7 @@ use PDO;
 
 class UserAccount
 {
-    /**
+  /**
    * @var string|bool  $session_key    The session key
    */
   private $session_key = false;
@@ -502,7 +502,7 @@ class UserAccount
    * Run a query to determine if a user account email exists in the database.
    *
    * @param       string $user_account_email     The data value
-   * @return      array|bool                     The query result
+   * @return      false|string                   The query result
    */
   public function account_email_exists($user_account_email)
   {
@@ -612,19 +612,19 @@ class UserAccount
    */
   public function get_user_group_roles_map( $user_account_id, $proxy_id = false )
   {
-      $current_group_values = array();
       $current_group_values = $this->get_user_account_groups($user_account_id);
 
-      if(!empty($current_group_values)) {
+      if(is_array($current_group_values) && !empty($current_group_values)) {
           foreach ($current_group_values as $index => $single_group) {
               $roles_array = array();
-              $selected_roles = array();
               $selected_roles = $this->get_user_group_roles($user_account_id, $single_group["group_id"]);
               $proxy_users = array();
-              foreach ($selected_roles as $single_role) {
-                  $roles_array[] = $single_role["role_id"];
-                  if (!empty($proxy_id) && $single_role["role_id"] == $proxy_id) {
-                      $proxy_users = $this->get_users_proxies_for_group($user_account_id, $single_group["group_id"]);
+              if(is_array($selected_roles) && !empty($selected_roles)) {
+                  foreach ($selected_roles as $single_role) {
+                      $roles_array[] = $single_role["role_id"];
+                      if (!empty($proxy_id) && $single_role["role_id"] == $proxy_id) {
+                          $proxy_users = $this->get_users_proxies_for_group($user_account_id, $single_group["group_id"]);
+                      }
                   }
               }
               $current_group_values[$index]["roles"] = $roles_array;
@@ -666,7 +666,7 @@ class UserAccount
    *
    * @param       int $user_account_id    The data value
    * @param       string $emailed_hash    The data value
-   * @return      array|bool              The query result
+   * @return      null|boolean            The query result
    */
   public function update_emailed_hash($user_account_id = false, $emailed_hash = false)
   {
@@ -696,7 +696,7 @@ class UserAccount
    * @param       int $user_account_password    The data value
    * @param       int $user_account_id          The data value
    * @param       string $emailed_hash          The data value
-   * @return      bool                          True/False
+   * @return      null|boolean                  True/False
    */
   public function update_password( $user_account_password = false, $user_account_id = false, $emailed_hash = false )
   {
@@ -719,5 +719,5 @@ class UserAccount
       }
       return $updated;
   }
-  
+
 }

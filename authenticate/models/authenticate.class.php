@@ -27,10 +27,10 @@ use PDO;
 
 class Authenticate
 {
-    /**
-   * @var string  $session_key    The session key
+  /**
+   * @var string|bool  $session_key    The session key
    */
-  private $session_key = "";
+  private $session_key = false;
 
   /**
    * @var object  $db   The database connection object

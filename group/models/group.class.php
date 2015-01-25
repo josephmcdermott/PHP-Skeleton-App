@@ -27,10 +27,10 @@ use PDO;
 
 class Group
 {
-    /**
-   * @var string  $session_key    The session key
+  /**
+   * @var string|bool  $session_key    The session key
    */
-  private $session_key = "";
+  private $session_key = false;
 
   /**
    * @var object  $db   The database connection object
@@ -68,6 +68,7 @@ class Group
       $sort = "";
       $search_sql = "";
       $pdo_params = array();
+      $data = array();
 
       $limit_sql = " LIMIT {$start_record}, {$stop_record} ";
 

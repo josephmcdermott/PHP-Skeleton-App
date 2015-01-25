@@ -89,7 +89,6 @@ function insert_update_user_account(\Slim\Route $route)
     $role_perm_manage_all_accounts_access = empty($has_permission) ? false : true;
 
     if (!empty($post) && $role_perm_manage_all_accounts_access) {
-        $current_group_values = array();
         $current_group_values = $useraccount->get_user_group_roles_map($user_account_id, $final_global_template_vars["proxy_id"]);
         $proposed_group_value = json_decode($post["group_data"], true);
         $changes = array();
@@ -105,7 +104,7 @@ function insert_update_user_account(\Slim\Route $route)
             }
         }
 
-        if(!empty($current_group_values)) {
+        if(is_array($current_group_values) && !empty($current_group_values)) {
             foreach ($current_group_values as $single_group_info) {
                 foreach ($single_group_info["roles"] as $single_role_id) {
                     $tmp_array = array(

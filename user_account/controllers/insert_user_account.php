@@ -37,6 +37,7 @@ function insert_user_account()
     $authenticate = new \PHPSkeleton\Authenticate($db_resource, $final_global_template_vars["session_key"]);
     $gump = new GUMP();
     $mail = new PHPMailer();
+    $errors = false;
 
     $posted_data = $app->request()->post() ? $app->request()->post() : false;
 
@@ -130,12 +131,13 @@ function insert_user_account()
         $universal_administrator_emails = $useraccount->get_universal_administrator_emails();
 
         // Create a comma-delimited list of email addresses
-        foreach ($universal_administrator_emails as $email)
-        {
-            array_push($admin_emails, $email["user_account_email"]);
+        if(is_array($universal_administrator_emails) && !empty($universal_administrator_emails)) {
+            foreach ($universal_administrator_emails as $email)
+            {
+                array_push($admin_emails, $email["user_account_email"]);
+            }
         }
 
-        $to_admins = implode(", ", $admin_emails); // Email addresses of all Universal Administrators
         $subject_admins = 'New User Registration'; // Give the email a subject
         $message_admins = '<h2>New User</h2>
         <p>A new user has registered.</p>
@@ -167,7 +169,6 @@ function insert_user_account()
         $mail->MsgHTML($message);
         $mail->AddAddress($to); // Recipient
         $mail->Send();
-
         $mail->ClearAllRecipients();
 
         // Send email to Universal Administrators
@@ -175,10 +176,13 @@ function insert_user_account()
         $mail->Subject = $subject_admins;
         $mail->MsgHTML($message_admins);
         // Universal Admin recipients
-        foreach ($universal_administrator_emails as $email) {
-            $mail->AddAddress($email["user_account_email"]);
+        if(is_array($universal_administrator_emails) && !empty($universal_administrator_emails)) {
+            foreach ($universal_administrator_emails as $email) {
+                $mail->AddAddress($email["user_account_email"]);
+            }
+            $mail->Send();
+            $mail->ClearAllRecipients();
         }
-        $mail->Send();
     }
 
     if (!$errors)
