@@ -51,12 +51,20 @@ function show_login_form()
         $tmp_array = array();
         $_SESSION[$final_global_template_vars["session_key"]]["associated_groups"] = \phpskeleton\models\utility::array_flatten($user_account->get_user_account_groups($_SESSION[$final_global_template_vars["session_key"]]["user_account_id"]), $tmp_array, 'group_id');
 
-        // Landing page exception. If coming from the register page, set to "/dashboard".
-        $final_landing_page = ($landing_page == "/user_account/register/") ? "/dashboard" : $landing_page;
-        // Landing page exception. If coming from the home page, set to "/dashboard".
-        $final_landing_page = ($landing_page == "/") ? "/dashboard" : $landing_page;
-
-        $app->redirect($final_landing_page);
+        // Landing page exceptions.
+        switch($landing_page) {
+            // If coming from the register page, set the $app->redirect() to the "/dashboard".
+            case "/user_account/register/":
+                $app->redirect("/dashboard");
+                break;
+            // If coming from the home page, set the $app->redirect() to the "/dashboard".
+            case "/":
+                $app->redirect("/dashboard");
+                break;
+            // Otherwise, set the $app->redirect() to the value of the $landing_page variable.
+            default:
+                $app->redirect($landing_page);
+        }
     }
 
     // If logged in, don't render the login form.
