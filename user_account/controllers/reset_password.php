@@ -25,79 +25,77 @@
 function reset_password()
 {
     $app = \Slim\Slim::getInstance();
-    $env = $app->environment();
     $final_global_template_vars = $app->config('final_global_template_vars');
-  
     require_once $final_global_template_vars["absolute_path_to_this_module"] . "/models/user_account.class.php";
     require_once $_SERVER["PATH_TO_VENDOR"] . "phpmailer/phpmailer/PHPMailerAutoload.php";
-
     $db_conn = new \PHPSkeleton\models\db($final_global_template_vars["db_connection"]);
     $db_resource = $db_conn->get_resource();
-
     $useraccount = new \PHPSkeleton\UserAccount($db_resource, $final_global_template_vars["session_key"]);
     $mail = new PHPMailer();
-
     $posted_data = $app->request()->post() ? $app->request()->post() : false;
+    $account_email_exists = false;
 
-  // Is the email address in the database?
-  if ($posted_data) {
-      $account_email_exists = $useraccount->account_email_exists($posted_data["user_account_email"]);
+    // Is the email address in the database?
+    if ($posted_data) {
+        $account_email_exists = $useraccount->account_email_exists($posted_data["user_account_email"]);
+        if (!$account_email_exists) {
+            $app->flash('message', 'The entered email address was not found in our database.');
+            $app->redirect($final_global_template_vars["path_to_this_module"]."/password/");
+        }
+    }
 
-      if (!$account_email_exists) {
-          $app->flash('message', 'The entered email address was not found in our database.');
-          $app->redirect($final_global_template_vars["path_to_this_module"]."/password/");
-      }
-  }
+    // If there are no errors, process posted data and email to user
+    if ($account_email_exists && $posted_data) {
 
-  // If there are no errors, process posted data and email to user
-  if ($account_email_exists && $posted_data) {
-      $emailed_hash = md5(rand(0, 1000));
+        $emailed_hash = md5(rand(0, 1000));
+        // Attempt to update the emailed_hash and set account to inactive (returns boolean)
+        $updated = $useraccount->update_emailed_hash($account_email_exists['user_account_id'], $emailed_hash);
 
-    // Attempt to update the emailed_hash and set account to inactive (returns boolean)
-    $updated = $useraccount->update_emailed_hash($account_email_exists['user_account_id'], $emailed_hash);
+        if ($updated) {
+            
+            // Prepare the email...
+            // The email subject.
+            $subject = 'Reset Password';
+            // The message, including the link.
+            $message = '<h2>Reset Your Password</h2>
+            <hr>
+            <p>Please click this link to reset your password:<br />
+            <a href="http://'.$_SERVER["SERVER_NAME"].'/user_account/reset/?user_account_email='.$account_email_exists['user_account_email'].'&emailed_hash='.$emailed_hash.'">http://'.$_SERVER["SERVER_NAME"].'/user_account/reset/?user_account_email='.$account_email_exists['user_account_email'].'&emailed_hash='.$emailed_hash.'</a></p>';
 
-      if ($updated) {
-          // Prepare the email.
+            // For the ability to send emails from an AWS EC2 instance...
+            // If you need this functionality, you can configure the settings accordingly in /default_global_settings.php
+            if ($final_global_template_vars["hosting_vendor"] && ($final_global_template_vars["hosting_vendor"] == "aws_ec2")) {
 
-      // Send an email to the user.
-      $to = $account_email_exists["user_account_email"];
-      // The email subject.
-      $subject = 'Reset Password';
-      // The message, including the link.
-      $message = '<h2>Reset Your Password</h2>
-      <hr>
-      <p>Please click this link to reset your password:<br />
-      <a href="http://'.$_SERVER["SERVER_NAME"].'/user_account/reset/?user_account_email='.$account_email_exists['user_account_email'].'&emailed_hash='.$emailed_hash.'">http://'.$_SERVER["SERVER_NAME"].'/user_account/reset/?user_account_email='.$account_email_exists['user_account_email'].'&emailed_hash='.$emailed_hash.'</a></p>';
+                $email = array();
+                require_once $final_global_template_vars["path_to_smtp_settings"];
+                // SMTP Settings
+                $mail->IsSMTP();
+                $mail->SMTPAuth   = $email['settings']['smtpauth'];
+                $mail->SMTPSecure = $email['settings']['smtpsecure'];
+                $mail->Host       = $email['settings']['host'];
+                $mail->Username   = $email['settings']['username'];
+                $mail->Password   = $email['settings']['password'];
 
-      // For the ability to send emails from an AWS EC2 instance...
-      // If you need this functionality, you can configure the settings accordingly in /default_global_settings.php
-      if ($final_global_template_vars["hosting_vendor"] && ($final_global_template_vars["hosting_vendor"] == "aws_ec2")) {
-          require_once $final_global_template_vars["path_to_smtp_settings"];
+            }
 
-        // SMTP Settings
-        $mail->IsSMTP();
-          $mail->SMTPAuth   = $email['settings']['smtpauth'];
-          $mail->SMTPSecure = $email['settings']['smtpsecure'];
-          $mail->Host       = $email['settings']['host'];
-          $mail->Username   = $email['settings']['username'];
-          $mail->Password   = $email['settings']['password'];
-      }
+            // From (verified email address).
+            $mail->SetFrom($final_global_template_vars["send_emails_from"], $final_global_template_vars["site_name"].' Accounts');
+            // Subject
+            $mail->Subject = $subject;
+            // Message
+            $mail->MsgHTML($message);
+            // Recipient
+            $mail->AddAddress($posted_data['user_account_email']);
+            // Send the email.
+            $mail->Send();
 
-      // From (verified email address).
-      $mail->SetFrom($final_global_template_vars["send_emails_from"], $final_global_template_vars["site_name"].' Accounts');
-      // Subject
-      $mail->Subject = $subject;
-          $mail->MsgHTML($message);
-      // Recipient
-      $mail->AddAddress($posted_data['user_account_email']);
-      // Send the email.
-      $mail->Send();
+            $app->flash('message', 'Thank you. Further instructions are being sent to your email address.');
+        }
+        else
+        {
+            $app->flash('message', 'Processing failed.');
+        }
 
-          $app->flash('message', 'Thank you. Further instructions are being sent to your email address.');
-      } else {
-          $app->flash('message', 'Processing failed.');
-      }
-
-      $app->redirect($final_global_template_vars["path_to_this_module"]."/password/");
-  }
+        $app->redirect($final_global_template_vars["path_to_this_module"]."/password/");
+    }
 }

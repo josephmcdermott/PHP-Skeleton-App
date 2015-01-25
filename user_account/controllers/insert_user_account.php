@@ -92,7 +92,6 @@ function insert_user_account()
         $error = $db_resource->errorInfo();
         if ($error[0] != "00000")
         {
-            var_dump($db_resource->errorInfo());
             die('The INSERT INTO user_account failed.');
         }
         $last_inserted_user_account_id = $db_resource->lastInsertId();
@@ -106,7 +105,6 @@ function insert_user_account()
         $error = $db_resource->errorInfo();
         if ($error[0] != "00000")
         {
-            var_dump($db_resource->errorInfo());
             die('The INSERT INTO user_account_groups failed.');
         }
 
