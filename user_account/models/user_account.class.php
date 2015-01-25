@@ -148,7 +148,7 @@ class UserAccount
   /**
    * Get User Account Groups
    *
-   * Run a query to retrieve all of a user's groups from the database.
+   * Run a query to retrieve all of a user's groups from the database. Used by get_user_group_roles_map().
    *
    * @param       int $user_account_id    The data value
    * @return      array|bool              The query result
@@ -169,7 +169,7 @@ class UserAccount
   /**
    * Get User Group Roles
    *
-   * Run a query to retrieve all of a user's group roles from the database.
+   * Run a query to retrieve all of a user's group roles from the database. Used by get_user_group_roles_map().
    *
    * @param       int $user_account_id    The data value
    * @param       int $group_id           The data value
@@ -328,6 +328,7 @@ class UserAccount
    *
    * Run queries to insert and update user accounts in the database.
    *
+   * @uses        UaserAccount::$this->delete_user_groups
    * @param       array $data                                   The array
    * @param       int $user_account_id                          The data value
    * @param       bool $update_groups                           True/False
@@ -425,7 +426,7 @@ class UserAccount
    * @param       string $search                 The data value
    * @return      array|bool                     The query result
    */
-  public function find_user_account($search)
+  public function find_user_account( $search )
   {
       $statement = $this->db->prepare("
           SELECT CONCAT(first_name, ' ', last_name) AS displayname
@@ -449,17 +450,16 @@ class UserAccount
    * @param       int $user_account_id           The data value
    * @return      void
    */
-  public function delete_user_account($user_account_id)
+  public function delete_user_account( $user_account_id )
   {
+      // Delete the user from the user_account table.
       $statement = $this->db->prepare("DELETE FROM user_account
           WHERE user_account_id = :user_account_id");
       $statement->bindValue(":user_account_id", $user_account_id, PDO::PARAM_INT);
       $statement->execute();
 
-      $statement = $this->db->prepare("DELETE FROM user_account_groups
-          WHERE user_account_id = :user_account_id");
-      $statement->bindValue(":user_account_id", $user_account_id, PDO::PARAM_INT);
-      $statement->execute();
+      // Delete the user from the user_account_groups table.
+      $this->delete_user_groups( $user_account_id );
   }
 
   /**
@@ -470,73 +470,12 @@ class UserAccount
    * @param       int $user_account_id           The data value
    * @return      void
    */
-  public function delete_user_groups($user_account_id)
+  public function delete_user_groups( $user_account_id )
   {
       $statement = $this->db->prepare("DELETE FROM user_account_groups
           WHERE user_account_id = :user_account_id");
       $statement->bindValue(":user_account_id", $user_account_id, PDO::PARAM_INT);
       $statement->execute();
-  }
-
-  /**
-   * Account Exists
-   *
-   * Run a query to determine if a user account exists in the database.
-   *
-   * @param       int $user_account_id           The data value
-   * @return      array|bool                     The query result
-   */
-  public function account_exists($user_account_id)
-  {
-      $statement = $this->db->prepare("SELECT *
-          FROM user_account
-          WHERE user_account_id = :user_account_id");
-      $statement->bindValue(":user_account_id", $user_account_id, PDO::PARAM_INT);
-      $statement->execute();
-      return $statement->fetch(PDO::FETCH_ASSOC);
-  }
-
-  /**
-   * Account Email Exists
-   *
-   * Run a query to determine if a user account email exists in the database.
-   *
-   * @param       string $user_account_email     The data value
-   * @return      false|string                   The query result
-   */
-  public function account_email_exists($user_account_email)
-  {
-      $statement = $this->db->prepare("SELECT 
-            user_account_id
-            ,user_account_email
-          FROM user_account
-          WHERE user_account_email = :user_account_email");
-      $statement->bindValue(":user_account_email", $user_account_email, PDO::PARAM_INT);
-      $statement->execute();
-      return $statement->fetch(PDO::FETCH_ASSOC);
-  }
-
-  /**
-   * Is Registered
-   *
-   * Run a query to determine if a user account has been registered.
-   *
-   * @param       int $user_account_id           The data value
-   * @return      array|bool                     The query result
-   */
-  public function is_registered($user_account_id)
-  {
-      $statement = $this->db->prepare("SELECT user_account.acceptable_use_policy
-          ,GROUP_CONCAT(user_account_groups.group_id SEPARATOR ', ') AS groups
-          FROM user_account
-          LEFT JOIN user_account_groups ON user_account.user_account_id = user_account_groups.user_account_id
-          WHERE user_account.user_account_id = :user_account_id
-          AND user_account.acceptable_use_policy = 1
-          GROUP BY user_account.user_account_id
-          HAVING groups != ''");
-      $statement->bindValue(":user_account_id", $user_account_id, PDO::PARAM_INT);
-      $statement->execute();
-      return $statement->fetch(PDO::FETCH_ASSOC);
   }
 
   /**
@@ -547,7 +486,7 @@ class UserAccount
    * @param       int $user_account_id           The data value
    * @return      array|bool                     The query result
    */
-  public function get_user_roles_list($user_account_id)
+  public function get_user_roles_list( $user_account_id )
   {
       $statement = $this->db->prepare("SELECT DISTINCT role_id
           FROM user_account_groups
@@ -566,7 +505,7 @@ class UserAccount
    * @param       int $value              The data value
    * @return      void
    */
-  public function update_acceptable_use_policy($user_account_id, $value)
+  public function update_acceptable_use_policy( $user_account_id, $value )
   {
       $statement = $this->db->prepare("UPDATE user_account
           SET acceptable_use_policy = :acceptable_use_policy
@@ -585,16 +524,16 @@ class UserAccount
    * @param       int $group_id           The data value
    * @return      array|bool              The query result
    */
-  public function get_users_proxies_for_group($user_account_id, $group_id)
+  public function get_users_proxies_for_group( $user_account_id, $group_id )
   {
-      $statement = $this->db->prepare("
-      SELECT CONCAT(user_account.first_name, ' ', user_account.last_name) AS displayname
-        ,user_account.user_account_id
-      FROM user_account_groups
-      RIGHT JOIN user_account_proxy ON user_account_proxy.user_account_groups_id = user_account_groups.user_account_groups_id
-      LEFT JOIN user_account ON user_account.user_account_id = user_account_proxy.proxy_user_account_id
-      WHERE user_account_groups.user_account_id = :user_account_id
-      AND user_account_groups.group_id = :group_id");
+      $statement = $this->db->prepare("SELECT 
+              CONCAT(user_account.first_name, ' ', user_account.last_name) AS displayname
+              ,user_account.user_account_id
+          FROM user_account_groups
+          RIGHT JOIN user_account_proxy ON user_account_proxy.user_account_groups_id = user_account_groups.user_account_groups_id
+          LEFT JOIN user_account ON user_account.user_account_id = user_account_proxy.proxy_user_account_id
+          WHERE user_account_groups.user_account_id = :user_account_id
+          AND user_account_groups.group_id = :group_id");
       $statement->bindValue(":user_account_id", $user_account_id, PDO::PARAM_INT);
       $statement->bindValue(":group_id", $group_id, PDO::PARAM_INT);
       $statement->execute();
@@ -606,6 +545,9 @@ class UserAccount
    *
    * Run queries to retrieve a user's current group values.
    *
+   * @uses        UserAccount::$this->get_user_account_groups
+   * @uses        UserAccount::$this->get_user_group_roles
+   * @uses        UserAccount::$this->get_users_proxies_for_group
    * @param       int $user_account_id    The data value
    * @param       int $proxy_id           The data value
    * @return      array|bool              The query result
@@ -645,7 +587,7 @@ class UserAccount
    * @param       int $group_id           The data value
    * @return      array|bool              The query result
    */
-  public function has_role($user_account_id, $roles = array(), $group_id = false)
+  public function has_role( $user_account_id, $roles = array(), $group_id = false )
   {
       $statement = $this->db->prepare("SELECT ancestor
           FROM group_closure_table
@@ -658,66 +600,5 @@ class UserAccount
       $statement->execute();
       return $statement->fetchAll(PDO::FETCH_ASSOC);
   }
-
-  /**
-   * Update Emailed Hash
-   *
-   * Run a query to update an emailed hash.
-   *
-   * @param       int $user_account_id    The data value
-   * @param       string $emailed_hash    The data value
-   * @return      null|boolean            The query result
-   */
-  public function update_emailed_hash($user_account_id = false, $emailed_hash = false)
-  {
-      $updated = false;
-      if ($user_account_id && $emailed_hash) {
-          // UPDATE the emailed_hash in the user_account table.
-          $statement = $this->db->prepare("UPDATE user_account
-              SET emailed_hash = :emailed_hash, active = 0
-              WHERE user_account_id = :user_account_id");
-          $statement->bindValue(":emailed_hash", $emailed_hash, PDO::PARAM_STR);
-          $statement->bindValue(":user_account_id", $user_account_id, PDO::PARAM_INT);
-          $statement->execute();
-          $error = $this->db->errorInfo();
-          if ($error[0] != "00000") {
-              die('The UPDATE user_account emailed_hash query failed.');
-          }
-          $updated = true;
-      }
-      return $updated;
-  }
-
-  /**
-   * Update Password
-   *
-   * Run a query to update a password.
-   *
-   * @param       int $user_account_password    The data value
-   * @param       int $user_account_id          The data value
-   * @param       string $emailed_hash          The data value
-   * @return      null|boolean                  True/False
-   */
-  public function update_password( $user_account_password = false, $user_account_id = false, $emailed_hash = false )
-  {
-      $updated = false;
-      if ($user_account_id && $emailed_hash) {
-          // UPDATE the emailed_hash in the user_account table.
-          $statement = $this->db->prepare("UPDATE user_account
-              SET user_account_password = :user_account_password, active = 1
-              WHERE user_account_id = :user_account_id
-              AND emailed_hash = :emailed_hash");
-          $statement->bindValue(":user_account_password", $user_account_password, PDO::PARAM_STR);
-          $statement->bindValue(":user_account_id", $user_account_id, PDO::PARAM_INT);
-          $statement->bindValue(":emailed_hash", $emailed_hash, PDO::PARAM_STR);
-          $statement->execute();
-          $error = $this->db->errorInfo();
-          if ($error[0] != "00000") {
-              die('The UPDATE user_account password query failed.');
-          }
-          $updated = true;
-      }
-      return $updated;
-  }
-
+  
 }

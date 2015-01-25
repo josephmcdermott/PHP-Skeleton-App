@@ -29,11 +29,13 @@ function insert_user_account()
     $final_global_template_vars = $app->config('final_global_template_vars');
     require_once $_SERVER["PATH_TO_VENDOR"] . "wixel/gump/gump.class.php";
     require_once $final_global_template_vars["absolute_path_to_this_module"] . "/models/user_account.class.php";
+    require_once $final_global_template_vars["absolute_path_to_this_module"] . "/models/register_account.class.php";
     require_once $final_global_template_vars["default_module_list"]["authenticate"]["absolute_path_to_this_module"] . "/models/authenticate.class.php";
     require_once $_SERVER["PATH_TO_VENDOR"] . "phpmailer/phpmailer/PHPMailerAutoload.php";
     $db_conn = new \PHPSkeleton\models\db($final_global_template_vars["db_connection"]);
     $db_resource = $db_conn->get_resource();
     $useraccount = new \PHPSkeleton\UserAccount($db_resource, $final_global_template_vars["session_key"]);
+    $register_account = new \PHPSkeleton\RegisterAccount($db_resource, $final_global_template_vars["session_key"]);
     $authenticate = new \PHPSkeleton\Authenticate($db_resource, $final_global_template_vars["session_key"]);
     $gump = new GUMP();
     $mail = new PHPMailer();
@@ -41,7 +43,7 @@ function insert_user_account()
 
     $posted_data = $app->request()->post() ? $app->request()->post() : false;
 
-    $account_email_exists = $useraccount->account_email_exists($posted_data["user_account_email"]);
+    $account_email_exists = $register_account->account_email_exists($posted_data["user_account_email"]);
     if ($account_email_exists)
     {
         $app->flash('message', 'It looks like you already have an account. Email address is already in use.');

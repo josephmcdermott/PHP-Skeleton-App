@@ -30,7 +30,13 @@ function show_update_password_form()
 
     $get_data = $app->request()->get() ? $app->request()->get() : false;
 
-    $app->render('update_password_form.php', array(
-    "page_title" => "Reset Your Password", "hide_page_header" => true, "path_to_this_module" => $final_global_template_vars["path_to_this_module"], "errors" => $env["default_validation_errors"], "data" => $get_data
-  ));
+    $app->render('update_password_form.php'
+        ,array(
+            "page_title" => "Reset Your Password"
+            ,"hide_page_header" => true
+            ,"path_to_this_module" => $final_global_template_vars["path_to_this_module"]
+            ,"errors" => $env["default_validation_errors"]
+            ,"data" => $get_data
+        )
+    );
 }

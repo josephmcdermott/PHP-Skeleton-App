@@ -27,12 +27,12 @@ function update_password()
     $app = \Slim\Slim::getInstance();
     $final_global_template_vars = $app->config('final_global_template_vars');
     require_once $_SERVER["PATH_TO_VENDOR"] . "wixel/gump/gump.class.php";
-    require_once $final_global_template_vars["absolute_path_to_this_module"] . "/models/user_account.class.php";
+    require_once $final_global_template_vars["absolute_path_to_this_module"] . "/models/register_account.class.php";
     require_once $final_global_template_vars["default_module_list"]["authenticate"]["absolute_path_to_this_module"] . "/models/authenticate.class.php";
     require_once $_SERVER["PATH_TO_VENDOR"] . "phpmailer/phpmailer/PHPMailerAutoload.php";
     $db_conn = new \PHPSkeleton\models\db($final_global_template_vars["db_connection"]);
     $db_resource = $db_conn->get_resource();
-    $useraccount = new \PHPSkeleton\UserAccount($db_resource, $final_global_template_vars["session_key"]);
+    $register_account = new \PHPSkeleton\RegisterAccount($db_resource, $final_global_template_vars["session_key"]);
     $authenticate = new \PHPSkeleton\Authenticate($db_resource, $final_global_template_vars["session_key"]);
     $gump = new GUMP();
     $mail = new PHPMailer();
@@ -41,7 +41,7 @@ function update_password()
 
     // Is the email address in the database?
     if ($post) {
-        $account_email_exists = $useraccount->account_email_exists($post["user_account_email"]);
+        $account_email_exists = $register_account->account_email_exists($post["user_account_email"]);
 
         if (!$account_email_exists) {
             $app->flash('message', 'The entered email address was not found in our database.');
@@ -85,7 +85,7 @@ function update_password()
     // If there are no errors, process posted data and email to user
     if (empty($errors) && $post) {
         // Attempt to update the user_account_password and set the account to active (returns boolean)
-        $updated = $useraccount->update_password(
+        $updated = $register_account->update_password(
             $authenticate->generate_hashed_password($post["user_account_password"]),
             $account_email_exists['user_account_id'],
             $post["emailed_hash"]

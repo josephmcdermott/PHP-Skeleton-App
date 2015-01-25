@@ -26,18 +26,18 @@ function reset_password()
 {
     $app = \Slim\Slim::getInstance();
     $final_global_template_vars = $app->config('final_global_template_vars');
-    require_once $final_global_template_vars["absolute_path_to_this_module"] . "/models/user_account.class.php";
+    require_once $final_global_template_vars["absolute_path_to_this_module"] . "/models/register_account.class.php";
     require_once $_SERVER["PATH_TO_VENDOR"] . "phpmailer/phpmailer/PHPMailerAutoload.php";
     $db_conn = new \PHPSkeleton\models\db($final_global_template_vars["db_connection"]);
     $db_resource = $db_conn->get_resource();
-    $useraccount = new \PHPSkeleton\UserAccount($db_resource, $final_global_template_vars["session_key"]);
+    $register_account = new \PHPSkeleton\RegisterAccount($db_resource, $final_global_template_vars["session_key"]);
     $mail = new PHPMailer();
     $posted_data = $app->request()->post() ? $app->request()->post() : false;
     $account_email_exists = false;
 
     // Is the email address in the database?
     if ($posted_data) {
-        $account_email_exists = $useraccount->account_email_exists($posted_data["user_account_email"]);
+        $account_email_exists = $register_account->account_email_exists($posted_data["user_account_email"]);
         if (!$account_email_exists) {
             $app->flash('message', 'The entered email address was not found in our database.');
             $app->redirect($final_global_template_vars["path_to_this_module"]."/password/");
@@ -49,7 +49,7 @@ function reset_password()
 
         $emailed_hash = md5(rand(0, 1000));
         // Attempt to update the emailed_hash and set account to inactive (returns boolean)
-        $updated = $useraccount->update_emailed_hash($account_email_exists['user_account_id'], $emailed_hash);
+        $updated = $register_account->update_emailed_hash($account_email_exists['user_account_id'], $emailed_hash);
 
         if ($updated) {
             
