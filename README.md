@@ -1,6 +1,6 @@
 ![alt text](http://halusanation.com/wp-content/uploads/2014/12/php_skeleton_app.jpg "The PHP Skeleton App Header Image")
 
-[![Build Status](https://scrutinizer-ci.com/g/ghalusa/PHP-Skeleton-App/badges/build.png?b=master)](https://scrutinizer-ci.com/g/ghalusa/PHP-Skeleton-App/build-status/master)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/ghalusa/PHP-Skeleton-App/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/ghalusa/PHP-Skeleton-App/?branch=master) [![Build Status](https://scrutinizer-ci.com/g/ghalusa/PHP-Skeleton-App/badges/build.png?b=master)](https://scrutinizer-ci.com/g/ghalusa/PHP-Skeleton-App/build-status/master)
 
 # The PHP Skeleton App
 
