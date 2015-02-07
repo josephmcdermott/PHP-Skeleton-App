@@ -71,6 +71,10 @@ Thanks!
 ##### Linux
 * So far, only tested on Linux Ubuntu 14.04 (trusty) running on an Amazon EC2 instance and another on a DigitalOcean Droplet.
 
+##### Instructions for a Digital Ocean Droplet
+
+[Installing the PHP Skeleton App on Digital Ocean](https://github.com/ghalusa/PHP-Skeleton-App/wiki/Installing-the-PHP-Skeleton-App-on-Digital-Ocean-(the-complete-guide)) (the complete guide)
+
 ##### Apache
 * Modules: alias, deflate, dir, env, headers, mime, php5, rewrite, setenvif
 
