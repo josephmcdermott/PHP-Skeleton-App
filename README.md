@@ -38,6 +38,8 @@ Thanks!
 
 * **Quick 5-minute installation**
 
+    (Provided the server environment is set up)
+
 * **Simple configuration**
 
 * **Easy templating with custom views using Twig**
