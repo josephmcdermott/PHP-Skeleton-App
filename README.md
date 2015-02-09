@@ -26,6 +26,12 @@ Thanks!
 
 * * *
 
+## Installing the PHP Skeleton App on DigitalOcean (the complete guide)
+
+![alt text](http://halusanation.com/wp-content/uploads/2014/12/DO_Logo_325x51.png "DigitalOcean logo")
+
+<a href="https://github.com/ghalusa/PHP-Skeleton-App/wiki/Installing-the-PHP-Skeleton-App-on-Digital-Ocean-(the-complete-guide)">View the Guide</a>
+
 ## Features
 
 * **Quick 5-minute installation**
