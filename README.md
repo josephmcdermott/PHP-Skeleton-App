@@ -32,6 +32,8 @@ Thanks!
 
 <a href="https://github.com/ghalusa/PHP-Skeleton-App/wiki/Installing-the-PHP-Skeleton-App-on-Digital-Ocean-(the-complete-guide)">View the Guide</a>
 
+* * *
+
 ## Features
 
 * **Quick 5-minute installation**
