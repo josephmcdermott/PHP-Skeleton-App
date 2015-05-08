@@ -4,6 +4,8 @@
 
 # The PHP Skeleton App
 
+[![Join the chat at https://gitter.im/ghalusa/PHP-Skeleton-App](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/ghalusa/PHP-Skeleton-App?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 The PHP Skeleton App creates an object-oriented PHP MVC environment, tailored for rapid development. The environment makes use of the [Slim PHP micro framework](http://slimframework.com/), [Twig](http://twig.sensiolabs.org/) for templating, and [Twitter Bootstrap 3](http://getbootstrap.com/) for the theme.
 
 Out of the box, it provides the ability to set up and run a public-facing website, authenticate to the administrative side, and create users and groups. All of the baseline database tables are created on first run, along with the first "Universal Administrator".
